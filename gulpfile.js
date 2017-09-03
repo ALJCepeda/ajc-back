@@ -1,12 +1,14 @@
 const gulp = require('gulp');
 const watch = require('gulp-watch');
 const jasmine = require('gulp-jasmine');
-
-
+const babel = require('gulp-babel');
 
 gulp.task('tests.run', function () {
-    return gulp.src('./test/**/*.js')
-            .pipe(jasmine({verbose:true}));
+    return gulp.src('./tests/**/*.mjs')
+      .pipe(babel())
+      .pipe(jasmine({
+        verbose:true
+      }));
 });
 
 gulp.task('tests.watch', function () {
