@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import data from '../data.js';
+import data from '../resources/data.js';
 
 export const getCollection = function(collection) {
   const collectionData = data[collection];
@@ -54,6 +54,7 @@ export const get = function(req, res) {
     return res.status(400).send('No lookups defined').end();
   }
 
+  console.log('moo');
   const { keys } = config;
 
   if(_.isObject(keys)) {

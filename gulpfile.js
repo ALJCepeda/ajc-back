@@ -1,21 +1,50 @@
+const path = require('path');
+
 const gulp = require('gulp');
 const watch = require('gulp-watch');
 const jasmine = require('gulp-jasmine');
 const babel = require('gulp-babel');
+const sourcemaps = require('gulp-sourcemaps');
+const sequence = require('gulp-sequence');
+const cached = require('gulp-cached');
+const remember = require('gulp-remember');
+const nodemon = require('gulp-nodemon');
 
-gulp.task('tests.run', function () {
-    return gulp.src('./tests/**/*.mjs')
-      .pipe(babel())
-      .pipe(jasmine({
-        verbose:true
-      }));
+gulp.task('build', () => {
+  return gulp.src('./src/**/*.js')
+    .pipe(babel())
+    .pipe(gulp.dest((file) => {
+      return path.normalize(file.base.replace('src', 'dist'));
+    }));
+});
+
+gulp.task('watch', () => {
+  return gulp.watch('./src/**/*.js', (vinyl) => {
+    console.log(`Changed: ${vinyl.path}`);
+
+    return sequence('build');
+  });
 });
 
 gulp.task('tests.watch', function () {
-    gulp.watch([
-      './tests/**/*.js',
-      './src/**/*.js'
-    ], ['tests.run']);
+  return gulp.watch('./src/**/*.js', (vinyl) => {
+    console.log(`Changed: ${vinyl.path}`);
+
+    return sequence('build', 'jasmine');
+  });
 });
 
-gulp.task('test', [ 'tests.watch', 'tests.run' ]);
+gulp.task('jasmine', () => {
+  return gulp.src('./dist/tests/**/*.js').pipe(jasmine());
+});
+
+gulp.task('run', function () {
+  nodemon({
+    script: './dist/index.js',
+    watch: './src',
+    delay: '250'
+  });
+});
+
+gulp.task('start', sequence([ 'build', 'watch' ], 'run'));
+gulp.task('test', [ 'build', 'tests.watch', 'jasmine' ]);

@@ -1,10 +1,10 @@
-import _ from '_';
+import _ from 'lodash';
 import moment from 'moment';
 
 let Work = {
   Name: 'N/A',
   link: '#',
-  logo: require('./../assets/images/work-icon.png')
+  logo: './../assets/images/work-icon.png'
 };
 
 let mock = {
@@ -13,7 +13,7 @@ let mock = {
     lastname: 'Cepeda',
     birthdate: moment('1988-08-30'),
     hometown: 'Yorktown Heights, New York',
-    image: require('./../assets/images/me.jpeg')
+    image: './../assets/images/me.jpeg'
   },
   cities: { },
   addresses: { },
