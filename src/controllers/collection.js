@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import Promise from 'bluebird';
 import data from '../resources/data.js';
 
 export const getCollection = function(collection) {
@@ -13,12 +14,18 @@ export const getCollection = function(collection) {
 
 export const fetchPrimary = function(collection, key) {
   const collectionData = getCollection(collection);
-  return collectionData[key];
+  return {
+    key: key,
+    value: collectionData[key]
+  };
 };
 
 export const fetchRow = function(collection, key) {
   const collectionData = getCollection(collection);
-  return collectionData[key];
+  return {
+    key: key,
+    value: collectionData[key]
+  };
 };
 
 export const fetch = function(collection, key) {
@@ -32,16 +39,34 @@ export const fetch = function(collection, key) {
 };
 
 export const lookupObject = function(collection, keys) {
-
+  //return Promise.resolve();
 };
 
-export const lookupArray = function(collection, key) {
-  return keys.reduce((res, key) => {
-    res[key] = fetch(collection, key);
-  }, {});
+export const lookupWithArray = function(collection, keys) {
+  const promises = [];
+
+  keys.forEach((key) => {
+    const promise = fetch(collection, key);
+    promises.push(promise);
+  });
+
+  return Promise.all(promises).then((data) => {
+    return data.reduce((res, entry) => {
+      res[entry.key] = entry.value;
+      return res;
+    }, {});
+  });
 };
 
-export const get = function(req, res) {
+export const get = function(collection, keys) {
+  if(_.isArray(keys)) {
+    return this.lookupWithArray(collection, keys);
+  } else if(_.isObject(keys)) {
+    return lookupObject(collection, keys);
+  }
+};
+
+export const resolveRequest = function(req, res) {
   const collection = req.params.collection;
 
   if(_.isNil(collection)) {
@@ -54,24 +79,12 @@ export const get = function(req, res) {
     return res.status(400).send('No lookups defined').end();
   }
 
-  console.log('moo');
   const { keys } = config;
 
-  if(_.isObject(keys)) {
-    return lookupObject(collection, keys)
-      .then(res.send)
-      .catch(res.status(400).send)
-      .finally(res.end);
-  } else if(_.isArray(keys)) {
-    return lookupArray(collection, keys)
-      .then(res.send)
-      .catch(res.status(400).send)
-      .finally(res.end);
-  } else {
-    return res.status(400).send('Invalid configuration').end();
-  }
+  get(collection, keys)
+    .then(res.send)
+    .catch(res.status(400).send)
+    .finally(res.end);
 };
 
-export default {
-  get
-};
+export default { fetchPrimary, lookupWithArray, get, resolveRequest };

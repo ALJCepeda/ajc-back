@@ -48,4 +48,4 @@ gulp.task('run', function () {
 });
 
 gulp.task('start', sequence([ 'build', 'watch' ], 'run'));
-gulp.task('test', [ 'build', 'tests.watch', 'jasmine' ]);
+gulp.task('test', sequence([ 'build', 'tests.watch'], 'jasmine'));
