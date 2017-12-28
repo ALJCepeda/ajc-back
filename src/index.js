@@ -1,6 +1,12 @@
-const express = require('express')();
+import express from 'express';
+
+import routes from './services/routes';
+import winston from './services/winston';
+
+const app = express();
 const port = process.env.PORT || 3000;
 
-express.listen(port);
+routes(app);
+app.listen(port);
 
-console.log(`Server started on: ${port}`);
+winston.log.verbose(`Server started on: ${port}`);

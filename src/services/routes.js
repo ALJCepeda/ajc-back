@@ -1,6 +1,9 @@
-import collectionController from '../controllers/collection';
+import blogController from '../controllers/blog';
 
 export default function(app) {
-  app.route('/collection/:collection')
-     .get(collectionController.get);
+  app.route('/blog/manifest')
+     .get(blogController.manifest.get);
+
+  app.route('/blog/:file')
+     .get(blogController.blog.get);
 };
