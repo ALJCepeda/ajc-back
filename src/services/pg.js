@@ -1,4 +1,7 @@
 import { Pool } from 'pg';
+import Promise from 'bluebird';
+
+import winston from './winston.js';
 
 const pool = new Pool({
   host: 'localhost',
@@ -9,4 +12,13 @@ const pool = new Pool({
   connectionTimeoutMillis: 2000,
 });
 
-export default pool;
+export default {
+  query: function(query, params = []) {
+    return pool.connect().then(client => {
+      return client.query(query, params).then(
+        res => { client.end(); return res; },
+        err => winston.log.error(`pg.query: ${err.stack}`)
+      );
+    }, err => winston.log.error(`pg.connect: ${err.stack}`));
+  }
+};

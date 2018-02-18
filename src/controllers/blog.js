@@ -1,25 +1,30 @@
-import pool from './../services/pg.js';
+import fs from 'fs';
+
+import pool from './../services/pg';
+import winston from './../services/winston';
+
+const returnRows = function(promise, res) {
+  return promise.then(result => res.send(result.rows))
+  .catch(result => res.status(500).send('This will be fixed soon!'));
+};
 
 export default {
   manifest: (req, res) => {
-    pool.connect((err, client, release) => {
-      if (err) {
-        res.status(500).send('This will be fixed soon!');
-        return console.error('Error acquiring client', err.stack)
-      }
-
-      client.query('SELECT NOW()', (err, result) => {
-        release();
-        if (err) {
-          res.status(500).send('This will be fixed soon!');
-          return console.error('Error executing query', err.stack)
-        }
-
-        res.send(result.rows);
-      })
-    });
+    const promise = pool.query('SELECT * FROM Blogs');
+    return returnRows(promise, res);
   },
   get: (req, res) => {
+    pool.query('SELECT file FROM Blogs WHERE id=$1::integer', [ req.params.id ]).then((blob) => {
+      const file = blob.rows[0].file;
 
+      fs.readFile(`${process.env.BLOG_DIR}/${file}`, (err, data) => {
+        if(err) {
+          winston.log.error(`blog.get: ${err}`);
+          return res.status(500).send('This will be fixed soon!');
+        }
+
+        return res.send(data);
+      });
+    });
   }
 };
