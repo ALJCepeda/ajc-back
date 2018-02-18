@@ -57,6 +57,7 @@ gulp.task('run', () => {
   nodemon({
     script: './dist/index.js',
     watch: './src',
+    exec: 'node -r dotenv/config',
     delay: '250'
   });
 });
