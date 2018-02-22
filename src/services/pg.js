@@ -16,7 +16,7 @@ export default {
   query: function(query, params = []) {
     return pool.connect().then(client => {
       return client.query(query, params).then(
-        res => { client.end(); return res; },
+        res => { client.release(); return res; },
         err => winston.log.error(`pg.query: ${err.stack}`)
       );
     }, err => winston.log.error(`pg.connect: ${err.stack}`));
