@@ -5,7 +5,10 @@ import winston from './services/winston';
 
 const app = express();
 app.use((req,res,next) => {
-  res.header('Access-Control-Allow-Origin', 'http://10.0.0.227:8080');
+  if(process.env.NODE_ENV === 'development') {
+    res.header('Access-Control-Allow-Origin', 'http://10.0.0.227:8080');
+  }
+  
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
