@@ -2,19 +2,15 @@ import path from 'path';
 import BlogController from '../controllers/blog';
 
 export default function(app) {
-  app.route('/')
-     .get((req, res) => {
-       res.sendFile(process.env.HTML_FILE);
-     });
+  app.get('/dist/build.js', (req, res) => {
+    res.sendFile(process.env.JS_FILE);
+  });
 
-  app.route('/dist/build.js')
-     .get((req, res) => {
-       res.sendFile(process.env.JS_FILE);
-     });
+  app.get('/blog/manifest', BlogController.manifest);
 
-  app.route('/blog/manifest')
-     .get(BlogController.manifest);
+  app.get('/blog/:id', BlogController.get);
 
-  app.route('/blog/:id')
-     .get(BlogController.get);
+  app.get('*', (req, res) => {
+    res.sendFile(process.env.HTML_FILE);
+  });
 };
