@@ -33,4 +33,11 @@ const erroredRequest = function(err, req) {
   }
 };
 
-export default { log, access, erroredRequest };
+const internalError = function(id, res) {
+  return (err) => {
+    winston.log.error(`${id}: ${err}`);
+    return res.status(500).send('This incident has been logged and will be fixed soon!');
+  }
+};
+
+export default { log, access, erroredRequest, internalError };
