@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import Promise from 'bluebird';
 import { Readable } from 'stream';
 
-import winston from './../services/winston';
+import logger from './../services/logger';
 
 const randomBytes = Promise.promisify(crypto.randomBytes);
 
@@ -17,20 +17,20 @@ const ToolController = {
     const length = parseInt(req.params.length);
 
     if(!_.isNumber(length)) {
-      winston.log.error(`tools.secureKey: length is not numeric`);
+      logger.error(`tools.secureKey: length is not numeric`);
       return res.status(422).send('Length must be numeric');
     }
 
     return randomBytes(length).then((key) => {
       res.send(key.toString('hex').substring(0, length));
-    }).catch(winston.internalError('tools.secureKey', res));
+    }).catch(logger.internalError('tools.secureKey', res));
   },
   fileSized: (req, res) => {
     const bytes = parseInt(req.params.bytes);
     const chunkSize = 1000;
 
     if(!_.isNumber(bytes)) {
-      winston.log.error(`tools.fileSized: bytes is not numeric`);
+      logger.error(`tools.fileSized: bytes is not numeric`);
       return res.status(422).send('Bytes must be numeric');
     }
 
@@ -63,7 +63,7 @@ const ToolController = {
 
     Promise.all(promises).then(() => {
       stream.push(null);
-    }, winston.internalError('tools.secureKey', res));
+    }, logger.internalError('tools.secureKey', res));
   }
 };
 

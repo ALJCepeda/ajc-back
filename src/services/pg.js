@@ -1,7 +1,7 @@
 import { Pool } from 'pg';
 import Promise from 'bluebird';
 
-import winston from './winston.js';
+import logger from './logger.js';
 
 const pool = new Pool({
   host: 'localhost',
@@ -17,8 +17,8 @@ export default {
     return pool.connect().then(client => {
       return client.query(query, params).then(
         res => { client.release(); return res; },
-        err => winston.log.error(`pg.query: ${err.stack}`)
+        err => logger.error(`pg.query: ${err.stack}`)
       );
-    }, err => winston.log.error(`pg.connect: ${err.stack}`));
+    }, err => logger.error(`pg.connect: ${err.stack}`));
   }
 };

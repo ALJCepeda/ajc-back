@@ -1,7 +1,7 @@
 import express from 'express';
 
 import routes from './services/routes';
-import winston from './services/winston';
+import logger from './services/logger';
 
 const app = express();
 app.use((req,res,next) => {
@@ -14,6 +14,8 @@ app.use((req,res,next) => {
 });
 const port = process.env.PORT;
 routes(app);
-app.listen(port);
 
-winston.log.verbose(`Server started on: ${port}`);
+logger.init().then(() => {
+  app.listen(port);
+  logger.log(`Server started on ${port}`);
+});

@@ -67,5 +67,6 @@ gulp.task('clean', () => {
              .pipe(clean());
 });
 
-gulp.task('start', sequence('clean', 'create-folders', 'build-js', 'build-html', 'watch', 'run'));
-gulp.task('test', sequence('clean', 'create-folders', 'build-js', 'build-html', 'tests.watch', 'jasmine'));
+gulp.task('build', sequence('clean', 'create-folders', 'build-js', 'build-html'));
+gulp.task('start', sequence('build', 'watch', 'run'));
+gulp.task('test', sequence('build', 'tests.watch', 'jasmine'));

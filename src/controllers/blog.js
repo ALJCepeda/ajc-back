@@ -3,7 +3,7 @@ import _ from 'lodash';
 import Promise from 'bluebird';
 
 import pool from './../services/pg';
-import winston from './../services/winston';
+import logger from './../services/logger';
 
 const readFile = Promise.promisify(fs.readFile);
 
@@ -25,7 +25,7 @@ const BlogController = {
     const id = parseInt(req.params.id);
 
     if(!_.isNumber(id)) {
-      winston.log.error(`blog.get: ID is not numeric`);
+      logger.error(`blog.get: ID is not numeric`);
       return res.status(422).send('ID must be numeric');
     }
 
@@ -38,7 +38,7 @@ const BlogController = {
       return readFile(`${process.env.BLOG_DIR}/${file}`);
     }).then((data) => {
       return res.send(data);
-    }).catch(winston.internalError('blog.get', res));
+    }).catch(logger.internalError('blog.get', res));
   }
 };
 
