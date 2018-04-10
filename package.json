@@ -4,11 +4,11 @@
   "description": "AJCepedas backend services",
   "main": "index.js",
   "scripts": {
-    "start": "npm build && pm2 start dist/index.js -i 0 --name 'ajcepeda-back'",
+    "start": "gulp build && pm2 start dist/index.js --name 'ajcepeda-back'",
     "restart": "pm2 restart 'ajcepeda-back'",
     "stop": "pm2 stop 'ajcepeda-back'",
     "build": "gulp build",
-    "run": "gulp start",
+    "dev": "gulp start",
     "test": "gulp test --silent"
   },
   "author": "Alfred J Cepeda",
