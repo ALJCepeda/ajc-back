@@ -14,6 +14,9 @@ const ToolController = {
     app.get('/tools/fileSized/:bytes', ToolController.fileSized);
   },
   secureKey: (req, res) => {
+    req.params = _.pick(req.params, [ 'length' ]);
+    logger.access('secureKey', req);
+
     const length = parseInt(req.params.length);
 
     if(!_.isNumber(length)) {
@@ -26,6 +29,9 @@ const ToolController = {
     }).catch(logger.internalError('tools.secureKey', res));
   },
   fileSized: (req, res) => {
+    req.params = _.pick(req.params, [ 'bytes' ]);
+    logger.access('fileSized', req);
+
     const bytes = parseInt(req.params.bytes);
     const chunkSize = 1000;
 

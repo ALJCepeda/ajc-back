@@ -1,6 +1,7 @@
-import bluebird from 'bluebird';
+import _ from 'lodash';
 import fs from 'fs';
 import moment from 'moment';
+import bluebird from 'bluebird';
 
 const stat = bluebird.promisify(fs.stat);
 const mkdir = bluebird.promisify(fs.mkdir);
@@ -32,6 +33,8 @@ const onStreamError = function(streamName) {
 
 const Logger = function() {
   this.errorCount = 0;
+  this.accessCount = 0;
+
   this.errorStream = null;
   this.accessStream = null;
   this.consoleStream = null;
@@ -59,8 +62,6 @@ Logger.prototype.timestamp = function() {
 Logger.prototype.error = function() {
   const timestamp = this.timestamp();
 
-  this.errorCount++;
-
   this.errorStream.write(`[${this.errorCount}]${timestamp} `);
 
   const args = Array.prototype.slice.call(arguments);
@@ -70,19 +71,26 @@ Logger.prototype.error = function() {
 
   this.errorStream.write(`\n----------------------------------------------------------------\n`);
   this.consoleStream.write(`[${this.errorCount}]${timestamp} Error encountered\n`);
-  log(`[${this.errorCount}]${timestamp} Error encountered`);
+
+  this.log(`[${this.errorCount}] Error`);
+  this.errorCount++;
 };
 
-Logger.prototype.access = function () {
+Logger.prototype.access = function (signature, req) {
   const timestamp = this.timestamp();
-  this.accessStream.write(`${timestamp} `);
+  const ip = req.connection.remoteAddress;
 
-  const args = Array.prototype.slice.call(arguments);
-  args.forEach((arg) => {
-    this.accessStream.write(arg);
-  });
-
+  this.accessStream.write(`[${this.accessCount}]${timestamp} (${signature}) ${ip}\n`);
+  this.accessStream.write(JSON.stringify(req.params));
   this.accessStream.write(`\n`);
+
+  if(!_.isUndefined(req.body)) {
+    this.accessStream.write(JSON.stringify(req.body));
+    this.accessStream.write(`\n`);
+  }
+
+  this.log(`[${this.accessCount}] Access`);
+  this.accessCount++;
 };
 
 Logger.prototype.log = function () {

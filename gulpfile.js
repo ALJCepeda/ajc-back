@@ -13,12 +13,6 @@ const cached = require('gulp-cached');
 const remember = require('gulp-remember');
 const nodemon = require('gulp-nodemon');
 
-gulp.task('create-folders', () => {
-  if (!fs.existsSync('./logs')){
-    fs.mkdirSync('./logs');
-  }
-});
-
 gulp.task('build-js', () => {
   return gulp.src('./src/**/*.js')
     .pipe(cached('scripts'))
@@ -66,6 +60,6 @@ gulp.task('clean', () => {
              .pipe(clean());
 });
 
-gulp.task('build', sequence('clean', 'create-folders', 'build-js', 'build-html'));
+gulp.task('build', sequence('clean', 'build-js', 'build-html'));
 gulp.task('start', sequence('build', 'watch', 'run'));
 gulp.task('test', sequence('build', 'tests.watch', 'jasmine'));
