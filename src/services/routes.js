@@ -1,6 +1,6 @@
 import path from 'path';
 import BlogController from '../controllers/blog';
-import ToolController from '../controllers/tool';
+import ToolController from '../controllers/tools';
 
 export default function(app) {
   app.get('/dist/build.js', (req, res) => {

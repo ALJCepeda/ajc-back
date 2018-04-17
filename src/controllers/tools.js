@@ -15,7 +15,7 @@ const ToolController = {
   },
   secureKey: (req, res) => {
     req.params = _.pick(req.params, [ 'length' ]);
-    logger.access('secureKey', req);
+    logger.access('tools.secureKey', req);
 
     const length = parseInt(req.params.length);
 
@@ -30,7 +30,7 @@ const ToolController = {
   },
   fileSized: (req, res) => {
     req.params = _.pick(req.params, [ 'bytes' ]);
-    logger.access('fileSized', req);
+    logger.access('tools.fileSized', req);
 
     const bytes = parseInt(req.params.bytes);
     const chunkSize = 1000;

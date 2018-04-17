@@ -1,11 +1,3 @@
-CREATE OR REPLACE FUNCTION set_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = NOW();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
 CREATE TABLE Blogs (
   id SERIAL PRIMARY KEY,
   file text UNIQUE NOT NULL CHECK (file <> ''),
@@ -14,11 +6,20 @@ CREATE TABLE Blogs (
   description text NOT NULL CHECK (description <> ''),
   category text NOT NULL CHECK (category <> ''),
   tags text[] DEFAULT array[]::text[],
-  created_at timestamp DEFAULT now(),
-  updated_at timestamp DEFAULT now()
+  created_at timestamp DEFAULT now()
 );
 
-CREATE TRIGGER set_updated_at
-BEFORE UPDATE ON Blogs
-FOR EACH ROW
-EXECUTE PROCEDURE set_updated_at();
+CREATE TABLE Timeline (
+  id SERIAL PRIMARY KEY,
+  message text NOT NULL CHECK (message <> ''),
+  image text NOT NULL CHECK (image <> ''),
+  link_id integer,
+  created_at timestamp DEFAULT now()
+);
+
+CREATE TABLE Links (
+  id SERIAL PRIMARY KEY,
+  url text NOT NULL CHECK (url <> ''),
+  marker text NOT NULL CHECK (marker <> ''),
+  enabled boolean DEFAULT TRUE
+);

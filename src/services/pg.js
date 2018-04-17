@@ -4,21 +4,27 @@ import Promise from 'bluebird';
 import logger from './logger.js';
 
 const pool = new Pool({
-  host: 'localhost',
-  database: process.env.DB,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  host: process.env.PSQL_HOST,
+  port: process.env.PSQL_PORT,
+  database: process.env.PSQL_DB,
+  user: process.env.PSQL_USER,
+  password: process.env.PSQL_PASSWORD,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
 });
 
 export default {
-  query: function(query, params = []) {
-    return pool.connect().then(client => {
-      return client.query(query, params).then(
-        res => { client.release(); return res; },
-        err => logger.error(`pg.query: ${err.stack}`)
-      );
-    }, err => logger.error(`pg.connect: ${err.stack}`));
+  pool,
+  connect: pool.connect,
+  query: async function(query, params = []) {
+    try {
+      const client = await pool.connect();
+      const res = await client.query(query, params);
+      client.release();
+      return res;
+    } catch(err) {
+      logger.error(`pg.query: ${err.stack}`);
+      throw err;
+    }
   }
 };

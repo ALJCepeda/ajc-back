@@ -18,10 +18,15 @@ const BlogController = {
     app.get('/blog/:id', BlogController.get);
   },
   manifest: (req, res) => {
+    req.params = _.pick(req.params, [ ]);
+    logger.access('blog.manifest', req);
     const promise = pool.query('SELECT * FROM Blogs');
     return returnRows(promise, res);
   },
   get: (req, res) => {
+    req.params = _.pick(req.params, ['id']);
+    logger.access('blog.get', req);
+
     const id = parseInt(req.params.id);
 
     if(!_.isNumber(id)) {
