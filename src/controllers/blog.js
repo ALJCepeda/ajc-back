@@ -7,29 +7,24 @@ import logger from './../services/logger';
 
 const readFile = Promise.promisify(fs.readFile);
 
-const returnRows = function(promise, res) {
-  return promise.then(result => res.send(result.rows))
-  .catch(result => res.status(500).send('This will be fixed soon!'));
-};
-
 const BlogController = {
   addRoutes: (app) => {
     app.get('/blog/manifest', BlogController.manifest);
     app.get('/blog/:id', BlogController.get);
   },
   manifest: (req, res) => {
-    req.params = _.pick(req.params, [ ]);
     logger.access('blog.manifest', req);
-    const promise = pool.query('SELECT * FROM Blogs');
-    return returnRows(promise, res);
+    return pool.query('SELECT * FROM Blogs').then(
+      result => res.send(result.rows),
+      result => res.status(500).send('This will be fixed soon!')
+    );
   },
   get: (req, res) => {
-    req.params = _.pick(req.params, ['id']);
     logger.access('blog.get', req);
 
     const id = parseInt(req.params.id);
 
-    if(!_.isNumber(id)) {
+    if(_.isNaN(id)) {
       logger.error(`blog.get: ID is not numeric`);
       return res.status(422).send('ID must be numeric');
     }

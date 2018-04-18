@@ -81,7 +81,11 @@ Logger.prototype.access = function (signature, req) {
   const ip = req.connection.remoteAddress;
 
   this.accessStream.write(`[${this.accessCount}]${timestamp} (${signature}) ${ip}\n`);
+
   this.accessStream.write(JSON.stringify(req.params));
+  this.accessStream.write(`\n`);
+
+  this.accessStream.write(JSON.stringify(req.query));
   this.accessStream.write(`\n`);
 
   if(!_.isUndefined(req.body)) {
