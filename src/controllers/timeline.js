@@ -7,8 +7,8 @@ import logger from './../services/logger';
 
 const TimelineController = {
   addRoutes: (app) => {
-    app.get('/manifest', TimelineController.manifest);
-    app.get('/timeline', TimelineController.get);
+    app.get('/timeline/manifest', TimelineController.manifest);
+    app.get('/timeline/indexes', TimelineController.indexes);
   },
   manifest: (req, res) => {
     logger.access('timeline.manifest', req);
@@ -18,22 +18,29 @@ const TimelineController = {
       result => res.status(500).send('This will be fixed soon!')
     );
   },
-  get: (req, res) => {
-    logger.access('timeline.get', req);
+  indexes: (req, res) => {
+    logger.access('timeline.indexes', req);
 
-    let size = parseInt(req.query.size),
+    let limit = parseInt(req.query.limit),
         offset = parseInt(req.query.offset);
 
-    if(_.isNaN(size)) {
-      size = 10;
+    if(_.isNaN(limit)) {
+      limit = 10;
     }
 
     if(_.isNaN(offset)) {
       offset = 0;
     }
 
-    pool.query('SELECT * FROM Timeline LIMIT $1::integer OFFSET $2::integer', [ size, offset ]).then(
-      result => res.send(result.rows),
+    pool.query('SELECT id, message, image, link_id FROM Timeline LIMIT $1::integer OFFSET $2::integer', [ limit, offset ]).then(
+      result => {
+        const indexes = result.rows.reduce((obj, row) => {
+          obj[row.id-1] = row
+          return obj;
+        }, {});
+
+        res.send(indexes);
+      },
       result => res.status(500).send('This will be fixed soon!')
     );
   }
