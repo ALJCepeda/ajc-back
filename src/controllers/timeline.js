@@ -5,41 +5,51 @@ import Promise from 'bluebird';
 import pool from './../services/pg';
 import logger from './../services/logger';
 
+const defaults = {
+  entries: {
+    limit:10,
+    offset:0
+  }
+};
+
+let manifest = null;
+pool.query('SELECT count(*), MAX(created_at) as "created_at" from Timeline').then(result => manifest = {
+  count:parseInt(result.rows[0].count),
+  last_created:result.rows[0].created_at
+});
+
 const TimelineController = {
+  defaults,
   addRoutes: (app) => {
     app.get('/timeline/manifest', TimelineController.manifest);
-    app.get('/timeline/indexes', TimelineController.indexes);
+    app.get('/timeline/entries', TimelineController.entries);
   },
   manifest: (req, res) => {
     logger.access('timeline.manifest', req);
-
-    pool.query('SELECT count(*) from Timeline').then(
-      result => res.send({ count: result.rows[0].count }),
-      result => res.status(500).send('This will be fixed soon!')
-    );
+    res.send({ defaults, ...manifest });
   },
-  indexes: (req, res) => {
-    logger.access('timeline.indexes', req);
+  entries: (req, res) => {
+    logger.access('timeline.entries', req);
 
     let limit = parseInt(req.query.limit),
         offset = parseInt(req.query.offset);
 
-    if(_.isNaN(limit)) {
-      limit = 10;
+    if(_.isNaN(limit) || limit === 0) {
+      limit = defaults.entries.limit;
     }
 
     if(_.isNaN(offset)) {
-      offset = 0;
+      offset = defaults.entries.offset;
     }
 
-    pool.query('SELECT id, message, image, link_id FROM Timeline LIMIT $1::integer OFFSET $2::integer', [ limit, offset ]).then(
+    pool.query('SELECT id, message, image, link_id FROM Timeline OFFSET $1::integer LIMIT $2::integer', [ offset, limit ]).then(
       result => {
-        const indexes = result.rows.reduce((obj, row) => {
+        const entries = result.rows.reduce((obj, row) => {
           obj[row.id-1] = row
           return obj;
         }, {});
 
-        res.send(indexes);
+        res.send(entries);
       },
       result => res.status(500).send('This will be fixed soon!')
     );

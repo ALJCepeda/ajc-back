@@ -23,6 +23,7 @@ fs.readFile(file, 'utf-8', (err, content) => {
     const client = await pg.pool.connect();
 
     try {
+      console.log('Publishing blog');
       await client.query('BEGIN');
       await client.query(`
         INSERT INTO Blogs(file, image, title, description, category, tags)
@@ -41,6 +42,7 @@ fs.readFile(file, 'utf-8', (err, content) => {
       `, [ data.timeline, data.image, rows[0].id ]);
 
       await client.query('COMMIT');
+      console.log('Finished publishing blog');
     } catch (err) {
       await client.query('ROLLBACK');
       throw err;

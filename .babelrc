@@ -1,6 +1,10 @@
 {
+  "sourceMaps": true,
   "presets": [
     ["es2015"],
     ["env", { "modules": false }]
+  ],
+  "plugins": [
+    ["transform-object-rest-spread", { "useBuiltIns": true }]
   ]
 }

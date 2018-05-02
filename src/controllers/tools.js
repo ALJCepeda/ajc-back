@@ -8,10 +8,10 @@ import logger from './../services/logger';
 
 const randomBytes = Promise.promisify(crypto.randomBytes);
 
-const ToolController = {
+const ToolsController = {
   addRoutes: (app) => {
-    app.get('/tools/secureKey/:length', ToolController.secureKey);
-    app.get('/tools/fileSized/:bytes', ToolController.fileSized);
+    app.get('/tools/secureKey/:length', ToolsController.secureKey);
+    app.get('/tools/fileSized/:bytes', ToolsController.fileSized);
   },
   secureKey: (req, res) => {
     req.params = _.pick(req.params, [ 'length' ]);
@@ -73,4 +73,4 @@ const ToolController = {
   }
 };
 
-export default ToolController;
+export default ToolsController;
