@@ -1,7 +1,9 @@
 import fs from 'fs';
 import _ from 'lodash';
 import Promise from 'bluebird';
+import Handlebars from 'handlebars';
 
+import config from './../config';
 import pool from './../services/pg';
 import logger from './../services/logger';
 
@@ -74,7 +76,10 @@ const BlogsController = {
       const file = blob.rows[0].file;
       return readFile(`${process.env.BLOG_DIR}/${file}`);
     }).then((data) => {
-      return res.send(data);
+      const template = Handlebars.compile(data.toString());
+      const blog = template(config.assets);
+
+      return res.send(blog);
     }).catch(logger.internalError('blog.get', res));
   }
 };

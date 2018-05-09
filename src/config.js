@@ -7,5 +7,9 @@ global.appRoot = path.resolve(`${__dirname}/../`);
 
 export default {
   blogURL: path.normalize(`${global.appRoot}/../blogs`),
-  assetsURL: path.normalize(`${global.appRoot}/../static-assets`)
+  assets: {
+    flex: {
+      css:`${process.env.STATIC_URL}/aj-toolbelt/css/flex.css`
+    }
+  }
 };
