@@ -49,9 +49,11 @@ const BlogsController = {
     pool.query('SELECT id, file, image, title, category, tags, created_at FROM Blogs OFFSET $1::integer LIMIT $2::integer', [ offset, limit ]).then(
       result => {
         const entries = result.rows.reduce((obj, row) => {
-          obj[row.id-1] = row
+          row.image = `${process.env.STATIC_URL}/images/${row.image}`;
+          obj[row.id-1] = row;
           return obj;
         }, {});
+        console.log(entries);
 
         res.send(entries);
       },
