@@ -9,7 +9,10 @@ export default {
   blogURL: path.normalize(`${global.appRoot}/../blogs`),
   assets: {
     flex: {
-      css:`${process.env.STATIC_URL}/aj-toolbelt/css/flex.css`
+      css:`${process.env.STATIC_URL}/ajc-toolbelt/css/flex.css`
+    },
+    display: {
+      css:`${process.env.STATIC_URL}/ajc-toolbelt/css/display.css`
     }
   }
 };

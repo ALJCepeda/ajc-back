@@ -53,7 +53,6 @@ const BlogsController = {
           obj[row.id-1] = row;
           return obj;
         }, {});
-        console.log(entries);
 
         res.send(entries);
       },
