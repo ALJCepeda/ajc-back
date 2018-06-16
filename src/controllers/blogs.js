@@ -1,13 +1,8 @@
-import fs from 'fs';
-import _ from 'lodash';
-import Promise from 'bluebird';
+import _ from 'lodash'
 import Handlebars from 'handlebars';
 
-import config from './../config';
-import pool from './../services/pg';
 import logger from './../services/logger';
-
-const readFile = Promise.promisify(fs.readFile);
+import blogsDB from './../dbs/blogs';
 
 const defaults = {
   entries: {
@@ -16,21 +11,15 @@ const defaults = {
   }
 };
 
-let manifest = null;
-pool.query('SELECT count(*), MAX(created_at) as "created_at" FROM Blogs').then(result => manifest = {
-  count:parseInt(result.rows[0].count),
-  last_created:result.rows[0].created_at
-});
-
 const BlogsController = {
   addRoutes: (app) => {
     app.get('/blogs/manifest', BlogsController.manifest);
     app.get('/blogs/entries', BlogsController.entries);
-    app.get('/blogs/:id', BlogsController.get);
+    app.get('/blogs/:url', BlogsController.url);
   },
   manifest: (req, res) => {
     logger.access('blogs.manifest', req);
-    res.send({ defaults, ...manifest });
+    res.send({ defaults, ...blogsDB.manifest });
   },
   entries: (req, res) => {
     logger.access('blogs.entries', req);
@@ -46,42 +35,31 @@ const BlogsController = {
       offset = defaults.entries.offset;
     }
 
-    pool.query('SELECT id, file, image, title, category, tags, created_at FROM Blogs OFFSET $1::integer LIMIT $2::integer', [ offset, limit ]).then(
-      result => {
-        const entries = result.rows.reduce((obj, row) => {
-          row.image = `${process.env.STATIC_URL}/images/${row.image}`;
-          obj[row.id-1] = row;
-          return obj;
-        }, {});
-
-        res.send(entries);
-      },
-      result => res.status(500).send('This will be fixed soon!')
-    );
+    blogsDB.entries(offset, limit).then(entries => {
+      entries.forEach(entry => {
+        entry.image = `${process.env.STATIC_URL}/images/${entry.image}`
+      });
+      res.send(entries);
+    }, logger.internalError('blog.entries', res));
   },
-  get: (req, res) => {
-    logger.access('blogs.get', req);
+  url: (req, res) => {
+    logger.access('blogs.url', req);
 
-    const id = parseInt(req.params.id);
+    const url = req.params.url;
 
-    if(_.isNaN(id)) {
-      logger.error(`blog.get: ID is not numeric`);
-      return res.status(422).send('ID must be numeric');
+    if(!_.isString(url) || url.length === 0) {
+      return res.status(422).send('url must be a string');
     }
 
-    pool.query('SELECT file FROM Blogs WHERE id=$1::integer', [ id ]).then((blob) => {
-      if(blob.rows.length === 0) {
-        return res.status(404).send('Unable to find blog');
+    blogsDB.url(url).then(blog => {
+      res.send(blog);
+    }, err => {
+      if(err.status === 'noblog') {
+        return res.status(404).send({ status:err.status, message:err.message });
       }
 
-      const file = blob.rows[0].file;
-      return readFile(`${process.env.BLOG_DIR}/${file}`);
-    }).then((data) => {
-      const template = Handlebars.compile(data.toString());
-      const blog = template(config.assets);
-
-      return res.send(blog);
-    }).catch(logger.internalError('blog.get', res));
+      logger.internalError('blogs.url', res, err);
+    });
   }
 };
 

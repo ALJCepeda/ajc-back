@@ -7,17 +7,17 @@ const stat = bluebird.promisify(fs.stat);
 const mkdir = bluebird.promisify(fs.mkdir);
 const log = console.log;
 
-const makeLogsDirectory = function() {
-  return mkdir('logs', '0740').catch((err) => {
+const makeDirectory = function(dir) {
+  return mkdir(dir, '0740').catch((err) => {
     log(err);
     throw err;
   });
 };
 
-const initiateLogsDirectory = function() {
-  return stat('logs').catch((err) => {
+const initiateDirectory = function(dir) {
+  return stat(dir).catch((err) => {
     if(err.code === 'ENOENT') {
-      return makeLogsDirectory();
+      return makeDirectory(dir);
     } else {
       log('Unexpected error while stating logs directory:', err);
       throw err;
@@ -38,13 +38,24 @@ const Logger = function() {
   this.errorStream = null;
   this.accessStream = null;
   this.consoleStream = null;
+
+  this.verbose = false;
+  this.muteCount = false;
+  this.consoleErrors = false;
+  this.consoleAccess = false;
 };
 
-Logger.prototype.init = function() {
-  return initiateLogsDirectory().then(() => {
-    this.errorStream = fs.createWriteStream('logs/error.log', { flags:'a' });
-    this.accessStream = fs.createWriteStream('logs/access.log', { flags:'a' });
-    this.consoleStream = fs.createWriteStream('logs/console.log', { flags:'a' });
+Logger.prototype.doVerbose = function(message, override) {
+  if(this.verbose === true || this[override] === true) {
+    this.log(message);
+  }
+};
+
+Logger.prototype.init = function(dir) {
+  return initiateDirectory(dir).then(() => {
+    this.errorStream = fs.createWriteStream(`${dir}/error.log`, { flags:'a' });
+    this.accessStream = fs.createWriteStream(`${dir}/access.log`, { flags:'a' });
+    this.consoleStream = fs.createWriteStream(`${dir}/console.log`, { flags:'a' });
 
     this.errorStream.on('error', onStreamError('Error'));
     this.accessStream.on('error', onStreamError('Access'));
@@ -67,12 +78,15 @@ Logger.prototype.error = function() {
   const args = Array.prototype.slice.call(arguments);
   args.forEach((arg) => {
     this.errorStream.write(arg);
+    this.doVerbose(arg, 'consoleErrors');
+    this.errorStream.write('\n');
   });
+  this.errorStream.write(`----------------------------------------------------------------\n`);
 
-  this.errorStream.write(`\n----------------------------------------------------------------\n`);
-  this.consoleStream.write(`[${this.errorCount}]${timestamp} Error encountered\n`);
+  if(!this.muteCount) {
+    this.log(`[${this.errorCount}] Error`);
+  }
 
-  this.log(`[${this.errorCount}] Error`);
   this.errorCount++;
 };
 
@@ -80,21 +94,37 @@ Logger.prototype.access = function (signature, req) {
   const timestamp = this.timestamp();
   const ip = req.connection.remoteAddress;
 
-  this.accessStream.write(`[${this.accessCount}]${timestamp} (${signature}) ${ip}\n`);
+  const hit = `[${this.accessCount}]${timestamp} (${signature}) ${ip}`;
+  this.accessStream.write(`${hit}\n`);
+  this.doVerbose(hit, 'consoleAccess');
 
   this.accessStream.write(JSON.stringify(req.params));
+  this.doVerbose(JSON.stringify(req.params), 'consoleAccess');
   this.accessStream.write(`\n`);
 
   this.accessStream.write(JSON.stringify(req.query));
+  this.doVerbose(JSON.stringify(req.query), 'consoleAccess');
   this.accessStream.write(`\n`);
 
   if(!_.isUndefined(req.body)) {
     this.accessStream.write(JSON.stringify(req.body));
+    this.doVerbose(JSON.stringify(req.body), 'consoleAccess');
     this.accessStream.write(`\n`);
   }
 
-  this.log(`[${this.accessCount}] Access`);
+  if(!this.muteCount) {
+    this.log(`[${this.accessCount}] Access`);
+  }
+
   this.accessCount++;
+};
+
+Logger.prototype.debug = function() {
+  console.log('wtf?');
+  if(this.verbose === true || this.consoleDebug === true) {
+    console.log('hit');
+    this.log.apply(this, arguments);
+  }
 };
 
 Logger.prototype.log = function () {
@@ -124,12 +154,24 @@ Logger.prototype.erroredRequest = function(err, req) {
   }
 };
 
-Logger.prototype.internalError = function(id, res) {
-  return (err) => {
-    this.error(`${id}: ${err}`);
+Logger.prototype.internalError = function(id, res, err) {
+  const cb = (err) => {
+    if(err instanceof Error) {
+      const stack = err.stack.split('\n');
+      this.error(`${id}: ${err.message}`, ...stack);
+    } else {
+      err = JSON.stringify(err);
+      this.error(`${id}: ${err}`);
+    }
+
     return res.status(500).send('This incident has been logged and will be fixed soon!');
+  };
+
+  if(err) {
+    cb(err);
+  } else {
+    return cb;
   }
 };
-
 
 export default new Logger();

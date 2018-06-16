@@ -16,7 +16,23 @@ app.use((req,res,next) => {
 const port = process.env.PORT;
 routes(app);
 
-logger.init().then(() => {
+if(process.env.CONSOLE_ERRORS === 'true') {
+  logger.consoleErrors = true;
+}
+
+if(process.env.CONSOLE_ACCESS === 'true') {
+  logger.consoleAccess = true;
+}
+
+if(process.env.VERBOSE === 'true') {
+  logger.verbose = true;
+}
+
+if(process.env.MUTE_COUNT === 'true') {
+  logger.muteCount = true;
+}
+
+logger.init('logs').then(() => {
   app.listen(port);
   logger.log(`Server started on ${port}`);
 });

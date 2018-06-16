@@ -2,8 +2,8 @@ import fs from 'fs';
 import _ from 'lodash';
 import Promise from 'bluebird';
 
-import pool from './../services/pg';
 import logger from './../services/logger';
+import timelineDB from './../dbs/timeline';
 
 const defaults = {
   entries: {
@@ -11,12 +11,6 @@ const defaults = {
     offset:0
   }
 };
-
-let manifest = null;
-pool.query('SELECT count(*), MAX(created_at) as "created_at" from Timeline').then(result => manifest = {
-  count:parseInt(result.rows[0].count),
-  last_created:result.rows[0].created_at
-});
 
 const TimelineController = {
   defaults,
@@ -26,7 +20,7 @@ const TimelineController = {
   },
   manifest: (req, res) => {
     logger.access('timeline.manifest', req);
-    res.send({ defaults, ...manifest });
+    res.send({ defaults, ...timelineDB.manifest });
   },
   entries: (req, res) => {
     logger.access('timeline.entries', req);
@@ -42,18 +36,13 @@ const TimelineController = {
       offset = defaults.entries.offset;
     }
 
-    pool.query('SELECT id, message, image, link_id FROM Timeline OFFSET $1::integer LIMIT $2::integer', [ offset, limit ]).then(
-      result => {
-        const entries = result.rows.reduce((obj, row) => {
-          row.image = `${process.env.STATIC_URL}/images/${row.image}`;
-          obj[row.id-1] = row;
-          return obj;
-        }, {});
+    timelineDB.entries(offset, limit).then(entries => {
+      entries.forEach(entry => {
+        entry.image = `${process.env.STATIC_URL}/images/${entry.image}`
+      });
 
-        res.send(entries);
-      },
-      result => res.status(500).send('This will be fixed soon!')
-    );
+      res.send(entries);
+    }, logger.internalError('timeline.entries', res));
   }
 };
 

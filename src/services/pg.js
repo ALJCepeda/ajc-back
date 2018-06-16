@@ -3,7 +3,7 @@ import Promise from 'bluebird';
 
 import logger from './logger.js';
 
-const pool = new Pool({
+const poolConfig = {
   host: process.env.PSQL_HOST,
   port: process.env.PSQL_PORT,
   database: process.env.PSQL_DB,
@@ -11,7 +11,9 @@ const pool = new Pool({
   password: process.env.PSQL_PASSWORD,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
-});
+};
+
+const pool = new Pool(poolConfig);
 
 export default {
   pool,

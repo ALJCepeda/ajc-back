@@ -1,6 +1,6 @@
-CREATE TABLE Blogs (
+CREATE TABLE blogs (
   id SERIAL PRIMARY KEY,
-  file text UNIQUE NOT NULL CHECK (file <> ''),
+  template text UNIQUE NOT NULL CHECK (template <> ''),
   image text NOT NULL CHECK (image <> ''),
   title text NOT NULL CHECK (title <> ''),
   description text NOT NULL CHECK (description <> ''),
@@ -9,19 +9,24 @@ CREATE TABLE Blogs (
   created_at timestamp DEFAULT (now() at time zone 'utc')
 );
 
-CREATE TABLE Links (
+CREATE TABLE blog_urls (
   id SERIAL PRIMARY KEY,
+  blog_id integer NOT NULL REFERENCES blogs(id),
+  url text UNIQUE NOT NULL CHECK (url <> '')
+);
+
+CREATE TABLE links (
+  id SERIAL PRIMARY KEY,
+  name text UNIQUE NOT NULL CHECK (name <> ''),
   url text UNIQUE NOT NULL CHECK (url <> ''),
   marker text NOT NULL CHECK (marker <> ''),
   enabled boolean DEFAULT TRUE,
   created_at timestamp DEFAULT (now() at time zone 'utc')
 );
 
-CREATE TABLE Timeline (
+CREATE TABLE timeline_blogs (
   id SERIAL PRIMARY KEY,
   message text NOT NULL CHECK (message <> ''),
-  image text NOT NULL CHECK (image <> ''),
-  link_id integer REFERENCES Links(id),
-  blog_id integer UNIQUE REFERENCES Blogs(id),
+  blog_id integer UNIQUE NOT NULL REFERENCES blogs(id),
   created_at timestamp DEFAULT (now() at time zone 'utc')
 );
