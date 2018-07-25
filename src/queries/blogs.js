@@ -3,6 +3,7 @@ import bluebird from 'bluebird';
 
 import pool from './../services/pg';
 import injector from './../services/injector';
+import util from './../services/util';
 
 const readFile = bluebird.promisify(fs.readFile);
 
@@ -11,14 +12,34 @@ const BlogsDB = {
     count:0,
     last_updated: null
   },
-  entries(offset, limit) {
+  entry(id) {
     return pool.query(`
-      SELECT id, image, title, category, tags, created_at
+      SELECT blogs.id, image, title, category, tags, created_at, array_agg(uri) as uris
       FROM blogs
-      OFFSET $1::integer LIMIT $2::integer'
+      INNER JOIN blog_uris ON blogs.id = blog_uris.blog_id
+      WHERE blogs.id=$1::integer
+      GROUP BY blogs.id
+    `, [ id ]).then(results => results.rows);
+  },
+  entries(ids) {
+    return pool.query(`
+      SELECT blogs.id, image, title, category, tags, created_at, array_agg(uri) as uris
+      FROM blogs
+      INNER JOIN blog_uris ON blogs.id = blog_uris.blog_id
+      WHERE blogs.id=ANY($1::int[])
+      GROUP BY blogs.id
+    `, [ ids ]).then(util.reduceRowsById);
+  },
+  entriesByPage(page, limit) {
+    const offset = (page - 1) * limit;
+
+    return pool.query(`
+      SELECT id
+      FROM blogs
+      OFFSET $1::integer LIMIT $2::integer
     `, [ offset, limit ]).then(results => results.rows);
   },
-  get(id) {
+  blog(id) {
     return pool.query(`
       SELECT template
       FROM Blogs
@@ -34,13 +55,14 @@ const BlogsDB = {
       return injector.render(blog.toString());
     });
   },
-  url(url) {
+  uri(uri) {
     return pool.query(`
-      SELECT b.template
-      FROM blog_urls AS bu
-      JOIN blogs as b ON (bu.blog_id = b.id)
-      WHERE url=$1::text
-    `, [ url ]).then(blob => {
+      SELECT blogs.template
+      FROM blog_uris
+      INNER JOIN blogs ON (blog_uris.blog_id = blogs.id)
+      WHERE uri=$1::text
+      LIMIT 1
+    `, [ uri ]).then(blob => {
       if(blob.rows.length === 0) {
         const error = new Error('Unable to find blog');
         error.status = 'noblog';

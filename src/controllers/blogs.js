@@ -2,63 +2,91 @@ import _ from 'lodash'
 import Handlebars from 'handlebars';
 
 import logger from './../services/logger';
-import blogsDB from './../dbs/blogs';
+import blogsDB from './../queries/blogs';
+
 
 const defaults = {
   entries: {
-    limit:10,
+    limit:20,
     offset:0
   }
 };
 
 const BlogsController = {
-  addRoutes: (app) => {
+  addRoutes(app) {
     app.get('/blogs/manifest', BlogsController.manifest);
-    app.get('/blogs/entries', BlogsController.entries);
-    app.get('/blogs/:url', BlogsController.url);
+    app.post('/blogs/entries', BlogsController.entries);
+    app.get('/blogs/entriesByPage', BlogsController.entriesByPage);
+    app.get('/blogs/entry/:id', BlogsController.entry);
+    app.get('/blogs/:uri', BlogsController.uri);
   },
-  manifest: (req, res) => {
+  manifest(req, res) {
     logger.access('blogs.manifest', req);
     res.send({ defaults, ...blogsDB.manifest });
   },
-  entries: (req, res) => {
+  entry(req, res) {
+    logger.access('blogs.entry', req);
+
+    let id = parseInt(req.params.id);
+
+    if(_.isNaN(id) || id === 0) {
+      return res.status(422).send('id must be an int');
+    }
+
+    blogsDB.entry(id).then(entry => {
+      res.send(entry);
+    }, logger.internalError('blogs.entry', res));
+  },
+  entries(req, res) {
     logger.access('blogs.entries', req);
 
+    let ids = req.body;
+
+    if(!_.isArray(ids)) {
+      return res.status(422).send('body must be an array');
+    }
+
+    blogsDB.entries(ids).then(entries => {
+      res.send(entries);
+    }, logger.internalError('blogs.entries', res));
+  },
+  entriesByPage(req, res) {
+    logger.access('blogs.entriesByPage', req);
+
     let limit = parseInt(req.query.limit),
-        offset = parseInt(req.query.offset);
+        page = parseInt(req.query.page);
 
     if(_.isNaN(limit) || limit === 0) {
       limit = defaults.entries.limit;
     }
 
-    if(_.isNaN(offset)) {
-      offset = defaults.entries.offset;
+    if(_.isNaN(page) || page < 1) {
+      page = 1;
     }
 
-    blogsDB.entries(offset, limit).then(entries => {
-      entries.forEach(entry => {
-        entry.image = `${process.env.STATIC_URL}/images/${entry.image}`
-      });
-      res.send(entries);
-    }, logger.internalError('blog.entries', res));
+    blogsDB.entriesByPage(page, limit).then(ids => {
+      res.send(ids.map(entry => entry.id));
+    }, logger.internalError('blogs.entriesByPage', res));
   },
-  url: (req, res) => {
-    logger.access('blogs.url', req);
+  uri(req, res) {
+    logger.access('blogs.uri', req);
 
-    const url = req.params.url;
+    let uri = req.params.uri;
 
-    if(!_.isString(url) || url.length === 0) {
-      return res.status(422).send('url must be a string');
+    if((!_.isString(uri) || uri.length === 0)) {
+      return res.status(422).send('uri must be a string');
     }
 
-    blogsDB.url(url).then(blog => {
+    uri = uri.replace(/[\W\_]/g, '').toLowerCase();
+
+    blogsDB.uri(uri).then(blog => {
       res.send(blog);
     }, err => {
       if(err.status === 'noblog') {
         return res.status(404).send({ status:err.status, message:err.message });
       }
 
-      logger.internalError('blogs.url', res, err);
+      logger.internalError('blogs.uri', res, err);
     });
   }
 };

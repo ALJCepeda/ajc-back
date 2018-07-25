@@ -120,9 +120,7 @@ Logger.prototype.access = function (signature, req) {
 };
 
 Logger.prototype.debug = function() {
-  console.log('wtf?');
   if(this.verbose === true || this.consoleDebug === true) {
-    console.log('hit');
     this.log.apply(this, arguments);
   }
 };

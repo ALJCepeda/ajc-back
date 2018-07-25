@@ -2,7 +2,7 @@ import _ from 'lodash';
 import path from 'path';
 import bluebird from 'bluebird';
 
-import linksDB from './../dbs/links';
+import linksDB from './../queries/links';
 import logger from './../services/logger';
 
 const Injector = {
@@ -28,7 +28,7 @@ const Injector = {
     let injected = str.replace(this.regex, (match, capture, index) => {
       capture = capture.trim();
       if(this.keywords[capture]) {
-        return bluebird.resolve(this.keywords[capture]);
+        return this.keywords[capture];
       }
 
       for(let action in this.actions) {
