@@ -1,9 +1,9 @@
 import fs from 'fs';
 import bluebird from 'bluebird';
 
-import pool from './../services/pg';
-import injector from './../services/injector';
-import util from './../services/util';
+import pool from './../libs/pg';
+import injector from './../libs/injector';
+import util from './../libs/util';
 
 const readFile = bluebird.promisify(fs.readFile);
 

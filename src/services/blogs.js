@@ -1,9 +1,9 @@
 import fs from 'fs';
 import bluebird from 'bluebird';
 
-import pool from './../services/pg';
-import injector from './../services/injector';
-import util from './../services/util';
+import pool from './../libs/pg';
+import injector from './../libs/injector';
+import util from './../libs/util';
 
 const readFile = bluebird.promisify(fs.readFile);
 
@@ -14,7 +14,8 @@ const BlogsDB = {
   },
   entry(id) {
     return pool.query(`
-      SELECT blogs.id, image, title, category, tags, created_at, array_agg(uri) as uris
+      SELECT blogs.id, image, title, category, tags, created_at, array_agg(uri) as uris,
+        (SELECT uri FROM blog_uris WHERE id=blogs.id AND isPrimary=true) as primary_uri
       FROM blogs
       INNER JOIN blog_uris ON blogs.id = blog_uris.blog_id
       WHERE blogs.id=$1::integer
@@ -23,7 +24,8 @@ const BlogsDB = {
   },
   entries(ids) {
     return pool.query(`
-      SELECT blogs.id, image, title, category, tags, created_at, array_agg(uri) as uris
+      SELECT blogs.id, image, title, category, tags, created_at, array_agg(uri) as uris,
+        (SELECT uri FROM blog_uris WHERE id=blogs.id AND isPrimary=true) as primary_uri
       FROM blogs
       INNER JOIN blog_uris ON blogs.id = blog_uris.blog_id
       WHERE blogs.id=ANY($1::int[])

@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import Handlebars from 'handlebars';
 
-import logger from './../services/logger';
-import blogsDB from './../queries/blogs';
+import logger from './../libs/logger';
+import blogsDB from './../services/blogs';
 
 
 const defaults = {

@@ -1,8 +1,8 @@
 import express from 'express';
 
 import config from './config';
-import routes from './services/routes';
-import logger from './services/logger';
+import routes from './libs/routes';
+import logger from './libs/logger';
 
 const app = express();
 app.use((req,res,next) => {

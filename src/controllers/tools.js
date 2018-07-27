@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import Promise from 'bluebird';
 import { Readable } from 'stream';
 
-import logger from './../services/logger';
+import logger from './../libs/logger';
 
 const randomBytes = Promise.promisify(crypto.randomBytes);
 

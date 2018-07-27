@@ -3,8 +3,8 @@ import _ from 'lodash';
 import Promise from 'bluebird';
 import isUUID from 'is-uuid';
 
-import logger from './../services/logger';
-import timelineDB from './../queries/timeline';
+import logger from './../libs/logger';
+import timelineDB from './../services/timeline';
 
 const defaults = {
   entries: {

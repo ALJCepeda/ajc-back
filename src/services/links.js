@@ -1,4 +1,4 @@
-import pool from './../services/pg';
+import pool from './../libs/pg';
 
 const LinksDB = {
   get(name) {
