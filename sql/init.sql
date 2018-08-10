@@ -32,14 +32,14 @@ CREATE TABLE links (
 );
 
 CREATE TABLE timeline_blogs (
-  id uuid DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY;
+  id uuid DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
   message text NOT NULL CHECK (message <> ''),
   blog_id integer UNIQUE NOT NULL REFERENCES blogs(id),
   created_at timestamp DEFAULT (now() at time zone 'utc')
 );
 
 CREATE TABLE timeline (
-  id uuid DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY;
+  id uuid DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
   message text NOT NULL CHECK (message <> ''),
   image text NOT NULL CHECK (image <> ''),
   link text,
