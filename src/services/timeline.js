@@ -14,14 +14,14 @@ const TimelineDB = {
   },
   entry(id) {
     return pool.query(`
-      SELECT id, message, image, link, link_label, created_at
+      SELECT *
       FROM all_timelines
       WHERE id=$1::uuid
     `, [ id ]).then(result => result.rows[0]);
   },
   entries(ids) {
     return pool.query(`
-      SELECT id, message, image, link, link_label, created_at
+      SELECT *
       FROM all_timelines
       WHERE id=ANY($1::uuid[])
     `, [ ids ]).then(util.reduceRowsById);
