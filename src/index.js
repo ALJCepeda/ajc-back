@@ -1,7 +1,7 @@
 import express from 'express';
 
 import config from './config';
-import routes from './libs/routes';
+import routes from './routes';
 import logger from './libs/logger';
 
 const app = express();

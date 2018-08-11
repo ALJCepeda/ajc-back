@@ -1,9 +1,9 @@
 import path from 'path';
 import bodyParser from 'body-parser';
 
-import BlogsController from '../controllers/blogs';
-import ToolsController from '../controllers/tools';
-import TimelineController from '../controllers/timeline';
+import BlogsController from './controllers/blogs';
+import ToolsController from './controllers/tools';
+import TimelineController from './controllers/timeline';
 
 export default function(app) {
   app.get('/build.js', (req, res) => {
