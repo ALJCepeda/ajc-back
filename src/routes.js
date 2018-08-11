@@ -10,6 +10,10 @@ export default function(app) {
     res.sendFile(process.env.JS_FILE);
   });
 
+  app.get('/build.js.map', (req, res) => {
+    res.sendFile(process.env.JS_FILE + '.map');
+  });
+
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
