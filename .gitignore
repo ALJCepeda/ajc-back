@@ -6,3 +6,4 @@ logs/
 backups/
 .env
 temp/
+.idea

@@ -8,9 +8,7 @@
   },
   "main": "dist/index.js",
   "scripts": {
-    "start": "npm build && pm2 start dist/index.js --name 'back'",
-    "restart": "pm2 restart 'back'",
-    "stop": "pm2 stop 'back'",
+    "start": "npm run-script build && node dist/index.js",
     "build": "babel src -d dist",
     "dev": "nodemon src/index.js --exec babel-node",
     "inspect": "nodemon src/index.js --exec babel-node --inspect"
