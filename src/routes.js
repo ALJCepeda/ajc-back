@@ -1,4 +1,3 @@
-import path from 'path';
 import bodyParser from 'body-parser';
 
 import BlogsController from './controllers/blogs';
@@ -7,11 +6,11 @@ import TimelineController from './controllers/timeline';
 
 export default function(app) {
   app.get('/build.js', (req, res) => {
-    res.sendFile(process.env.JS_FILE);
+    res.sendFile(__dirname + '/' + process.env.JS_FILE);
   });
 
   app.get('/build.js.map', (req, res) => {
-    res.sendFile(process.env.JS_FILE + '.map');
+    res.sendFile(__dirname + '/' + process.env.JS_FILE + '.map');
   });
 
   app.use(bodyParser.json());
@@ -27,6 +26,6 @@ export default function(app) {
   }
 
   app.get(clientRoute, (req, res) => {
-    res.sendFile(process.env.HTML_FILE);
+    res.sendFile(__dirname + '/' + process.env.HTML_FILE);
   });
 };
