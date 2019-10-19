@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.28",
+    "@types/lodash": "^4.14.144",
     "eslint": "^4.19.1",
     "inquirer": "^5.2.0",
     "js-yaml": "^3.13.1",

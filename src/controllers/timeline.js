@@ -1,7 +1,5 @@
-import fs from 'fs';
-import _ from 'lodash';
-import Promise from 'bluebird';
-import isUUID from 'is-uuid';
+import { isNaN, isArray } from 'lodash';
+import * as isUUID from 'is-uuid';
 
 import logger from './../libs/logger';
 import timelineDB from './../services/timeline';
@@ -42,8 +40,8 @@ const TimelineController = {
 
     let ids = req.body;
 
-    if(!_.isArray(ids)) return res.status(422).send('body must be an array')
-    if(!ids.every(isUUID.v4)) return res.status(422).send('all ids must be a uuidv4')
+    if(!isArray(ids)) return res.status(422).send('body must be an array');
+    if(!ids.every(isUUID.v4)) return res.status(422).send('all ids must be a uuidv4');
 
     timelineDB.entries(ids).then(entries => {
       res.send(entries);
@@ -55,8 +53,8 @@ const TimelineController = {
     let limit = parseInt(req.query.limit),
         page = parseInt(req.query.page);
 
-    if(_.isNaN(limit) || limit === 0) limit = defaults.entries.limit
-    if(_.isNaN(page) || page < 1) page = 1
+    if(isNaN(limit) || limit === 0) limit = defaults.entries.limit;
+    if(isNaN(page) || page < 1) page = 1;
 
     timelineDB.entriesByPage(page, limit).then(ids => {
       res.send(ids.map(entry => entry.id));

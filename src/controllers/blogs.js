@@ -1,6 +1,4 @@
-import _ from 'lodash'
-import Handlebars from 'handlebars';
-
+import { isNaN, isArray, isString } from 'lodash';
 import logger from './../libs/logger';
 import blogsDB from './../services/blogs';
 
@@ -29,7 +27,7 @@ const BlogsController = {
 
     let id = parseInt(req.params.id);
 
-    if(_.isNaN(id) || id === 0) {
+    if(isNaN(id) || id === 0) {
       return res.status(422).send('id must be an int');
     }
 
@@ -42,7 +40,7 @@ const BlogsController = {
 
     let ids = req.body;
 
-    if(!_.isArray(ids)) {
+    if(!isArray(ids)) {
       return res.status(422).send('body must be an array');
     }
 
@@ -56,11 +54,11 @@ const BlogsController = {
     let limit = parseInt(req.query.limit),
         page = parseInt(req.query.page);
 
-    if(_.isNaN(limit) || limit === 0) {
+    if(isNaN(limit) || limit === 0) {
       limit = defaults.entries.limit;
     }
 
-    if(_.isNaN(page) || page < 1) {
+    if(isNaN(page) || page < 1) {
       page = 1;
     }
 
@@ -73,7 +71,7 @@ const BlogsController = {
 
     let uri = req.params.uri;
 
-    if((!_.isString(uri) || uri.length === 0)) {
+    if((!isString(uri) || uri.length === 0)) {
       return res.status(422).send('uri must be a string');
     }
 

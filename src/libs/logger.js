@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { isUndefined } from 'lodash';
 import * as fs from 'fs';
 import * as moment from 'moment';
 import { promisify } from 'bluebird';
@@ -106,7 +106,7 @@ Logger.prototype.access = function (signature, req) {
   this.doVerbose(JSON.stringify(req.query), 'consoleAccess');
   this.accessStream.write(`\n`);
 
-  if(!_.isUndefined(req.body)) {
+  if(!isUndefined(req.body)) {
     this.accessStream.write(JSON.stringify(req.body));
     this.doVerbose(JSON.stringify(req.body), 'consoleAccess');
     this.accessStream.write(`\n`);
