@@ -1,11 +1,5 @@
-import fs from 'fs';
-import bluebird from 'bluebird';
-
 import pool from './../libs/pg';
-import injector from './../libs/injector';
 import util from './../libs/util';
-
-const readFile = bluebird.promisify(fs.readFile);
 
 const TimelineDB = {
   manifest: {

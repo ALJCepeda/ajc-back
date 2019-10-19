@@ -1,12 +1,11 @@
-import fs from 'fs';
 import _ from 'lodash';
-import crypto from 'crypto';
-import Promise from 'bluebird';
+import * as crypto from 'crypto';
+import { promisify } from 'bluebird';
 import { Readable } from 'stream';
 
 import logger from './../libs/logger';
 
-const randomBytes = Promise.promisify(crypto.randomBytes);
+const randomBytes = promisify(crypto.randomBytes);
 
 const ToolsController = {
   addRoutes: (app) => {

@@ -1,6 +1,5 @@
-import 'babel-polyfill';
-import path from 'path';
-import dotenv from 'dotenv';
+import * as path from 'path';
+import * as dotenv from 'dotenv';
 
 dotenv.config();
 

@@ -1,11 +1,11 @@
-import fs from 'fs';
-import bluebird from 'bluebird';
+import * as fs from 'fs';
+import { promisify } from 'bluebird';
 
 import pool from './../libs/pg';
 import injector from './../libs/injector';
 import util from './../libs/util';
 
-const readFile = bluebird.promisify(fs.readFile);
+const readFile = promisify(fs.readFile);
 
 const BlogsDB = {
   manifest: {

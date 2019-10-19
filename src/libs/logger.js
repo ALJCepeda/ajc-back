@@ -1,10 +1,10 @@
 import _ from 'lodash';
-import fs from 'fs';
-import moment from 'moment';
-import bluebird from 'bluebird';
+import * as fs from 'fs';
+import * as moment from 'moment';
+import { promisify } from 'bluebird';
 
-const stat = bluebird.promisify(fs.stat);
-const mkdir = bluebird.promisify(fs.mkdir);
+const stat = promisify(fs.stat);
+const mkdir = promisify(fs.mkdir);
 const log = console.log;
 
 const makeDirectory = function(dir) {

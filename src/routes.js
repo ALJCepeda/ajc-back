@@ -1,4 +1,4 @@
-import bodyParser from 'body-parser';
+import { json, urlencoded } from 'body-parser';
 
 import BlogsController from './controllers/blogs';
 import ToolsController from './controllers/tools';
@@ -13,8 +13,8 @@ export default function(app) {
     res.sendFile(__dirname + '/' + process.env.JS_FILE + '.map');
   });
 
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(json());
+  app.use(urlencoded({ extended: true }));
 
   BlogsController.addRoutes(app);
   ToolsController.addRoutes(app);

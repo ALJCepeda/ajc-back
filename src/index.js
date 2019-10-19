@@ -1,4 +1,4 @@
-import express from 'express';
+import * as express from 'express';
 import './config';
 import routes from './routes';
 import logger from './libs/logger';
