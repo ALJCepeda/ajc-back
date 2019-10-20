@@ -1,11 +1,10 @@
 import { Pool } from 'pg';
-import Promise from 'bluebird';
 
-import logger from './logger.js';
+import logger from './logger';
 
 const poolConfig = {
   host: process.env.PSQL_HOST,
-  port: process.env.PSQL_PORT,
+  port: Number(process.env.PSQL_PORT),
   database: process.env.PSQL_DB,
   user: process.env.PSQL_USER,
   password: process.env.PSQL_PASSWORD,
@@ -18,7 +17,7 @@ const pool = new Pool(poolConfig);
 export default {
   pool,
   connect: pool.connect,
-  query: async function(query, params = []) {
+  query: async function(query, params = [] as any[]): Promise<any> {
     try {
       const client = await pool.connect();
       const res = await client.query(query, params);

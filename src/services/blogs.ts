@@ -12,7 +12,7 @@ const BlogsDB = {
     count:0,
     last_updated: null
   },
-  entry(id) {
+  entry(id:number) {
     return pool.query(`
       SELECT blogs.id, image, title, category, tags, created_at, array_agg(uri) as uris,
         (SELECT uri FROM blog_uris WHERE id=blogs.id AND isPrimary=true) as primary_uri
@@ -66,9 +66,7 @@ const BlogsDB = {
       LIMIT 1
     `, [ uri ]).then(blob => {
       if(blob.rows.length === 0) {
-        const error = new Error('Unable to find blog');
-        error.status = 'noblog';
-        throw error;
+        throw  new Error('Unable to find blog');
       }
 
       const template = blob.rows[0].template;
@@ -79,9 +77,10 @@ const BlogsDB = {
   }
 };
 
+/*
 pool.query('SELECT count(*), MAX(created_at) as "created_at" FROM Blogs').then(result => BlogsDB.manifest = {
   count:parseInt(result.rows[0].count),
-  last_created:result.rows[0].created_at
-});
+  last_updated:result.rows[0].created_at
+});*/
 
 export default BlogsDB;

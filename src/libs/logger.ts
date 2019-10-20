@@ -8,7 +8,7 @@ const mkdir = promisify(fs.mkdir);
 const log = console.log;
 
 const makeDirectory = function(dir) {
-  return mkdir(dir, '0740').catch((err) => {
+  return mkdir(dir).catch((err) => {
     log(err);
     throw err;
   });
@@ -67,7 +67,7 @@ Logger.prototype.init = function(dir) {
 };
 
 Logger.prototype.timestamp = function() {
-  return moment().format('MM-DD HHmm');
+  return moment.utc().format('MM-DD HHmm');
 };
 
 Logger.prototype.error = function() {
@@ -155,6 +155,7 @@ Logger.prototype.erroredRequest = function(err, req) {
 Logger.prototype.internalError = function(id, res, err) {
   const cb = (err) => {
     if(err instanceof Error) {
+      // @ts-ignore
       const stack = err.stack.split('\n');
       this.error(`${id}: ${err.message}`, ...stack);
     } else {

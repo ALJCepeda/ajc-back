@@ -1,12 +1,12 @@
-import _ from 'lodash';
-import path from 'path';
-import bluebird from 'bluebird';
+import { isString } from 'lodash';
+import { normalize } from 'path';
+import * as Promise from 'bluebird';
 
 import linksDB from './../services/links';
 import logger from './../libs/logger';
 
 const Injector = {
-  regex:/{{\s?([\w\s\.\:\\\/]+)\s?}}/g,
+  regex:/{{\s?([\w\s\\\/]+)\s?}}/g,
   keywords: {
     "flex.css": `${process.env.STATIC_URL}/ajc-toolbelt/css/flex.css`,
     "display.css": `${process.env.STATIC_URL}/ajc-toolbelt/css/display.css`
@@ -16,14 +16,14 @@ const Injector = {
       return linksDB.get(tag).then(link => link.url);
     },
     image(tag) {
-      return bluebird.resolve(`${process.env.STATIC_URL}/images/${path.normalize(tag)}`);
+      return Promise.resolve(`${process.env.STATIC_URL}/images/${normalize(tag)}`);
     }
   },
   rebuild(parts, replacements) {
     return parts.reduce((result, part, index) => {
       result = result + part;
 
-      if(_.isString(replacements[index])) {
+      if(isString(replacements[index])) {
         result = result + replacements[index];
       }
 
@@ -31,29 +31,30 @@ const Injector = {
     }, '');
   },
   findMatches(str) {
-    const matches = [];
-    let match = [];
+    const matches:any[] = [];
+    let match;
     while ((match = this.regex.exec(str)) !== null) {
-      matches.push({
+      const newMatch = {
         match:match[0],
         capture:match[1].trim(),
         index:match.index,
         input:match.input
-      });
+      };
+
+      matches.push(newMatch);
     }
 
     return matches;
   },
   splitTemplate(str, matches) {
-    const parts = [];
-    const promises = [];
+    const parts:any[] = [];
+    const promises:Promise<any>[] = [];
     let offset = 0;
     matches.forEach(({ match, capture, index }) => {
       const part = str.slice(offset, index);
       offset = index + match.length;
       parts.push(part);
 
-      const test = this.keywords[capture];
       if(this.keywords[capture]) {
         const promise = Promise.resolve(this.keywords[capture]);
         promises.push(promise);
@@ -79,7 +80,7 @@ const Injector = {
     const matches = this.findMatches(str);
     const { parts, promises } = this.splitTemplate(str, matches);
 
-    return bluebird.all(promises).then(results => {
+    return Promise.all(promises).then(results => {
       return this.rebuild(parts, results);
     });
   }

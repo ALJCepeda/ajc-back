@@ -1,0 +1,35 @@
+import './config';
+import logger from './libs/logger';
+import {typeORMConfig} from "./config";
+import {createConnection} from "typeorm";
+import serverService from "./services/ServerService";
+
+if(process.env.CONSOLE_ERRORS === 'true') {
+  logger.consoleErrors = true;
+}
+
+if(process.env.CONSOLE_ACCESS === 'true') {
+  logger.consoleAccess = true;
+}
+
+if(process.env.VERBOSE === 'true') {
+  logger.verbose = true;
+}
+
+if(process.env.MUTE_COUNT === 'true') {
+  logger.muteCount = true;
+}
+
+async function run(): Promise<any> {
+  await logger.init('logs');
+  await createConnection(typeORMConfig);
+  const port = Number(process.env.PORT);
+
+  const app = serverService.setupApp();
+  app.listen(port);
+  logger.log(`Server started on ${port}`)
+}
+
+run().then(() => logger.log('Completed setup'));
+
+
