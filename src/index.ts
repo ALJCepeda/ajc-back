@@ -1,5 +1,5 @@
 import './config';
-import logger from './libs/logger';
+import logger from './services/logger';
 import {typeORMConfig} from "./config";
 import {createConnection} from "typeorm";
 import serverService from "./services/ServerService";

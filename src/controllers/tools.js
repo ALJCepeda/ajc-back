@@ -3,7 +3,7 @@ import * as crypto from 'crypto';
 import { promisify } from 'bluebird';
 import { Readable } from 'stream';
 
-import logger from './../libs/logger';
+import logger from './../services/logger';
 
 const randomBytes = promisify(crypto.randomBytes);
 

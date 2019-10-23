@@ -1,7 +1,7 @@
 import { isNaN } from 'lodash';
 import {Request, Response} from 'express';
 
-import logger from './../libs/logger';
+import logger from './../services/logger';
 import TimelineService from "../services/TimelineService";
 import Controller from "../decorators/Controller";
 import {GET} from "../decorators/HTTP";

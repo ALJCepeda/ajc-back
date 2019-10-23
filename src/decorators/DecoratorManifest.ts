@@ -1,7 +1,7 @@
 import {Application, NextFunction, Request, Response} from "express";
 import {Container} from "inversify";
 import { normalize, isAbsolute } from "path";
-import logger from "../libs/logger";
+import logger from "../services/logger";
 
 type ControllerConstructor = new (...args:any[]) => any;
 

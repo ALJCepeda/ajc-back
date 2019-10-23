@@ -3,7 +3,7 @@ import { normalize } from 'path';
 import * as Promise from 'bluebird';
 
 import linksDB from './../services/links';
-import logger from './../libs/logger';
+import logger from './../services/logger';
 
 const Injector = {
   regex:/{{\s?([\w\s\\\/]+)\s?}}/g,
