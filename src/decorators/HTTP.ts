@@ -1,15 +1,18 @@
+import {RequestHandler} from 'express';
 import DecoratorManifest from "./DecoratorManifest";
+import {Middleware} from "../types";
 
-export function HTTP(action:string, path:string) {
+export function HTTP(action:string, path:string, ...middleware:Middleware[]) {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    DecoratorManifest.recordHTTP(target.constructor, action, path, propertyKey);
+    DecoratorManifest.recordHTTP(target.constructor, action, path, propertyKey, ...middleware);
   }
 }
 
-export function GET(path:string) {
-  return HTTP('get', path);
+export function GET(path:string, ...middleware:Middleware[]) {
+  return HTTP('get', path, ...middleware);
 }
 
-export function POST(path:string) {
-  return HTTP('post', path);
+export function POST(path:string, ...middleware:Middleware[]) {
+  return HTTP('post', path, ...middleware);
 }
+

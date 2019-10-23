@@ -8,10 +8,8 @@ export default function(container:Container) {
     const entityManager = getConnection().createEntityManager();
 
     containerChild.bind(EntityManager).toConstantValue(entityManager);
-    console.log('EntityManager bound');
 
     res.locals.container = containerChild;
-
     next();
   }
 }

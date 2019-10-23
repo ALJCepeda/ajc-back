@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { promisify } from 'bluebird';
 import {WriteStream} from "fs";
 import {Request, Response} from "express";
+import { parse } from 'url';
 
 const stat = promisify(fs.stat);
 const mkdir = promisify(fs.mkdir);
@@ -84,7 +85,10 @@ class Logger {
     this.errorCount++;
   }
 
-  access(signature:string, req:Request) {
+  access(req:Request) {
+    const parsedUrl = parse(req.originalUrl);
+    const path = parsedUrl.pathname;
+
     const writeObj = (identifier:string, obj:any) => {
       const objStr = JSON.stringify(obj);
       if(objStr !== '{}') {
@@ -97,7 +101,7 @@ class Logger {
     const timestamp = this.timestamp();
     const ip = req.connection.remoteAddress;
 
-    const hit = `${timestamp} (${signature}) ${ip}`;
+    const hit = `${timestamp} ${path} ${ip}`;
     this.accessStream.write(`${hit}\n`);
     this.doVerbose(hit, 'consoleAccess');
 
@@ -150,14 +154,17 @@ class Logger {
     }
   }
 
-  internalError(signature:string, resp:Response, err:Error) {
+  internalError(resp:Response, err:Error) {
+    const parsedUrl = parse((resp.req as Request).originalUrl);
+    const path = parsedUrl.pathname;
+
     const cb = (err) => {
       if(err instanceof Error) {
         const stack = (err.stack as string).split('\n');
-        this.error(`${signature}: ${err.message}`, ...stack);
+        this.error(`${path}: ${err.message}`, ...stack);
       } else {
         err = JSON.stringify(err);
-        this.error(`${signature}: ${err}`);
+        this.error(`${path}: ${err}`);
       }
 
       return resp.status(500).send('This incident has been logged and will be fixed soon!');
@@ -171,4 +178,5 @@ class Logger {
   }
 }
 
-export default new Logger();
+export const logger = new Logger();
+export default logger;

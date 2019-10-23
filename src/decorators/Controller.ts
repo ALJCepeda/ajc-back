@@ -1,10 +1,10 @@
 import DecoratorManifest from "./DecoratorManifest";
 import {decorate, injectable} from "inversify";
-type ControllerConstructor = new (...args:any[]) => any;
+import {ControllerConstructor, Middleware} from "../types";
 
-export default function Controller(basePath:string) {
+export default function Controller(basePath:string, ...middleware:Middleware[]) {
   return (target:ControllerConstructor) => {
     decorate(injectable(), target);
-    DecoratorManifest.recordController(target, basePath);
+    DecoratorManifest.recordController(target, basePath, ...middleware);
   }
 }

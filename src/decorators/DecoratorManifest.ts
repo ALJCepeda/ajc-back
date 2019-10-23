@@ -2,19 +2,26 @@ import {Application, NextFunction, Request, Response} from "express";
 import {Container} from "inversify";
 import { normalize, isAbsolute } from "path";
 import logger from "../services/logger";
+import {ControllerConstructor, Middleware} from "../types";
+import ValidationMiddleware from "../middleware/ValidationMiddleware";
+import LoggerMiddleware from "../middleware/LoggerMiddleware";
 
-type ControllerConstructor = new (...args:any[]) => any;
+interface RouterHandlerEntry {
+  methodKey:string;
+  middleware:Middleware[]
+}
 
 class ControllerEntry {
   basePath:string = '/';
-  handlers:Map<string, Map<string, string>> = new Map();
+  middleware:Middleware[];
+  handlers:Map<string, Map<string, RouterHandlerEntry>> = new Map();
 
-  pathMapFor(method:string):Map<string, string> {
+  pathMapFor(method:string):Map<string, RouterHandlerEntry> {
     if(!this.handlers.has(method)) {
       this.handlers.set(method, new Map());
     }
 
-    return this.handlers.get(method) as Map<string, string>;
+    return this.handlers.get(method) as Map<string, RouterHandlerEntry>;
   }
 }
 
@@ -29,15 +36,19 @@ class DecoratorManifest {
     return this.controllers.get(constructor) as ControllerEntry;
   }
 
-  recordController(constructor:ControllerConstructor, basePath:string) {
+  recordController(constructor:ControllerConstructor, basePath:string, ...middleware:Middleware[]) {
     const entry = this.entryForController(constructor);
     entry.basePath = basePath;
+    entry.middleware = middleware;
   }
 
-  recordHTTP(constructor:ControllerConstructor, action:string, path:string, methodKey:string) {
+  recordHTTP(constructor:ControllerConstructor, action:string, path:string, methodKey:string, ...middleware:Middleware[]) {
     const entry = this.entryForController(constructor);
     const pathMap = entry.pathMapFor(path);
-    pathMap.set(action, methodKey);
+    pathMap.set(action, {
+      methodKey,
+      middleware
+    });
   }
 
   generateRoutes(app:Application, container:Container) {
@@ -46,7 +57,7 @@ class DecoratorManifest {
       const basePath = controllerEntry.basePath;
 
       controllerEntry.handlers.forEach((pathMap, path) => {
-        pathMap.forEach((methodKey, action) => {
+        pathMap.forEach((routeHandlerEntry, action) => {
           let route = normalize(`${basePath}/${path}`);
 
           if(!isAbsolute(route)) {
@@ -55,10 +66,20 @@ class DecoratorManifest {
 
           logger.log(action, route, constructor.name);
 
-          app[action](route, (req:Request, resp:Response, next:NextFunction) => {
-            const controller = resp.locals.container.get(constructor);
-            controller[methodKey](req, resp, next);
-          });
+          app[action](route,
+            LoggerMiddleware,
+            controllerEntry.middleware,
+            routeHandlerEntry.middleware,
+            ValidationMiddleware,
+            async (req:Request, resp:Response, next:NextFunction) => {
+              try {
+                const controller = resp.locals.container.get(constructor);
+                await controller[routeHandlerEntry.methodKey](req, resp, next);
+              } catch(err) {
+                logger.internalError(resp, err);
+              }
+            }
+          );
         });
       });
     });

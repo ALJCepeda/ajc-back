@@ -1,7 +1,5 @@
-import { isNaN } from 'lodash';
 import {Request, Response} from 'express';
-
-import logger from './../services/logger';
+import { check } from 'express-validator';
 import TimelineService from "../services/TimelineService";
 import Controller from "../decorators/Controller";
 import {GET} from "../decorators/HTTP";
@@ -21,25 +19,17 @@ export class TimelineController {
 
   @GET('manifest')
   manifest(req: Request, res: Response) {
-    logger.access('timeline.manifest', req);
     res.send({defaults});
   }
 
-  @GET('entriesByPage')
-  async entriesByPage(req: Request, res: Response) {
-    logger.access('timeline.entriesByPage', req);
+  @GET('entries', [
+    check('limit').isInt({ gt:0 }).withMessage('Limit must be larger than 0'),
+    check('page').isInt({ gt:0 }).withMessage('Page must be larger than 0')
+  ]) async entries(req: Request, res: Response) {
+    const limit = parseInt(req.query.limit);
+    const page = parseInt(req.query.page);
 
-    let limit = parseInt(req.query.limit),
-      page = parseInt(req.query.page);
-
-    if (isNaN(limit) || limit === 0) limit = defaults.entries.limit;
-    if (isNaN(page) || page < 1) page = 1;
-
-    try {
-      const entries = await this.timelineService.entriesByPage(page, limit);
-      res.send(entries);
-    } catch (err) {
-      logger.internalError('timeline.entriesByPage', res, err);
-    }
+    const entries = await this.timelineService.entriesByPage(page, limit);
+    res.send(entries);
   }
 }
