@@ -1,8 +1,8 @@
 import * as dotenv from 'dotenv';
 import {PostgresConnectionOptions} from "typeorm/driver/postgres/PostgresConnectionOptions";
 import User from "./models/User";
-import TimelineEntry from "./models/TimelineEntry";
 import Blog from "./models/Blog";
+import TimelineEntry from "ajc-shared/src/models/TimelineEntry";
 
 dotenv.config();
 

@@ -58,7 +58,13 @@ class DecoratorManifest {
 
       controllerEntry.handlers.forEach((pathMap, path) => {
         pathMap.forEach((routeHandlerEntry, action) => {
-          let route = normalize(`${basePath}/${path}`);
+          let route;
+
+          if(path) {
+            route = normalize(`${basePath}/${path}`)
+          } else {
+            route = normalize(basePath);
+          }
 
           if(!isAbsolute(route)) {
             route = `/${route}`;

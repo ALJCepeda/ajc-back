@@ -16,3 +16,6 @@ export function POST(path:string, ...middleware:Middleware[]) {
   return HTTP('post', path, ...middleware);
 }
 
+export function REMOVE(path:string, ...middleware:Middleware[]) {
+  return HTTP('delete', path, ...middleware);
+}

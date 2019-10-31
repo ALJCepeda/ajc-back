@@ -1,6 +1,7 @@
 import {EntityManager} from "typeorm";
 import {injectable} from "inversify";
 import TimelineEntryRepository from "../repositories/TimelineEntryRepository";
+import TimelineEntry from "ajc-shared/src/models/TimelineEntry";
 
 @injectable()
 export default class TimelineService {
@@ -14,5 +15,13 @@ export default class TimelineService {
 
   entriesByPage(page:number, limit:number) {
     return this.timelineEntryRepository.entriesByPage(page, limit);
+  }
+
+  upsert(entry:TimelineEntry) {
+    return this.timelineEntryRepository.save(entry);
+  }
+
+  remove(id:number) {
+    return this.timelineEntryRepository.delete({ id });
   }
 }
