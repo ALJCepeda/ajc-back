@@ -1,7 +1,7 @@
 import {EntityManager} from "typeorm";
 import {injectable} from "inversify";
 import TimelineEntryRepository from "../repositories/TimelineEntryRepository";
-import TimelineEntry from "ajc-shared/src/models/TimelineEntry";
+import TimelineEntry from "../models/TimelineEntry";
 
 @injectable()
 export default class TimelineService {

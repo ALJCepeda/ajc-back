@@ -1,5 +1,5 @@
 import {EntityRepository, Repository} from "typeorm";
-import TimelineEntry from "ajc-shared/src/models/TimelineEntry";
+import TimelineEntry from "../models/TimelineEntry";
 
 @EntityRepository(TimelineEntry)
 export default class TimelineEntryRepository extends Repository<TimelineEntry> {
