@@ -23,13 +23,13 @@ if(process.env.MUTE_COUNT === 'true') {
 async function run(): Promise<any> {
   await logger.init('logs');
   await createConnection(typeORMConfig);
-  const port = Number(process.env.PORT);
+  const port = Number(process.env.PORT) || 3000;
 
   const app = serverService.setupApp();
   app.listen(port);
   logger.log(`Server started on ${port}`)
 }
 
-run().then(() => logger.log('Completed setup'));
+run().then(() => logger.log('Completed setup'), (err) => console.error(err));
 
 
