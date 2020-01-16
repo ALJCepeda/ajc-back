@@ -1,7 +1,7 @@
 {
   "name": "ajc-back",
   "version": "1.2.0",
-  "description": "AJCepedas backend services",
+  "description": "AJCepeda's backend services",
   "repository": {
     "type": "git",
     "url": "https://github.com/ALJCepeda/ajcepeda-back.git"
@@ -10,8 +10,10 @@
   "scripts": {
     "start": "node dist/index.js",
     "build": "babel src -d dist",
-    "dev": "ts-node src/index.ts",
-    "watch:dev": "nodemon --exec npm run dev"
+    "dev": "node -r ts-node/register src/index.ts",
+    "inspect": "node -r ts-node/register --inspect-brk=9229 src/index.ts",
+    "docker:dev": "docker exec ajc-back npm run dev",
+    "docker:inspect": "docker exec ajc-back npm run inspect"
   },
   "author": "Alfred Cepeda",
   "license": "ISC",
@@ -22,7 +24,7 @@
     "dotenv": "^5.0.1",
     "express": "^4.17.1",
     "express-validator": "^6.2.0",
-    "handlebars": "^4.5.3",
+    "handlebars": "^4.4.5",
     "inversify": "^5.0.1",
     "is-uuid": "^1.0.2",
     "lodash": "^4.17.15",

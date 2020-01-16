@@ -8,11 +8,11 @@ dotenv.config();
 
 export const typeORMConfig: PostgresConnectionOptions = {
   type: 'postgres',
-  host: process.env.PSQL_HOST || 'db',
-  port: Number(process.env.PSQL_PORT || 5432),
-  username: process.env.PSQL_USER || 'ajc-web',
-  password: process.env.PSQL_PASSWORD || 'password',
-  database: process.env.PSQL_DB || 'ajc-web'  ,
+  host: process.env.POSTGRES_HOST || 'db',
+  port: Number(process.env.POSTGRES_PORT || 5432),
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DB,
   synchronize: true,
   logging: false,
   entities: [

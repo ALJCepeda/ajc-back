@@ -9,6 +9,7 @@ export function HTTP(action:string, path:string, ...middleware:Middleware[]) {
 }
 
 export function GET(path:string, ...middleware:Middleware[]) {
+  debugger;
   return HTTP('get', path, ...middleware);
 }
 
