@@ -4,23 +4,12 @@ import {typeORMConfig} from "./config";
 import {createConnection} from "typeorm";
 import serverService from "./services/ServerService";
 
-if(process.env.CONSOLE_ERRORS === 'true') {
-  logger.consoleErrors = true;
-}
+logger.consoleErrors = process.env.CONSOLE_ERRORS === 'true';
+logger.consoleAccess = process.env.CONSOLE_ACCESS === 'true';
+logger.verbose = process.env.VERBOSE === 'true';
+logger.muteCount = process.env.MUTE_COUNT === 'true';
 
-if(process.env.CONSOLE_ACCESS === 'true') {
-  logger.consoleAccess = true;
-}
-
-if(process.env.VERBOSE === 'true') {
-  logger.verbose = true;
-}
-
-if(process.env.MUTE_COUNT === 'true') {
-  logger.muteCount = true;
-}
-
-async function run(): Promise<any> {
+async function run(): Promise<void> {
   await logger.init('logs');
   await createConnection(typeORMConfig);
   const port = Number(process.env.PORT) || 3000;
@@ -30,6 +19,4 @@ async function run(): Promise<any> {
   logger.log(`Server started on ${port}`)
 }
 
-run().then(() => logger.log('Completed setup'), (err) => console.error(err));
-
-
+run().then(() => logger.log('Completed setup'), (err) => logger.error(err));

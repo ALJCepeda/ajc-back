@@ -63,7 +63,7 @@ class Logger {
   }
 
   timestamp() {
-    return moment.utc().format('MM-DD HHmm');
+    return moment.utc().format('MM-DD HH:mm:ss');
   }
 
   error(...args:string[]) {

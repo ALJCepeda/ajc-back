@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 
-import logger from './logger';
+import logger from './../services/logger';
 
 const poolConfig = {
   host: process.env.PSQL_HOST,
