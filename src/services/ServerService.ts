@@ -22,7 +22,7 @@ export class ServerService {
   setupApp():Application {
     this.readControllers();
 
-    const clientRoute = process.env.NODE_ENV === 'dev' ? '/' : '*';
+    const clientRoute = process.env.NODE_ENV === 'development' ? '/' : '*';
     let container = new Container({
       autoBindInjectable: true
     });
