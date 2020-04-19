@@ -1,7 +1,7 @@
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity('timeline_entry')
-export default class TimelineEntry {
+export default class TimelineEntry implements ITimelineEntry {
     @PrimaryGeneratedColumn()
     id?:number;
 
