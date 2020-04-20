@@ -8,6 +8,8 @@ import DecoratorManifest from "../decorators/DecoratorManifest";
 import HeaderMiddleware from "../middleware/HeaderMiddleware";
 import ContainerMiddleware from "../middleware/ContainerMiddleware";
 import {Application} from "express";
+import {setupPassport} from "../config/passport";
+import {EntityManager, getConnection} from "typeorm";
 
 export class ServerService {
   readControllers() {
@@ -26,6 +28,8 @@ export class ServerService {
     let container = new Container({
       autoBindInjectable: true
     });
+    const entityManager = getConnection().createEntityManager();
+    container.bind(EntityManager).toConstantValue(entityManager);
 
     const app = express();
 
@@ -33,6 +37,8 @@ export class ServerService {
     app.use(urlencoded({ extended: true }));
     app.use(HeaderMiddleware);
     app.use(ContainerMiddleware(container));
+
+    setupPassport(app, container);
 
     app.get(clientRoute, (req, res) => {
       res.sendFile(__dirname + '/' + process.env.HTML_FILE);

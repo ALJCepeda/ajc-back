@@ -4,11 +4,6 @@ import {typeORMConfig} from "./config";
 import {createConnection} from "typeorm";
 import serverService from "./services/ServerService";
 
-logger.consoleErrors = process.env.CONSOLE_ERRORS === 'true';
-logger.consoleAccess = process.env.CONSOLE_ACCESS === 'true';
-logger.verbose = process.env.VERBOSE === 'true';
-logger.muteCount = process.env.MUTE_COUNT === 'true';
-
 async function run(): Promise<void> {
   await logger.init('logs');
   await createConnection(typeORMConfig);

@@ -47,6 +47,10 @@ class Logger {
   consoleAccess:boolean = false;
   consoleDebug:boolean = false;
 
+  constructor(config:Partial<Logger> = {}) {
+    Object.assign(this, config);
+  }
+
   init(dir:string) {
     return initiateDirectory(dir).then(() => {
       this.errorStream = fs.createWriteStream(`${dir}/error.log`, { flags:'a' });
@@ -72,8 +76,9 @@ class Logger {
     this.errorStream.write(`[${this.errorCount}]${timestamp} `);
 
     args.forEach((arg) => {
-      this.errorStream.write(arg);
-      this.doVerbose(arg, 'consoleErrors');
+      const argStr = JSON.stringify(arg, Object.getOwnPropertyNames(arg));
+      this.errorStream.write(argStr);
+      this.doVerbose(argStr, 'consoleErrors');
       this.errorStream.write('\n');
     });
     this.errorStream.write(`----------------------------------------------------------------\n`);
@@ -178,5 +183,11 @@ class Logger {
   }
 }
 
-export const logger = new Logger();
+export const logger = new Logger({
+  consoleErrors: process.env.CONSOLE_ERRORS === 'true',
+  consoleAccess: process.env.CONSOLE_ACCESS === 'true',
+  verbose: process.env.VERBOSE === 'true',
+  muteCount: process.env.MUTE_COUNT === 'true'
+});
+
 export default logger;
