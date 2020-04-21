@@ -6,44 +6,36 @@ import User from "../models/User";
 import {Container} from "inversify";
 import UserService from "../services/UserService";
 
-class AuthenticationFailed extends Error {
-  constructor(username:string) {
-    super(`Failed to authenticate ${username}`);
-  }
-}
 export function setupPassport(app:Application, container:Container) {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  passport.serializeUser((user:User) => {
-    return user.username;
+  passport.serializeUser(function (user:User, done) {
+    done(null, user.username);
   });
 
-  passport.deserializeUser((username:string, done) => {
+  passport.deserializeUser(function (username:string, done) {
     const userService = container.resolve(UserService);
-    userService.entry(username).then((user) => done(null, user), (err) => done(err));
+    userService.entry(username).then((user) => done(null, user)).catch((err) => done(err));
   });
 
-  passport.use(new LocalStrategy((username, password, done) => {
+  passport.use(new LocalStrategy(function (username, password, done) {
     const userService = container.resolve(UserService);
     console.log('Attempting to authenticate:', username);
 
-    return userService.entry(username).then((user) => {
+    userService.entry(username).then((user) => {
       if(!user) {
-        throw new AuthenticationFailed(username);
+        done(null, false);
       } else {
         bcrypt.compare(password, user.password, function(err, matches) {
           if(!matches) {
-            throw new AuthenticationFailed(username);
+            done(err, false);
           }
 
           console.log(`Authenticated ${username}:`, user);
-          return done(null, user);
+          done(err, user);
         });
       }
-    }).catch((err) => {
-      console.log('Failed to authenticate', err);
-      done(new AuthenticationFailed(username));
-    });
+    }).catch((err) => done(err));
   }));
 }

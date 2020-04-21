@@ -3,6 +3,7 @@ import {json, urlencoded} from "body-parser";
 import {readdirSync} from "fs";
 import {join} from 'path';
 import express = require('express');
+import session from 'express-session';
 
 import DecoratorManifest from "../decorators/DecoratorManifest";
 import HeaderMiddleware from "../middleware/HeaderMiddleware";
@@ -33,6 +34,11 @@ export class ServerService {
 
     const app = express();
 
+    app.use(session({
+      secret: 'keyboard cat',
+      resave: true,
+      saveUninitialized: true
+    }));
     app.use(json());
     app.use(urlencoded({ extended: true }));
     app.use(HeaderMiddleware);

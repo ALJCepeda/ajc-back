@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  ajc-db:
+    container_name: ajc-db
+    env_file:
+      - .env
+    ports:
+      - '5432:5432'
+    volumes:
+      - ajc-db:/var/lib/postgresql/data:Z
+    image: postgres:11
+volumes:
+  ajc-db:
+    external: true
+networks:
+  default:
+    attachable: true
