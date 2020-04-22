@@ -3,6 +3,7 @@ import { check } from 'express-validator';
 import TimelineService from "../services/TimelineService";
 import Controller from "../decorators/Controller";
 import {REMOVE, GET, POST} from "../decorators/HTTP";
+import AuthenticatedMiddleware from "../middleware/AuthenticatedMiddleware";
 
 const defaults = {
   entries: {
@@ -33,13 +34,13 @@ export class TimelineController {
     res.send(entries);
   }
 
-  @POST('')
+  @POST('', AuthenticatedMiddleware)
   async upsert(req:Request, res:Response) {
     const entry = this.timelineService.upsert(req.body);
     res.send(entry);
   }
 
-  @REMOVE('')
+  @REMOVE('', AuthenticatedMiddleware)
   async remove(req:Request, res:Response) {
     await this.timelineService.remove(req.body.id);
     res.send(true);
