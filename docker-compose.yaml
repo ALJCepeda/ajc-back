@@ -1,8 +1,23 @@
 version: "3.7"
 
 services:
+  ajc-back:
+    container_name: ajc-back
+    working_dir: /home/node/app
+    networks:
+      - ajc-web
+    user: node
+    env_file:
+      - .env
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./:/home/node/app:Z
+    image: node:13
   ajc-db:
     container_name: ajc-db
+    networks:
+      - ajc-web
     env_file:
       - .env
     ports:
@@ -14,5 +29,5 @@ volumes:
   ajc-db:
     external: true
 networks:
-  default:
+  ajc-web:
     attachable: true

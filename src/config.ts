@@ -12,7 +12,7 @@ export const typeORMConfig: PostgresConnectionOptions = {
   port: Number(process.env.POSTGRES_PORT),
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DB,
+  database: process.env.POSTGRES_DB || process.env.POSTGRES_USER,
   synchronize: true,
   logging: false,
   entities: [
