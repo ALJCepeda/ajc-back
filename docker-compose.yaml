@@ -1,25 +1,31 @@
 version: "3.7"
 
+x-common-variables: &variables
+  NODE_ENV: development
+  VERBOSE: "true"
+  PORT: 3000
+  POSTGRES_USER: ajc-web
+  POSTGRES_PASSWORD: password
+  POSTGRES_HOST: ajc-db
+  POSTGRES_PORT: 5432
+  POSTGRES_DB: ajc-web
+
 services:
   ajc-back:
-    container_name: ajc-back
     working_dir: /home/node/app
+    user: node
+    environment: *variables
     networks:
       - ajc-web
-    user: node
-    env_file:
-      - .env
     ports:
       - '3000:3000'
     volumes:
       - ./:/home/node/app:Z
     image: node:13
   ajc-db:
-    container_name: ajc-db
+    environment: *variables
     networks:
       - ajc-web
-    env_file:
-      - .env
     ports:
       - '5432:5432'
     volumes:
