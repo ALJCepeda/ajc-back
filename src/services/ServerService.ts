@@ -34,15 +34,15 @@ export class ServerService {
 
     const app = express();
 
+    app.use(ContainerMiddleware(container));
+    app.use(HeaderMiddleware);
     app.use(session({
       secret: 'keyboard cat',
       resave: true,
-      saveUninitialized: true
+      saveUnitialized: false
     }));
     app.use(json());
     app.use(urlencoded({ extended: true }));
-    app.use(HeaderMiddleware);
-    app.use(ContainerMiddleware(container));
 
     setupPassport(app, container);
 

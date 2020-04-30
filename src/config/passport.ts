@@ -16,23 +16,23 @@ export function setupPassport(app:Application, container:Container) {
 
   passport.deserializeUser(function (username:string, done) {
     const userService = container.resolve(UserService);
-    userService.entry(username).then((user) => done(null, user)).catch((err) => done(err));
+    userService.entry(username).then((user) => {
+      return done(null, user)
+    }).catch((err) => done(err));
   });
 
   passport.use(new LocalStrategy(function (username, password, done) {
     const userService = container.resolve(UserService);
-    console.log('Attempting to authenticate:', username);
 
     userService.entry(username).then((user) => {
       if(!user) {
         done(null, false);
       } else {
         bcrypt.compare(password, user.password, function(err, matches) {
-          if(!matches) {
+          if(!matches || err) {
             done(err, false);
           }
 
-          console.log(`Authenticated ${username}:`, user);
           done(err, user);
         });
       }

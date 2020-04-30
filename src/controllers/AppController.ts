@@ -7,8 +7,12 @@ import passport = require('passport');
 
 @Controller('')
 export class AppController {
-  @POST('/login', passport.authenticate('local', { session:true }))
+  @POST('/login', passport.authenticate('local'))
   login(req: RequestContext, res: Response) {
-    res.end();
+    req.login(req.user, (err) => {
+      if(err) { throw err; }
+      res.status(200);
+      res.send(req.user);
+    });
   }
 }
