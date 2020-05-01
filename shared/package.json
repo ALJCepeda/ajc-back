@@ -1,0 +1,21 @@
+{
+  "name": "ajc-shared",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc --declaration",
+    "prepare": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^13.13.1",
+    "typescript": "^3.6.4"
+  },
+  "dependencies": {
+    "moment": "^2.24.0",
+    "typeorm": "^0.2.24"
+  }
+}
