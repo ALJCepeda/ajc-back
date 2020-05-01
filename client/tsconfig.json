@@ -1,0 +1,51 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "strictNullChecks": true,
+    "target": "es5",
+    "module": "esnext",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "types": [
+      "webpack-env",
+      "mocha",
+      "node",
+      "chai"
+    ],
+    "paths": {
+      "typeorm": ["./node_modules/typeorm/typeorm-model-shim.js"],
+      "@/*": ["src/*"]
+    },
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "node_modules/ajc-shared/src/types.d.ts",
+    "node_modules/ajc-shared/src/api/app.d.ts",
+    "node_modules/ajc-shared/src/api/timeline.d.ts",
+    "../ajc-shared/src/app.api.d.ts",
+    "../ajc-shared/src/api/app.d.ts"
+  ]
+}

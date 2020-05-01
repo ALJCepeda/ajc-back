@@ -1,0 +1,74 @@
+@color-white:#FFFFFF;
+
+@color-black1:#4b4f56;
+@color-black2:#1d2129;
+
+@color-grey1:#A6AAB3;
+@color-grey2:#ADB3BC;
+@color-grey3:#F6F7F9;
+@color-grey4:#90949c;
+@color-greyHr:#e9ebee;
+
+@color-body:@color-grey4;
+@color-red:#B82601;
+@color-violet:#813772;
+@color-blue:#365899;
+
+@fontsize-large:1.5em;
+@fontsize-largest:2.5em;
+
+@height-topnav:8%;
+@height-page:100% - @height-topnav;
+
+.border-bottom { border-bottom: 1px solid @color-greyHr; }
+.body-font {
+  color:@color-body;
+  font-size:15px;
+  font-family:Helvetica, Arial, sans-serif;
+  line-height:18px;
+}
+.header-font {
+  color: @color-blue;
+  font-weight: 600;
+  font-size: 1.2em;
+}
+.subtitle-font {
+  font-size:0.85em;
+  color:@color-grey4;
+}
+
+.upToTablet(@rules) {
+  @media only screen and (max-width:767px) {
+    @rules();
+  }
+}
+
+.upToMedium(@rules) {
+  @media only screen and (max-width:374px) {
+    @rules();
+  }
+}
+
+.downToTablet(@rules) {
+  @media only screen and (min-width:768px) {
+    @rules();
+  }
+}
+
+.downToMedium(@rules) {
+  @media only screen and (min-width:375px) {
+    @rules();
+  }
+}
+
+.hide-upto-tablet {
+  .upToTablet({
+    display: none !important;
+  });
+}
+
+.hide-downto-tablet {
+  .downToTablet({
+    display: none !important;
+  });
+}
