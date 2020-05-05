@@ -3,7 +3,7 @@ import {APIAction} from "@/models/Action";
 
 class TimelineAction <
   IAPI extends IEndpoint<IAPI['IRequest'], IAPI['IResponse']>
-> extends APIAction<TimelineModuleState, IAPI> {
+> extends APIAction<IAPI, TimelineModuleState> {
   module = 'timeline';
 }
 

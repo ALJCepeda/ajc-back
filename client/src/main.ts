@@ -20,7 +20,7 @@ Vue.config.productionTip = false;
 registerGlobals(Vue);
 
 Promise.all([
-  AppActions.UPDATEAPPSTATE.$dispatch(store, null)
+  AppActions.UPDATEAPPSTATE.$dispatch(null)
   //store.dispatch('blogs/manifest'),
   //store.dispatch('timeline/manifest')
 ]).then(() => {
@@ -33,6 +33,3 @@ Promise.all([
     render: h => h(App)
   }).$mount("#app");
 });
-
-/* Home script */
-//$('.home-carousel').slick();

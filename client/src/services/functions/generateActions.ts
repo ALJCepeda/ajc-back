@@ -5,7 +5,7 @@ export default function generateActions(module:any, actions:{ [key:string]:Actio
 
   for(const key in actions) {
     const action = actions[key];
-    moduleActions[action.task] = action.handler
+    moduleActions[action.task] = action.handler;
   }
 
   module.actions = {

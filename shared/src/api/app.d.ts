@@ -1,6 +1,6 @@
 type ILogin = IEndpoint<ICredentials, boolean>;
-type IFetchAppState = IEndpoint<null, IAppState>;
+type IFetchUserState = IEndpoint<null, IUserState | null>;
 
-interface IAppState {
-  isAuthenticated: boole
+interface IUserState {
+  isAuthenticated: boolean
 }

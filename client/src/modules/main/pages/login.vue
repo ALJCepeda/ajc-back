@@ -14,7 +14,7 @@
 
   @Component
   export default class LoginComponent extends Vue {
-    form = withAction(this.$store, {
+    form = withAction( {
       username:'vlegm',
       password:'Password123'
     }, {

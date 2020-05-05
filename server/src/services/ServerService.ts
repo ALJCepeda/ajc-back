@@ -11,6 +11,7 @@ import ContainerMiddleware from "../middleware/ContainerMiddleware";
 import {Application} from "express";
 import {setupPassport} from "../config/passport";
 import {EntityManager, getConnection} from "typeorm";
+import LoggerMiddleware from "../middleware/LoggerMiddleware";
 
 export class ServerService {
   readControllers() {
@@ -58,6 +59,7 @@ export class ServerService {
       res.sendFile(__dirname + '/' + process.env.JS_FILE + '.map');
     });
 
+    app.use(LoggerMiddleware);
     DecoratorManifest.generateRoutes(app, container);
 
     return app;

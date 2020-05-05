@@ -19,7 +19,7 @@ import { withAction } from '@/factories/FormFactory';
 export default class TimelineComponent extends Vue {
   name:string = "TimelineComponent";
 
-  timelineEntry = withAction(this.$store, {
+  timelineEntry = withAction({
     imageURL: "https://vuejs.org/images/logo.png",
     labelURL: "https://vuejs.org/",
     label: "Label",

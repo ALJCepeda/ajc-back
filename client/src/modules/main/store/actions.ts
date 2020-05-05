@@ -1,27 +1,43 @@
 import {APIAction} from "@/models/Action";
 import {AppAPI} from "@/modules/main/store/api";
+import {AppMutations} from "@/modules/main/store/mutations";
 
 class AppAction <
   IAPI extends IEndpoint<IAPI['IRequest'], IAPI['IResponse']>
-> extends APIAction<AppState, IAPI> {
+> extends APIAction<IAPI, AppState> {
   module: ''
 }
+
+const DefaultUserState:IUserState = {
+  isAuthenticated: false
+};
 
 export const AppActions = {
   LOGIN: new AppAction<ILogin>('Login User', async (context, action) => {
     return AppAPI.login(action.payload).then(() => {
-      context.commit('setAuthenticated', true);
+      AppMutations.setUserState.commit({ isAuthenticated: true });
       return true;
     }).catch((err) => {
-      context.commit('setAuthenticated', false);
+      AppMutations.setUserState.commit({ isAuthenticated: false });
       throw err;
     });
   }),
-  UPDATEAPPSTATE: new AppAction<IFetchAppState>('Update App State', async (context, action) => {
+  UPDATEAPPSTATE: new AppAction<IFetchUserState>('Update App State', async () => {
     return AppAPI.fetchAppState(null).then((resp) => {
-      console.log(resp);
-      context.commit('setAppState', resp);
+      if(resp === null) {
+        AppMutations.setUserState.commit(DefaultUserState);
+      } else {
+        AppMutations.setUserState.commit(resp);
+      }
+
       return resp;
-    })
+    }).catch(err => {
+      if(err.response && err.response.status===401) {
+        AppMutations.setUserState.commit(DefaultUserState);
+        return null;
+      }
+
+      throw err;
+    });
   })
 };

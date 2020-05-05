@@ -2,12 +2,13 @@ import {ActionContext, Store} from "vuex";
 import {copyInstance} from "@/services/util";
 
 export class Action<
-  IStoreState,
   IPayloadType,
   IResponseType,
+  IStoreState,
   IRootState = AppState
 > {
-  payload?: IPayloadType;
+  public $store?:Store<IStoreState>;
+  public payload?:IPayloadType;
   public module:string = '';
 
   constructor(
@@ -30,19 +31,23 @@ export class Action<
     };
   }
 
-  with(payload:IPayloadType): Action<IStoreState, IPayloadType, IResponseType, IRootState> {
-    return copyInstance<Action<IStoreState, IPayloadType, IResponseType, IRootState>>(this, { payload })
+  with(payload:IPayloadType): Action<IPayloadType, IResponseType, IStoreState, IRootState> {
+    return copyInstance<Action<IPayloadType, IResponseType, IStoreState, IRootState>>(this, { payload })
   }
 
   _doneCB:Callback<IResponseType>;
-  done(cb:Callback<IResponseType>):Action<IStoreState, IPayloadType, IResponseType, IRootState> {
-    return copyInstance<Action<IStoreState, IPayloadType, IResponseType, IRootState>>(this, { _doneCB:cb })
+  done(cb:Callback<IResponseType>):Action<IPayloadType, IResponseType, IStoreState, IRootState> {
+    return copyInstance<Action<IPayloadType, IResponseType, IStoreState, IRootState>>(this, { _doneCB:cb })
   }
 
-  createDispatcher($store:Store<IStoreState>): (payload:IPayloadType) => Promise<IResponseType> {
+  createDispatcher($store?:Store<IStoreState>): (payload:IPayloadType) => Promise<IResponseType> {
     return (payload:IPayloadType) => {
+      if(!$store && !this.$store) {
+        throw new Error('Unable to dispatch without a store being set');
+      }
+
       return this.transform(payload).then((storeAction) =>  {
-        return $store.dispatch(storeAction)
+        return ($store || this.$store)!.dispatch(storeAction)
       }).then((result) => {
         if(this._doneCB) {
           this._doneCB(null, result);
@@ -59,12 +64,12 @@ export class Action<
     };
   }
 
-  $dispatch($store:Store<IStoreState>, payload:IPayloadType): Promise<IResponseType> {
+  $dispatch(payload:IPayloadType, $store?:Store<IStoreState>): Promise<IResponseType> {
     return this.createDispatcher($store)(payload);
   }
 }
 
 export class APIAction<
-  IStoreState,
-  IAPI extends IEndpoint<IAPI['IRequest'], IAPI['IResponse']>
-> extends Action<IStoreState, IAPI['IRequest'], IAPI['IResponse']> { }
+  IAPI extends IEndpoint<IAPI['IRequest'], IAPI['IResponse']>,
+  IStoreState
+> extends Action<IAPI['IRequest'], IAPI['IResponse'], IStoreState> { }

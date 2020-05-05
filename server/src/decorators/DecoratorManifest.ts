@@ -5,6 +5,7 @@ import logger from "../services/logger";
 import {ControllerConstructor, Middleware} from "../types";
 import ValidationMiddleware from "../middleware/ValidationMiddleware";
 import LoggerMiddleware from "../middleware/LoggerMiddleware";
+import {Resp} from "../models/http/Resp";
 
 interface RouterHandlerEntry {
   methodKey:string;
@@ -73,14 +74,21 @@ class DecoratorManifest {
           logger.log(action, route, constructor.name);
 
           app[action](route,
-            LoggerMiddleware,
             controllerEntry.middleware,
             routeHandlerEntry.middleware,
             ValidationMiddleware,
             async (req:Request, resp:Response, next:NextFunction) => {
               try {
                 const controller = resp.locals.container.get(constructor);
-                await controller[routeHandlerEntry.methodKey](req, resp, next);
+                const result = await controller[routeHandlerEntry.methodKey](req, resp, next);
+
+                if(!resp.headersSent) {
+                  if(Resp.is(result)) {
+                    result.send(resp);
+                  } else {
+                    resp.status(200).contentType('application/json').send(result);
+                  }
+                }
               } catch(err) {
                 logger.internalError(resp, err);
               }

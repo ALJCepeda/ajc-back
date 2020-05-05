@@ -31,7 +31,7 @@ export default {
     async fetchEntries() {
       this.fetchingEntries = true;
 
-      this.forms = await fromAction(this.$store, TimelineActions.LOAD.with({
+      this.forms = await fromAction(TimelineActions.LOAD.with({
         limit:10,
         page:this.page
       }), {

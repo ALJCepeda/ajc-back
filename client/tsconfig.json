@@ -42,10 +42,9 @@
     "node_modules"
   ],
   "files": [
-    "node_modules/ajc-shared/src/types.d.ts",
-    "node_modules/ajc-shared/src/api/app.d.ts",
-    "node_modules/ajc-shared/src/api/timeline.d.ts",
-    "../ajc-shared/src/app.api.d.ts",
-    "../ajc-shared/src/api/app.d.ts"
+    "../shared/src/app.api.d.ts",
+    "../shared/src/api/app.d.ts",
+    "../shared/src/api/timeline.d.ts",
+    "../shared/src/types.d.ts"
   ]
 }
