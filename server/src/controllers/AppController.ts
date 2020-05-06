@@ -4,7 +4,6 @@ import {Response} from "express";
 import {RequestContext} from "../types";
 
 import passport = require('passport');
-import {Resp} from "../models/http/Resp";
 import AuthenticatedMiddleware from "../middleware/AuthenticatedMiddleware";
 
 @Controller('')
