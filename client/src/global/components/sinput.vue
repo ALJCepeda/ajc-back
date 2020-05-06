@@ -5,7 +5,7 @@
     <div class="value">
       <input
         :type="type"
-        :value="initialValue"
+        :value="value"
         @input="emitValue"
         v-if="!nonSimpleTypes.includes(type) && editable"
         ref="input"
@@ -17,7 +17,7 @@
 
       <textarea
         :placeholder="placeholder"
-        :value="initialValue"
+        :value="value"
         @input="emitValue"
         v-if="type === 'textarea' && editable"
         ref="input"
@@ -26,14 +26,14 @@
       <ckeditor
         v-if="type === 'editor' && editable"
         :editor="editor"
-        v-model="initialValue"
+        :value="value"
         @input="emitValue"
         :config="editorConfig"
         ref="input"
       ></ckeditor>
 
       <datetime
-        v-model="valueStr"
+        :value="valueStr"
         :type="type"
         @input="emitValue"
         v-if="dateTypes.includes(type) && editable"
@@ -74,8 +74,7 @@ export default {
       editorConfig: {},
       specialTypes: ['textarea', 'editor'],
       dateTypes: ['date', 'datetime', 'time'],
-      valueStr: isDate(this.value) ? this.value.toISOString() : this.value,
-      initialValue: this.value
+      valueStr: isDate(this.value) ? this.value.toISOString() : this.value
     }
   },
 

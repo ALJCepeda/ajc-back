@@ -4,7 +4,6 @@
     <list default="true" id="83406fae-28ba-47ae-be92-b4f84a3c5a34" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/global/components/sinput.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/global/components/sinput.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/controllers/AppController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/controllers/AppController.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,7 +100,7 @@
       <workItem from="1588645030970" duration="2629000" />
       <workItem from="1588713450421" duration="80000" />
       <workItem from="1588722820469" duration="650000" />
-      <workItem from="1588723522186" duration="2593000" />
+      <workItem from="1588723522186" duration="2744000" />
     </task>
     <task id="LOCAL-00001" summary="Fixes headers already sent error">
       <created>1588725367222</created>
@@ -110,7 +109,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588725367222</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Fixes error thrown with ckeditor binding">
+      <created>1588727694544</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1588727694544</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -131,37 +137,38 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Fixes headers already sent error" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixes headers already sent error" />
+    <MESSAGE value="Fixes error thrown with ckeditor binding" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixes error thrown with ckeditor binding" />
   </component>
   <component name="WindowStateProjectService">
     <state x="403" y="110" key="#xdebugger.evaluate" timestamp="1588723323565">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
     <state x="403" y="110" key="#xdebugger.evaluate/0.0.1280.800@0.0.1280.800" timestamp="1588723323565" />
-    <state x="223" y="23" key="CommitChangelistDialog2" timestamp="1588725366578">
+    <state x="223" y="23" key="CommitChangelistDialog2" timestamp="1588727693969">
       <screen x="0" y="23" width="1280" height="726" />
     </state>
-    <state x="223" y="23" key="CommitChangelistDialog2/0.23.1280.726@0.23.1280.726" timestamp="1588725366578" />
-    <state width="1259" height="180" key="GridCell.Tab.0.bottom" timestamp="1588727677009">
+    <state x="223" y="23" key="CommitChangelistDialog2/0.23.1280.726@0.23.1280.726" timestamp="1588727693969" />
+    <state width="1259" height="180" key="GridCell.Tab.0.bottom" timestamp="1588727853256">
       <screen x="0" y="23" width="1280" height="726" />
     </state>
     <state width="1259" height="263" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1588723360800" />
-    <state width="1259" height="180" key="GridCell.Tab.0.bottom/0.23.1280.726@0.23.1280.726" timestamp="1588727677009" />
-    <state width="1259" height="180" key="GridCell.Tab.0.center" timestamp="1588727677008">
+    <state width="1259" height="180" key="GridCell.Tab.0.bottom/0.23.1280.726@0.23.1280.726" timestamp="1588727853256" />
+    <state width="1259" height="180" key="GridCell.Tab.0.center" timestamp="1588727853255">
       <screen x="0" y="23" width="1280" height="726" />
     </state>
     <state width="1259" height="263" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1588723360798" />
-    <state width="1259" height="180" key="GridCell.Tab.0.center/0.23.1280.726@0.23.1280.726" timestamp="1588727677008" />
-    <state width="1259" height="180" key="GridCell.Tab.0.left" timestamp="1588727677008">
+    <state width="1259" height="180" key="GridCell.Tab.0.center/0.23.1280.726@0.23.1280.726" timestamp="1588727853255" />
+    <state width="1259" height="180" key="GridCell.Tab.0.left" timestamp="1588727853254">
       <screen x="0" y="23" width="1280" height="726" />
     </state>
     <state width="1259" height="263" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1588723360797" />
-    <state width="1259" height="180" key="GridCell.Tab.0.left/0.23.1280.726@0.23.1280.726" timestamp="1588727677008" />
-    <state width="1259" height="180" key="GridCell.Tab.0.right" timestamp="1588727677008">
+    <state width="1259" height="180" key="GridCell.Tab.0.left/0.23.1280.726@0.23.1280.726" timestamp="1588727853254" />
+    <state width="1259" height="180" key="GridCell.Tab.0.right" timestamp="1588727853256">
       <screen x="0" y="23" width="1280" height="726" />
     </state>
     <state width="1259" height="263" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1588723360799" />
-    <state width="1259" height="180" key="GridCell.Tab.0.right/0.23.1280.726@0.23.1280.726" timestamp="1588727677008" />
+    <state width="1259" height="180" key="GridCell.Tab.0.right/0.23.1280.726@0.23.1280.726" timestamp="1588727853256" />
     <state width="1259" height="224" key="GridCell.Tab.1.bottom" timestamp="1588725760397">
       <screen x="0" y="23" width="1280" height="726" />
     </state>
