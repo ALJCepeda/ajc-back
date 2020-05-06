@@ -26,16 +26,16 @@ export function setupPassport(app:Application, container:Container) {
 
     userService.entry(username).then((user) => {
       if(!user) {
-        done(null, false);
-      } else {
-        bcrypt.compare(password, user.password, function(err, matches) {
-          if(!matches || err) {
-            done(err, false);
-          }
-
-          done(err, user);
-        });
+        return done(null, false);
       }
+
+      bcrypt.compare(password, user.password, function(err, matches) {
+        if(!matches || err) {
+          return done(err, false);
+        }
+
+        return done(err, user);
+      });
     }).catch((err) => done(err));
   }));
 }

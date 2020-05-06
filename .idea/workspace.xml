@@ -2,29 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="83406fae-28ba-47ae-be92-b4f84a3c5a34" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/client/src/models/Mutation.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/modules/main/store/mutations.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/services/functions/generateMutations.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/models/http/Resp.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/factories/FormFactory.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/factories/FormFactory.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/models/Action.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/models/Action.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/modules/main/pages/admin/timeline.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/modules/main/pages/admin/timeline.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/modules/main/pages/home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/modules/main/pages/home.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/modules/main/pages/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/modules/main/pages/login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/modules/main/store/actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/modules/main/store/actions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/modules/main/store/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/modules/main/store/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/modules/main/store/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/modules/main/store/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/modules/timeline/store/actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/modules/timeline/store/actions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/services/functions/generateActions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/services/functions/generateActions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/vuex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/vuex.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/config/passport.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/config/passport.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/controllers/AppController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/controllers/AppController.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/decorators/DecoratorManifest.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/decorators/DecoratorManifest.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/services/ServerService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/services/ServerService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/src/api/app.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/shared/src/api/app.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shared/src/api/timeline.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/shared/src/api/timeline.d.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +98,10 @@
       <workItem from="1588377997188" duration="14016000" />
       <workItem from="1588520795546" duration="32000" />
       <workItem from="1588553799102" duration="3919000" />
-      <workItem from="1588645030970" duration="2365000" />
+      <workItem from="1588645030970" duration="2629000" />
+      <workItem from="1588713450421" duration="80000" />
+      <workItem from="1588722820469" duration="650000" />
+      <workItem from="1588723522186" duration="661000" />
     </task>
     <servers />
   </component>
@@ -139,21 +122,114 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state width="629" height="212" key="GridCell.Tab.0.bottom" timestamp="1588647609348">
+    <state x="403" y="110" key="#xdebugger.evaluate" timestamp="1588723323565">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state width="629" height="212" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1588647609348" />
-    <state width="629" height="212" key="GridCell.Tab.0.center" timestamp="1588647609347">
-      <screen x="0" y="0" width="1280" height="800" />
+    <state x="403" y="110" key="#xdebugger.evaluate/0.0.1280.800@0.0.1280.800" timestamp="1588723323565" />
+    <state width="1259" height="180" key="GridCell.Tab.0.bottom" timestamp="1588725330987">
+      <screen x="0" y="23" width="1280" height="726" />
     </state>
-    <state width="629" height="212" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1588647609347" />
-    <state width="629" height="212" key="GridCell.Tab.0.left" timestamp="1588647609346">
-      <screen x="0" y="0" width="1280" height="800" />
+    <state width="1259" height="263" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1588723360800" />
+    <state width="1259" height="180" key="GridCell.Tab.0.bottom/0.23.1280.726@0.23.1280.726" timestamp="1588725330987" />
+    <state width="1259" height="180" key="GridCell.Tab.0.center" timestamp="1588725330986">
+      <screen x="0" y="23" width="1280" height="726" />
     </state>
-    <state width="629" height="212" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1588647609346" />
-    <state width="629" height="212" key="GridCell.Tab.0.right" timestamp="1588647609348">
-      <screen x="0" y="0" width="1280" height="800" />
+    <state width="1259" height="263" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1588723360798" />
+    <state width="1259" height="180" key="GridCell.Tab.0.center/0.23.1280.726@0.23.1280.726" timestamp="1588725330986" />
+    <state width="1259" height="180" key="GridCell.Tab.0.left" timestamp="1588725330986">
+      <screen x="0" y="23" width="1280" height="726" />
     </state>
-    <state width="629" height="212" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1588647609348" />
+    <state width="1259" height="263" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1588723360797" />
+    <state width="1259" height="180" key="GridCell.Tab.0.left/0.23.1280.726@0.23.1280.726" timestamp="1588725330986" />
+    <state width="1259" height="180" key="GridCell.Tab.0.right" timestamp="1588725330987">
+      <screen x="0" y="23" width="1280" height="726" />
+    </state>
+    <state width="1259" height="263" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1588723360799" />
+    <state width="1259" height="180" key="GridCell.Tab.0.right/0.23.1280.726@0.23.1280.726" timestamp="1588725330987" />
+    <state width="1259" height="224" key="GridCell.Tab.1.bottom" timestamp="1588725169043">
+      <screen x="0" y="23" width="1280" height="726" />
+    </state>
+    <state width="1259" height="263" key="GridCell.Tab.1.bottom/0.0.1280.800@0.0.1280.800" timestamp="1588723326073" />
+    <state width="1259" height="224" key="GridCell.Tab.1.bottom/0.23.1280.726@0.23.1280.726" timestamp="1588725169043" />
+    <state width="1259" height="224" key="GridCell.Tab.1.center" timestamp="1588725169042">
+      <screen x="0" y="23" width="1280" height="726" />
+    </state>
+    <state width="1259" height="263" key="GridCell.Tab.1.center/0.0.1280.800@0.0.1280.800" timestamp="1588723326071" />
+    <state width="1259" height="224" key="GridCell.Tab.1.center/0.23.1280.726@0.23.1280.726" timestamp="1588725169042" />
+    <state width="1259" height="224" key="GridCell.Tab.1.left" timestamp="1588725169041">
+      <screen x="0" y="23" width="1280" height="726" />
+    </state>
+    <state width="1259" height="263" key="GridCell.Tab.1.left/0.0.1280.800@0.0.1280.800" timestamp="1588723326071" />
+    <state width="1259" height="224" key="GridCell.Tab.1.left/0.23.1280.726@0.23.1280.726" timestamp="1588725169041" />
+    <state width="1259" height="224" key="GridCell.Tab.1.right" timestamp="1588725169042">
+      <screen x="0" y="23" width="1280" height="726" />
+    </state>
+    <state width="1259" height="263" key="GridCell.Tab.1.right/0.0.1280.800@0.0.1280.800" timestamp="1588723326072" />
+    <state width="1259" height="224" key="GridCell.Tab.1.right/0.23.1280.726@0.23.1280.726" timestamp="1588725169042" />
+    <state width="1259" height="224" key="GridCell.Tab.2.bottom" timestamp="1588725169046">
+      <screen x="0" y="23" width="1280" height="726" />
+    </state>
+    <state width="1259" height="224" key="GridCell.Tab.2.bottom/0.23.1280.726@0.23.1280.726" timestamp="1588725169046" />
+    <state width="1259" height="224" key="GridCell.Tab.2.center" timestamp="1588725169044">
+      <screen x="0" y="23" width="1280" height="726" />
+    </state>
+    <state width="1259" height="224" key="GridCell.Tab.2.center/0.23.1280.726@0.23.1280.726" timestamp="1588725169044" />
+    <state width="1259" height="224" key="GridCell.Tab.2.left" timestamp="1588725169043">
+      <screen x="0" y="23" width="1280" height="726" />
+    </state>
+    <state width="1259" height="224" key="GridCell.Tab.2.left/0.23.1280.726@0.23.1280.726" timestamp="1588725169043" />
+    <state width="1259" height="224" key="GridCell.Tab.2.right" timestamp="1588725169045">
+      <screen x="0" y="23" width="1280" height="726" />
+    </state>
+    <state width="1259" height="224" key="GridCell.Tab.2.right/0.23.1280.726@0.23.1280.726" timestamp="1588725169045" />
+    <state width="1259" height="224" key="GridCell.Tab.3.bottom" timestamp="1588725169047">
+      <screen x="0" y="23" width="1280" height="726" />
+    </state>
+    <state width="1259" height="224" key="GridCell.Tab.3.bottom/0.23.1280.726@0.23.1280.726" timestamp="1588725169047" />
+    <state width="1259" height="224" key="GridCell.Tab.3.center" timestamp="1588725169047">
+      <screen x="0" y="23" width="1280" height="726" />
+    </state>
+    <state width="1259" height="224" key="GridCell.Tab.3.center/0.23.1280.726@0.23.1280.726" timestamp="1588725169047" />
+    <state width="1259" height="224" key="GridCell.Tab.3.left" timestamp="1588725169046">
+      <screen x="0" y="23" width="1280" height="726" />
+    </state>
+    <state width="1259" height="224" key="GridCell.Tab.3.left/0.23.1280.726@0.23.1280.726" timestamp="1588725169046" />
+    <state width="1259" height="224" key="GridCell.Tab.3.right" timestamp="1588725169047">
+      <screen x="0" y="23" width="1280" height="726" />
+    </state>
+    <state width="1259" height="224" key="GridCell.Tab.3.right/0.23.1280.726@0.23.1280.726" timestamp="1588725169047" />
+    <state x="305" y="136" width="670" height="614" key="search.everywhere.popup" timestamp="1588724903689">
+      <screen x="0" y="23" width="1280" height="726" />
+    </state>
+    <state x="305" y="124" width="670" height="676" key="search.everywhere.popup/0.0.1280.800@0.0.1280.800" timestamp="1588723155000" />
+    <state x="305" y="136" width="670" height="614" key="search.everywhere.popup/0.23.1280.726@0.23.1280.726" timestamp="1588724903689" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/server/src/controllers/AppController.ts</url>
+          <line>13</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/server/src/controllers/AppController.ts</url>
+          <line>17</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/server/src/models/http/Resp.ts</url>
+          <line>18</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/server/src/config/passport.ts</url>
+          <line>32</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -11,11 +11,14 @@ import AuthenticatedMiddleware from "../middleware/AuthenticatedMiddleware";
 export class AppController {
   @POST('/login', passport.authenticate('local'))
   login(req: RequestContext, res: Response) {
-    req.login(req.user, (err) => {
-      if(err) { throw err; }
-      res.status(200);
-      res.send(req.user);
-    });
+    if(req.user) {
+      req.login(req.user, (err) => {
+        if(err) { throw err; }
+
+        res.status(200);
+        res.send(req.user);
+      });
+    }
   }
 
   @GET('/state', AuthenticatedMiddleware)
