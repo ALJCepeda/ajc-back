@@ -22,16 +22,14 @@
           <span v-if="!entry.labelURL">{{ entry.label }}</span>
           <span v-if="entry.type"> shared a {{ entry.type }}</span>
 
-          <span class="edit"
-            v-if="form.editable && !form.editing"
-            @click="form.editing = true">
-            edit
-          </span>
+          <span class="edit" v-if="isAuthenticated">
+            <span v-if="form.editable && !form.editing" @click="form.editing = true">
+              edit
+            </span>
 
-          <span class="edit"
-            v-if="form.editable && form.editing"
-            @click="form.cancel()">
-            cancel
+            <span v-if="form.editable && form.editing"  @click="form.cancel()">
+              cancel
+            </span>
           </span>
         </div>
 
@@ -41,7 +39,7 @@
       </div>
     </div>
 
-    <div class="message border-bottom" v-html="entry.message">b</div>
+    <div class="message border-bottom" v-html="entry.message"></div>
 
     <sform class="form" v-if="form && form.editable && form.editing" :form="form"></sform>
   </main>
@@ -51,8 +49,11 @@
 import TimelineEntry from "ajc-shared/src/models/TimelineEntry";
 import {Component} from "vue-property-decorator";
 import AbstractFormComponent from "@/abstract/AbstractFormComponent";
+import { mapGetters } from 'vuex';
 
-@Component
+@Component({
+  computed: mapGetters(['isAuthenticated'])
+})
 export default class TimelineCard extends AbstractFormComponent<TimelineEntry> {
   name:string = "TimelineCard";
 
