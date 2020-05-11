@@ -14,10 +14,12 @@
     <section class="row-nw">
       <nav class="side-nav">
         <router-link to="/admin/timeline">Timeline</router-link>
+        <router-link to="/admin/address">Address</router-link>
       </nav>
 
       <div class="side-nav-content">
-        <timeline v-if="$route.params.section === 'timeline'"></timeline>
+        <timeline-panel v-if="$route.params.section === 'timeline'"></timeline-panel>
+        <address-panel v-if="$route.params.section === 'address'"></address-panel>
       </div>
     </section>
   </main>
@@ -25,11 +27,12 @@
 
 <script>
 import $ from "jquery";
-import timeline from "./timeline";
+import timelinePanel from "./timeline";
+import addressPanel from "./address";
 
 export default {
   name: "admin",
-  components: { timeline },
+  components: { timelinePanel, addressPanel },
   data: function() {
     return {
       isTablet: false,

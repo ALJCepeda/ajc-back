@@ -2,9 +2,7 @@
   <main class="timeline-card border">
     <div class="header row-nw border-bottom">
       <div class="img row-nw ai-center">
-        <a v-if="entry.labelURL && entry.labelURL !== ''"
-          :href="entry.labelURL"
-          target="_blank">
+        <a v-if="entry.labelURL && entry.labelURL !== ''" :href="entry.labelURL"  target="_blank">
           <simg :src="entry.imageURL"></simg>
         </a>
 
@@ -13,9 +11,7 @@
 
       <div class="content">
         <div class="top">
-          <a v-if="entry.labelURL"
-            :href="entry.labelURL"
-            target="_blank">
+          <a v-if="entry.labelURL" :href="entry.labelURL" target="_blank">
             {{ entry.label }}
           </a>
 
@@ -47,15 +43,27 @@
 
 <script lang="ts">
 import TimelineEntry from "ajc-shared/src/models/TimelineEntry";
-import {Component} from "vue-property-decorator";
-import AbstractFormComponent from "@/abstract/AbstractFormComponent";
+import {Component, Prop} from "vue-property-decorator";
 import { mapGetters } from 'vuex';
+import Form from "@/models/Form";
+import Vue from "vue";
 
 @Component({
   computed: mapGetters(['isAuthenticated'])
 })
-export default class TimelineCard extends AbstractFormComponent<TimelineEntry> {
+export default class TimelineCard extends Vue {
+  @Prop()
+  form:Form<TimelineEntry>;
+
   name:string = "TimelineCard";
+
+  get entry(): Partial<TimelineEntry> {
+    if(!this.form) {
+      return {};
+    }
+
+    return this.form.data;
+  }
 
   created() {
     if(this.form.controls.length === 0) {
@@ -82,10 +90,6 @@ export default class TimelineCard extends AbstractFormComponent<TimelineEntry> {
 }
 
 .timeline-card {
-  .ck-editor {
-    width: 100%
-  }
-
   width: 100%;
   background: @color-white;
   color: black;

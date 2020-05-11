@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import TimelineIntro from "@/modules/timeline/components/info.vue";
-import TimelineCard from "@/modules/timeline/components/card.vue";
+import TimelineCard from "@/modules/timeline/components/TimelineCard.vue";
 import {TimelineActions} from "@/modules/timeline/store/actions";
 import {fromAction} from "@/factories/FormFactory";
 

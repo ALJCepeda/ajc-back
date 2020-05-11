@@ -12,12 +12,10 @@ import store from "@/vuex";
 
 Vue.use(VueRouter);
 
-const isAuthenticated = true;
-
 export default new VueRouter({
   mode: "history",
   routes: [
-    { path: "/", redirect: "/home" },
+    { path: "/", redirect: "/home", name:'Home' },
     { path: "/login", component: login },
     { path: "/home", component: home },
     { path: "/about", redirect: "/about/overview" },
@@ -25,11 +23,7 @@ export default new VueRouter({
     { path: "/blogs", redirect: "/blogs/all" },
     { path: "/blogs/all", component: blogsList },
     { path: "/blogs/:id", component: blogsView },
-    {
-      name: "AdminPage",
-      path: "/admin",
-      redirect: "/admin/timeline"
-    },
+    { path: "/admin", redirect: "/admin/timeline", name:'Admin'},
     {
       path: "/admin/:section",
       component: adminPage,

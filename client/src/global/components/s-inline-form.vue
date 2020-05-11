@@ -4,7 +4,7 @@
       <div class="sform-control row-w" v-for="control in controls">
         <label>{{ control.label }}:</label>
 
-        <sinput
+          <sinput
           :key="control.key"
           :name="control.key"
           :type="control.type"
@@ -15,33 +15,30 @@
 
       <div v-if="form.controls.length === 0">No controls from form to render!</div>
     </div>
-
-    <div class="row-nw jc-center action-btns">
-      <button class="btn btn-primary submit" @click="submit()" :disabled="!isDirty">Submit</button>
-      <button class="btn btn-warning" @click="form.reset()" :disabled="!isDirty">Reset</button>
-      <button class="btn btn-danger remove" v-if="entry.id" @click="remove()">Delete</button>
-    </div>
+]]
   </main>
 </template>
 
 <script lang="ts">
-import {Component} from "vue-property-decorator";
-import AbstractFormComponent from "@/abstract/AbstractFormComponent";
+  import {Component} from "vue-property-decorator";
 
-@Component
-export default class FormComponent<IResourceType> extends AbstractFormComponent<IResourceType> {
-  name:string = "sform";
-
-  get controls() {
-    return this.form.controls.filter(control => {
-      if(!!control.hideIfEmpty) {
-        return !!this.form.data[control.key];
-      }
-
-      return true;
-    });
+  interface InlineControl<IResourceType, IKey extends keyof IResourceType = keyof IResourceType> {
+    key: IKey,
+    type:'text' | 'textarea' | 'date' | 'time' | 'datetime' | 'editor',
+    value: IResourceType[IKey],
+    readonly?:boolean,
+    hideIfEmpty?:boolean
   }
-}
+
+  @Component
+  export default class InlineFormComponent<IResourceType> {
+    name:string = "sform";
+    editing:boolean = false;
+    editable:boolean = false;
+
+    data: { [key in keyof IResourceType] : IResourceType[key] };
+    controls: InlineControl<IResourceType>[] = [];
+  }
 </script>
 
 <style lang="less" scoped>

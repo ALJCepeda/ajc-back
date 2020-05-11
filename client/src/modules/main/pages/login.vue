@@ -37,7 +37,7 @@
     });
 
     async onSuccess() {
-      return this.$router.push({ name:'AdminPage' });
+      return this.$router.push({ name:'Admin' });
     }
   }
 </script>

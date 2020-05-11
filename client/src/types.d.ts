@@ -6,8 +6,7 @@ interface ActionPayload<T> {
 }
 
 interface TimelineModuleState {
-  manifest:any,
-  entries:{ [key:string]:any }
+
 }
 
 interface AppState {

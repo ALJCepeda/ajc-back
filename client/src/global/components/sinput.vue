@@ -1,30 +1,30 @@
 <template>
-  <main class="sinput row-w">
-    <label>{{ label }}:</label>
+  <main class="sinput">
+    <div v-if='!editable'>
+      <span
+        v-if="!editable"
+      >{{ value }}</span>
+    </div>
 
-    <div class="value">
+    <div v-if="editable">
       <input
         :type="type"
         :value="value"
         @input="emitValue"
-        v-if="!nonSimpleTypes.includes(type) && editable"
+        v-if="!nonSimpleTypes.includes(type)"
         ref="input"
       />
-
-      <span
-        v-if="!editable"
-      >{{ value }}</span>
 
       <textarea
         :placeholder="placeholder"
         :value="value"
         @input="emitValue"
-        v-if="type === 'textarea' && editable"
+        v-if="type === 'textarea'"
         ref="input"
       ></textarea>
 
       <ckeditor
-        v-if="type === 'editor' && editable"
+        v-if="type === 'editor'"
         :editor="editor"
         :value="value"
         @input="emitValue"
@@ -36,7 +36,7 @@
         :value="valueStr"
         :type="type"
         @input="emitValue"
-        v-if="dateTypes.includes(type) && editable"
+        v-if="dateTypes.includes(type)"
         ref="input"
       ></datetime>
     </div>
@@ -55,7 +55,6 @@ export default {
     Datetime
   },
   props: {
-    label: String,
     value: [String, Number, Boolean, Date],
     type: String,
     placeholder: {
@@ -65,6 +64,10 @@ export default {
     editable: {
       type: Boolean,
       default: true
+    },
+    editing: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -110,6 +113,8 @@ export default {
 
 <style lang="less">
 .sinput {
+  max-width: 100%;
+
   label {
     width: 20%;
     text-align: right;

@@ -6,7 +6,7 @@
           Alfred Cepeda
 
           <div class='image hide-downto-tablet'>
-            <img class='border' :src='image' />
+            <img class='border' :src='image' @click="clickedImg()"/>
           </div>
         </h1>
       </div>
@@ -18,7 +18,7 @@
 
         <nav>
           <router-link to='/admin' :hidden="!isAuthenticated">Admin</router-link>
-          <router-link to='/home'>Timeline</router-link>
+          <router-link to='/home'>Home</router-link>
           <router-link to='/about'>About</router-link>
           <router-link to='/blogs'>Blog<!--<span class='subtitle-font'>71</span>--></router-link>
           <!--<router-link to='/tools'>Tools</router-link>-->
@@ -50,6 +50,11 @@
     created: function() {
       this.name = `${data.general.firstname} ${data.general.lastname}`;
       this.image = data.general.image;
+    },
+    methods: {
+      clickedImg() {
+        this.$router.push({ name:'Home' });
+      }
     }
   };
 </script>
