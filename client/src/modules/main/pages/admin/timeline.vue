@@ -1,7 +1,7 @@
 <template>
   <main class="admin-timeline">
     <div class="row-nw jc-center">
-      <timeline-card :form="form"></timeline-card>
+      <timeline-card v-model="entry"></timeline-card>
     </div>
   </main>
 </template>
@@ -12,6 +12,7 @@ import Vue from 'vue';
 import TimelineCard from "@/modules/timeline/components/TimelineCard.vue";
 import {TimelineActions} from "@/modules/timeline/store/actions";
 import { withAction } from '@/factories/FormFactory';
+import TimelineEntry from "../../../../../../shared/src/models/TimelineEntry";
 
 @Component({
   components: { TimelineCard }
@@ -19,6 +20,15 @@ import { withAction } from '@/factories/FormFactory';
 export default class TimelineComponent extends Vue {
   name:string = "TimelineComponent";
 
+  entry:TimelineEntry = {
+    imageURL: "https://vuejs.org/images/logo.png",
+    labelURL: "https://vuejs.org/",
+    label: "Label",
+    message: "Timeline Message",
+    when: new Date()
+  };
+
+  /*
   form = withAction({
     imageURL: "https://vuejs.org/images/logo.png",
     labelURL: "https://vuejs.org/",
@@ -31,6 +41,6 @@ export default class TimelineComponent extends Vue {
     }),
     editable:true,
     editing:true
-  });
+  });*/
 }
 </script>

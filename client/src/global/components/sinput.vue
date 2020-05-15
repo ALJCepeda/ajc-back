@@ -90,9 +90,7 @@ export default {
   watch: {
     value: function(newVal) {
       if (this.$refs.input.value !== newVal && !isDate(newVal)) {
-        setTimeout(() => {
-          this.$refs.input.value = newVal;
-        });
+        this.$refs.input.value = newVal;
       }
     }
   },

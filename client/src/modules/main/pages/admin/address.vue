@@ -13,7 +13,7 @@
   import AddressCard from "@/modules/main/components/AddressCard.vue";
 
   @Component({
-      components: { AddressCard }
+    components: { AddressCard }
   })
   export default class AdminAddressComponent extends Vue {
     name:string = "AdminAddressComponent";

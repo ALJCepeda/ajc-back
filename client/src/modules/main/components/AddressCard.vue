@@ -14,7 +14,7 @@
 
 <script lang="ts">
   import {Component} from "vue-property-decorator";
-  import AbstractFormComponent from "@/abstract/AbstractFormComponent";
+  import Vue from 'vue';
 
   interface Address {
     id?:number;
@@ -44,7 +44,7 @@
   };
 
   @Component
-  export default class AddressCard extends AbstractFormComponent<Address> {
+  export default class AddressCard extends Vue {
     created() {
       this.form.commit(example);
 

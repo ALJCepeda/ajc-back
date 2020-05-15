@@ -25,21 +25,51 @@
 </template>
 
 <script lang="ts">
-import {Component} from "vue-property-decorator";
-import AbstractFormComponent from "@/abstract/AbstractFormComponent";
+import Vue from 'vue';
+import {Component, Prop} from "vue-property-decorator";
+import {StateObject} from "@/models/StateObject";
 
 @Component
-export default class FormComponent<IResourceType> extends AbstractFormComponent<IResourceType> {
+export default class FormComponent<IResourceType extends object> extends Vue {
+  @Prop()
+  options:SFormOptions<IResourceType> = {};
+
+  @Prop()
+  editing:boolean = false;
+
   name:string = "sform";
+  id:number | undefined;
+  submitting:boolean = false;
+  removing:boolean = false;
+  actions:{ [type:string]:(payload:IResourceType) => Promise<any> } = {};
+  state: StateObject<IResourceType>;
+  controls: SFormControls<IResourceType>[] = [];
 
-  get controls() {
-    return this.form.controls.filter(control => {
-      if(!!control.hideIfEmpty) {
-        return !!this.form.data[control.key];
-      }
+  created() {
+    Object.assign(this, this.options);
+  }
 
-      return true;
-    });
+  isDirty():boolean {
+    return this.state.isDirty();
+  }
+
+  submit() {
+    if(this.actions.submit) {
+      this.submitting = true;
+      this.actions.submit(this.state.data).then(() => {
+        this.submitting = false;
+        this.state.commit();
+      });
+    }
+  }
+
+  remove() {
+    if(this.actions.remove) {
+      this.removing = true;
+      this.actions.remove(this.state.data).then(() => {
+        this.removing = false;
+      });
+    }
   }
 }
 </script>
