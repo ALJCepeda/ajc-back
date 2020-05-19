@@ -2,7 +2,13 @@
   <main class="login col-center">
     <h3 style="margin-bottom:25px;">Login page</h3>
 
-    <sform class="form" :form="form" />
+    <div class="form">
+      <label>Username:</label> <sinput v-model="credentials.username" type="text" />
+      <label>Password:</label> <sinput v-model="credentials.password" type="text" />
+
+      <button class="btn btn-primary submit" @click="submit()">Login</button>
+      <button class="btn btn-warning reset" @click="cancel()">Cancel</button>
+    </div>
   </main>
 </template>
 
@@ -10,34 +16,24 @@
   import Vue from 'vue';
   import {Component} from "vue-property-decorator";
   import {AppActions} from "@/modules/main/store/actions";
-  import {withAction} from "@/factories/FormFactory";
 
   @Component
   export default class LoginComponent extends Vue {
-    form = withAction( {
-      username:'vlegm',
-      password:'Password123'
-    }, {
-      isDirty(): boolean {
-        return true;
-      },
-      storeActions: (form) => ({
-        submit: AppActions.LOGIN.done((err, resp) => {
-          if (err) {
-            console.error('Need to broadcast error', err);
-          } else if (resp) {
-            this.onSuccess();
-          }
-        })
-      }),
-      controls:[
-        { key:'username', label:'Username', type:'text' },
-        { key:'password', label:'Password', type:'text'}
-      ]
-    });
+    credentials:ReqT<ILogin> = {
+      username: 'vlegm',
+      password: 'Password123'
+    };
 
-    async onSuccess() {
-      return this.$router.push({ name:'Admin' });
+    submit() {
+      AppActions.LOGIN.$dispatch(this.credentials).then(() => {
+        this.$router.push({ name:'Admin' });
+      }).catch(err => {
+        console.error('Need to broadcast error', err);
+      });
+    }
+
+    cancel() {
+      this.$router.push({ name:'Home' });
     }
   }
 </script>

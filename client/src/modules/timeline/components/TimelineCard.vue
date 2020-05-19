@@ -53,47 +53,52 @@
 
 <script lang="ts">
 import TimelineEntry from "ajc-shared/src/models/TimelineEntry";
-import {Component, Emit, Prop, PropSync, Watch} from "vue-property-decorator";
+import {Component, Emit, Prop, Watch, PropSync} from "vue-property-decorator";
 import { mapGetters } from 'vuex';
 import Vue from "vue";
 import Sinput from "@/global/components/sinput.vue";
+import {TimelineActions} from "@/modules/timeline/store/actions";
+import {RevertObject} from "@/models/RevertObject";
 
 @Component({
+  name:'TimelineCard',
   components: {Sinput},
   computed: mapGetters(['isAuthenticated'])
 })
 export default class TimelineCard extends Vue {
   @Prop()
   value:TimelineEntry;
-
-  @Watch('value')
-  onValueChanged(newVal) {
-    this.entry = { ...newVal };
-  }
-
-  entry:TimelineEntry;
+  state:RevertObject<TimelineEntry>;
 
   isEditing:boolean = false;
 
-  name:string = "TimelineCard";
+  get entry():TimelineEntry {
+    return this.state.data;
+  }
 
   created() {
-    this.entry = { ...this.value };
+    this.state = new RevertObject(this.value);
   }
 
-  @Emit('update:value')
-  submit() {
-    return this.entry;
+  @Watch('value')
+  onValueChanged(newVal) {
+    this.state.commit(newVal);
   }
 
-  @Emit('update:value')
+  @Emit('submit')
+  async submit() {
+    await TimelineActions.UPSERT.$dispatch(this.state.data);
+    this.state.commit();
+  }
+
+  @Emit('reset')
   reset() {
-    this.entry = { ...this.value };
-    return this.entry;
+    this.state.reset();
   }
 
+  @Emit('remove')
   remove() {
-
+    return TimelineActions.DELETE.$dispatch(this.state.data);
   }
 
   cancel() {

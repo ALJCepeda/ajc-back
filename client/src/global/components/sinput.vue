@@ -1,24 +1,22 @@
 <template>
   <main class="sinput">
-    <div v-if='!editable'>
-      <span
-        v-if="!editable"
-      >{{ value }}</span>
+    <div v-if='!editing'>
+      <span>{{ val }}</span>
     </div>
 
-    <div v-if="editable">
+    <div v-if="editing">
       <input
         :type="type"
-        :value="value"
-        @input="emitValue"
+        :value="val"
+        @input="onInputChange"
         v-if="!nonSimpleTypes.includes(type)"
         ref="input"
       />
 
       <textarea
         :placeholder="placeholder"
-        :value="value"
-        @input="emitValue"
+        :value="val"
+        @input="onInputChange"
         v-if="type === 'textarea'"
         ref="input"
       ></textarea>
@@ -26,8 +24,8 @@
       <ckeditor
         v-if="type === 'editor'"
         :editor="editor"
-        :value="value"
-        @input="emitValue"
+        :value="val"
+        @input="onInputChange"
         :config="editorConfig"
         ref="input"
       ></ckeditor>
@@ -35,7 +33,7 @@
       <datetime
         :value="valueStr"
         :type="type"
-        @input="emitValue"
+        @input="onInputChange"
         v-if="dateTypes.includes(type)"
         ref="input"
       ></datetime>
@@ -43,70 +41,78 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
 import 'vue-datetime/dist/vue-datetime.css'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Datetime } from 'vue-datetime';
 import {isDate, isString} from 'lodash';
+import {Component, Prop, Ref, Watch, PropSync, Emit} from "vue-property-decorator";
+import {mapGetters} from "vuex";
+import Vue from "vue";
 
-export default {
-  name: "sinput",
-  components: {
-    Datetime
-  },
-  props: {
-    value: [String, Number, Boolean, Date],
+@Component({
+    name: 'sinput',
+    components: { Datetime },
+    computed: mapGetters(['isAuthenticated'])
+})
+export default class SInput extends Vue {
+  @PropSync('value',{
+    type: [String, Number, Boolean, Date]
+  })
+  val: string | number | boolean | Date;
+
+  @Prop({
     type: String,
-    placeholder: {
-      type: String,
-      default: "Enter a value"
-    },
-    editable: {
-      type: Boolean,
-      default: true
-    },
-    editing: {
-      type: Boolean,
-      default: false
-    }
-  },
+    default: 'text'
+  })
+  type: string;
 
-  data() {
-    return {
-      editor: ClassicEditor,
-      editorConfig: {},
-      specialTypes: ['textarea', 'editor'],
-      dateTypes: ['date', 'datetime', 'time'],
-      valueStr: isDate(this.value) ? this.value.toISOString() : this.value
-    }
-  },
+  @Prop({
+    type: String,
+    default: 'Enter a value'
+  })
+  placeholder: string;
 
-  computed: {
-    nonSimpleTypes() {
-      return this.specialTypes.concat(this.dateTypes);
-    }
-  },
+  @Prop({
+    type: Boolean,
+    default: true
+  })
+  editing: boolean;
 
-  watch: {
-    value: function(newVal) {
-      if (this.$refs.input.value !== newVal && !isDate(newVal)) {
-        this.$refs.input.value = newVal;
-      }
-    }
-  },
+  @Ref('input')
+  element:HTMLInputElement;
 
-  methods: {
-    emitValue(event) {
-      const value = isString(event) ? event : event.target.value;
+  editor = ClassicEditor;
+  editorConfig = {};
+  specialTypes = ['textarea', 'editor'];
+  dateTypes = ['date', 'datetime', 'time'];
 
-      if(isDate(this.value)) {
-        this.$emit("input", new Date(value) );
-      } else {
-        this.$emit("input", value);
-      }
+  get valueStr(): string {
+    return isDate(this.val) ? this.val.toISOString() : this.val;
+  }
+
+  get nonSimpleTypes(): string[] {
+    return this.specialTypes.concat(this.dateTypes);
+  }
+
+  @Watch('value')
+  onValueChange(newVal) {
+    if (this.type !== 'editor' && this.element.value !== newVal && !isDate(newVal)) {
+      this.element.value = newVal;
     }
   }
-};
+
+  @Emit('input')
+  onInputChange(event) {
+    const value = isString(event) ? event : event.target.value;
+
+    if(isDate(this.value)) {
+      return new Date(value);
+    } else {
+      return value;
+    }
+  }
+}
 </script>
 
 <style lang="less">

@@ -1,4 +1,4 @@
-import {StateObject} from "@/models/StateObject";
+import {RevertObject} from "@/models/RevertObject";
 
 export type FormOptions<IResourceType extends IEntity> = Partial<Form<IResourceType>>;
 
@@ -7,7 +7,7 @@ export default class Form<IResourceType extends IEntity> {
   editing:boolean = false;
   editable:boolean = false;
   actions:{ [type:string]:(payload:IResourceType) => Promise<any> } = {};
-  state: StateObject<IResourceType>;
+  state: RevertObject<IResourceType>;
   controls: {
     key:keyof IResourceType,
     label:string,
@@ -18,7 +18,7 @@ export default class Form<IResourceType extends IEntity> {
 
   constructor(initialValues:IResourceType, options?:FormOptions<IResourceType>) {
     this.id = initialValues.id;
-    this.state = new StateObject(initialValues);
+    this.state = new RevertObject(initialValues);
     Object.assign(this, options);
 
     if(!this.editable) {

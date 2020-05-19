@@ -1,6 +1,6 @@
 import {isDate} from "moment";
 
-export class StateObject<T extends object> implements IStateObject<T>{
+export class RevertObject<T extends object> implements IRevertObject<T>{
   committed: T;
   data: T;
 

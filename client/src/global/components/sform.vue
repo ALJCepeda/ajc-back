@@ -27,7 +27,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import {Component, Prop} from "vue-property-decorator";
-import {StateObject} from "@/models/StateObject";
+import {RevertObject} from "@/models/RevertObject";
 
 @Component
 export default class FormComponent<IResourceType extends object> extends Vue {
@@ -42,7 +42,7 @@ export default class FormComponent<IResourceType extends object> extends Vue {
   submitting:boolean = false;
   removing:boolean = false;
   actions:{ [type:string]:(payload:IResourceType) => Promise<any> } = {};
-  state: StateObject<IResourceType>;
+  state: RevertObject<IResourceType>;
   controls: SFormControls<IResourceType>[] = [];
 
   created() {
