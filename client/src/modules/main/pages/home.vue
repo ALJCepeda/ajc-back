@@ -4,70 +4,51 @@
 
     <div class="cards">
       <timeline-card
-        :form="form"
-        v-for="form in forms"
-        :key="form.id"
+        v-for="(entry, index) in entries"
+        :key="entry.id"
+        v-model="entries[index]"
         style="margin-bottom:15px;"
+        @removed="removed"
+        @submitted="submitted"
       ></timeline-card>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import Vue from "vue";
 import TimelineIntro from "@/modules/timeline/components/info.vue";
 import TimelineCard from "@/modules/timeline/components/TimelineCard.vue";
 import {TimelineActions} from "@/modules/timeline/store/actions";
-import {fromAction} from "@/factories/FormFactory";
+import {Component} from "vue-property-decorator";
+import TimelineEntry from 'ajc-shared/dist/models/TimelineEntry';
 
-export default {
-  name: "timeline",
-  components: { TimelineIntro, TimelineCard },
-  data: () => ({
-    page: 1,
-    forms: [],
-    fetchingEntries: false
-  }),
-  methods: {
-    async fetchEntries() {
-      this.fetchingEntries = true;
+@Component({
+  name:'HomeComponent',
+  components: { TimelineIntro, TimelineCard }
+})
+export default class HomeComponent extends Vue {
+  page:number = 1;
+  entries:TimelineEntry[] = [];
+  fetchingEntries:boolean = false;
 
-      this.forms = await fromAction(TimelineActions.LOAD.with({
-        limit:10,
-        page:this.page
-      }), {
-        editable: true,
-        controls: [
-          {key: 'id', label: 'ID', type: 'text', readonly: true, hideIfEmpty: true},
-          {key: 'when', label: 'When', type: 'datetime'},
-          {key: 'imageURL', label: 'Image', type: 'text'},
-          {key: 'labelURL', label: 'Link', type: 'text'},
-          {key: 'label', label: 'Label', type: 'text'},
-          {key: 'message', label: 'Message', type: 'editor'}
-        ],
-        storeActions: (form) => ({
-          submit: TimelineActions.UPSERT.done((err, result) => {
-            if (err) {
-              console.error(err);
-            } else if (result) {
-              form.editing = false;
-              this.fetchingEntries = false;
-            }
-          }),
-          remove: TimelineActions.DELETE.done((err, result) => {
-            if (err) {
-              console.error(err);
-            } else if (result) {
-              this.forms = this.forms.filter(aForm => aForm !== form);
-            }
-          })
-        })
-      });
-    }
-  },
-  created() {
-    this.fetchEntries();
+  async created() {
+    this.fetchingEntries = true;
+    this.entries = await TimelineActions.LOAD.$dispatch({
+      limit: 10,
+      page: this.page
+    });
+    this.fetchingEntries = false;
   }
-};
+
+  removed(removedEntry) {
+    this.entries = this.entries.filter(entry => entry !== removedEntry);
+  }
+
+  submitted(result) {
+    result.vm.isEditing = false;
+  }
+}
 </script>
 
 <style lang="less" scoped>

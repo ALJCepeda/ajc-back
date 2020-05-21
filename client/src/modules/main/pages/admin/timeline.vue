@@ -1,7 +1,7 @@
 <template>
   <main class="admin-timeline">
     <div class="row-nw jc-center">
-      <timeline-card v-model="entry" @input="entry = { ...$event }"></timeline-card>
+      <timeline-card v-model="entry"></timeline-card>
     </div>
   </main>
 </template>

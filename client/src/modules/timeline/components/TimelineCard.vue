@@ -19,11 +19,11 @@
           <span v-if="entry.type"> shared a {{ entry.type }}</span>
 
           <span class="edit" v-if="isAuthenticated">
-            <span v-if="!isEditing" @click="edit()">
+            <span v-if="!viewState.isEditing" @click="edit()">
               edit
             </span>
 
-            <span v-if="isEditing"  @click="cancel()">
+            <span v-if="viewState.isEditing" @click="cancel()">
               cancel
             </span>
           </span>
@@ -37,7 +37,7 @@
 
     <div class="message border-bottom" v-html="entry.message"></div>
 
-    <div class="form" v-if="isEditing">
+    <div class="form" v-if="viewState.isEditing">
       <label v-if="entry.id">ID:</label> <sinput v-if="entry.id" v-model="entry.id" :editable="false" type="text" />
       <label>When:</label> <sinput v-model="entry.when" type="datetime" />
       <label>Image URL:</label> <sinput v-model="entry.imageURL" type="text" />
@@ -53,7 +53,7 @@
 
 <script lang="ts">
 import TimelineEntry from "ajc-shared/src/models/TimelineEntry";
-import {Component, Emit, Prop, Watch, PropSync} from "vue-property-decorator";
+import {Component, Emit, Prop, PropSync, Watch} from "vue-property-decorator";
 import { mapGetters } from 'vuex';
 import Vue from "vue";
 import Sinput from "@/global/components/sinput.vue";
@@ -70,7 +70,14 @@ export default class TimelineCard extends Vue {
   value:TimelineEntry;
   state:RevertObject<TimelineEntry>;
 
-  isEditing:boolean = false;
+  @PropSync('vm', {
+    default() {
+      return {
+        isEditing: false
+      }
+    }
+  })
+  viewState;
 
   get entry():TimelineEntry {
     return this.state.data;
@@ -85,10 +92,11 @@ export default class TimelineCard extends Vue {
     this.state.commit(newVal);
   }
 
-  @Emit('submit')
+  @Emit('submitted')
   async submit() {
     await TimelineActions.UPSERT.$dispatch(this.state.data);
     this.state.commit();
+    return { vm:this.viewState, entry:this.state.data };
   }
 
   @Emit('reset')
@@ -96,17 +104,23 @@ export default class TimelineCard extends Vue {
     this.state.reset();
   }
 
-  @Emit('remove')
+  @Emit('removed')
   remove() {
-    return TimelineActions.DELETE.$dispatch(this.state.data);
+    return TimelineActions.DELETE.$dispatch(this.state.data).then(removed => {
+      if(removed) {
+        return this.state.data;
+      }
+
+      return null;
+    });
   }
 
   cancel() {
-    this.isEditing = false;
+    this.viewState.isEditing = false;
   }
 
   edit() {
-    this.isEditing = true;
+    this.viewState.isEditing = true;
   }
 }
 </script>
