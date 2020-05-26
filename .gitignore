@@ -1,5 +1,4 @@
 node_modules
-<<<<<<< HEAD
 dist
 .DS_Store
 ._.DS_Store
@@ -26,3 +25,4 @@ logs
 public/libs
 public/fonts
 npm-debug.log
+mnt
