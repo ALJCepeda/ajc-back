@@ -12,7 +12,8 @@
     "build": "babel src -d dist",
     "dev": "ts-node-dev --poll --transpileOnly src/index.ts",
     "playground": "ts-node-dev playground.ts",
-    "inspect": "ts-node-dev --inspect=0.0.0.0:9229 --poll --transpileOnly src/index.ts"
+    "inspect": "ts-node-dev --inspect=0.0.0.0:9229 --poll --transpileOnly src/index.ts",
+    "script": "ts-node-dev"
   },
   "author": "Alfred Cepeda",
   "license": "ISC",

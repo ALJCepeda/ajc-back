@@ -14,13 +14,13 @@ export default class InlineFormComponent<IResourceType extends IEntity> extends 
   }
 
   get entry():IResourceType {
-    return this.form.data;
+    return this.form.state.data;
   }
 
   submit() {
     if(this.form.actions.submit) {
       this.submitting = true;
-      this.form.actions.submit(this.form.data).then(() => {
+      this.form.actions.submit(this.form.state.data).then(() => {
         this.submitting = false;
         this.form.commit();
       });
@@ -30,7 +30,7 @@ export default class InlineFormComponent<IResourceType extends IEntity> extends 
   remove() {
     if(this.form.actions.remove) {
       this.removing = true;
-      this.form.actions.remove(this.form!.data).then(() => {
+      this.form.actions.remove(this.form.state.data).then(() => {
         this.removing = false;
       });
     }

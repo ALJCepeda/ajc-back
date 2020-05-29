@@ -87,8 +87,12 @@ export default class SInput extends Vue {
   specialTypes = ['textarea', 'editor'];
   dateTypes = ['date', 'datetime', 'time'];
 
-  get valueStr(): string {
-    return isDate(this.val) ? this.val.toISOString() : this.val;
+  get valueStr(): string | number | boolean {
+    if(isDate(this.val)) {
+      return this.val.toISOString();
+    }
+
+    return this.val;
   }
 
   get nonSimpleTypes(): string[] {
@@ -106,7 +110,7 @@ export default class SInput extends Vue {
   onInputChange(event) {
     const value = isString(event) ? event : event.target.value;
 
-    if(isDate(this.value)) {
+    if(isDate(this.val)) {
       return new Date(value);
     } else {
       return value;

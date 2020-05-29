@@ -6,6 +6,7 @@ import serverService from "./services/ServerService";
 
 async function run(): Promise<void> {
   await logger.init('logs');
+  console.log(typeORMConfig);
   await createConnection(typeORMConfig);
   const port = Number(process.env.PORT) || 3000;
 

@@ -1,6 +1,6 @@
 import {EntityRepository, Repository} from "typeorm";
-import TimelineEntry from "../models/TimelineEntry";
 import {injectable} from "inversify";
+import TimelineEntry from "../../../shared/src/models/TimelineEntry";
 
 @injectable()
 @EntityRepository(TimelineEntry)

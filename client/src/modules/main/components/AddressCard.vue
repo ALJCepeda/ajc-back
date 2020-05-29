@@ -46,6 +46,7 @@
   @Component
   export default class AddressCard extends Vue {
     created() {
+      /*
       this.form.commit(example);
 
       this.form.controls = [
@@ -56,7 +57,7 @@
         { key:'city', type:'text' },
         { key:'state', type:'editor' },
         { key:'zipcode', type:'text'}
-      ];
+      ];*/
     }
   }
 </script>

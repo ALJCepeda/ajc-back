@@ -21,6 +21,7 @@
 
 <script lang="ts">
   import {Component} from "vue-property-decorator";
+  import Vue from 'vue';
 
   interface InlineControl<IResourceType, IKey extends keyof IResourceType = keyof IResourceType> {
     key: IKey,
@@ -31,7 +32,7 @@
   }
 
   @Component
-  export default class InlineFormComponent<IResourceType> {
+  export default class InlineFormComponent<IResourceType> extends Vue {
     name:string = "sform";
     editing:boolean = false;
     editable:boolean = false;

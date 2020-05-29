@@ -4,7 +4,7 @@ dist
 ._.DS_Store
 logs/
 backups/
-.env
+server/.env
 temp/
 .idea
 .*
