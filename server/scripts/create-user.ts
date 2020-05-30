@@ -14,5 +14,5 @@ createConnection(typeORMConfig).then(async (connection) => {
     active: true
   });
 
-  console.log(result);
+  console.log('Created used:', result);
 });

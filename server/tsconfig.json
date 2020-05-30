@@ -24,5 +24,11 @@
     "./src/**/*.d.ts",
     "./src/**/*.ts",
     "../ajc-shared/src/types.d.ts"
+  ],
+  "files": [
+    "../shared/src/app.api.d.ts",
+    "../shared/src/api/app.d.ts",
+    "../shared/src/api/timeline.d.ts",
+    "../shared/src/types.d.ts"
   ]
 }

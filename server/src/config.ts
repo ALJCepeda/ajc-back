@@ -1,10 +1,9 @@
-import * as dotenv from 'dotenv';
+require('dotenv').config({ path: './../.env' })
+
 import {PostgresConnectionOptions} from "typeorm/driver/postgres/PostgresConnectionOptions";
 import User from "./models/User";
 import Blog from "./models/Blog";
 import TimelineEntry from "../../shared/src/models/TimelineEntry";
-
-dotenv.config();
 
 export const typeORMConfig: PostgresConnectionOptions = {
   type: 'postgres',
