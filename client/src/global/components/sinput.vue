@@ -1,12 +1,12 @@
 <template>
-  <span class="sinput" v-bind:class="{ row: type === 'editor' }">
-    <span v-if='!editing'>{{ val }}</span>
+  <span class="sinput" v-bind:class="{ row: type === 'editor' }" @dblclick="onDoubleClick" @keyup.enter="onSubmit">
+    <span v-if='!isEditing'>{{ val }}</span>
 
     <input
       :type="type"
       :value="val"
       @input="onInputChange"
-      v-if="editing && !nonSimpleTypes.includes(type)"
+      v-if="isEditing && !nonSimpleTypes.includes(type)"
       ref="input"
     />
 
@@ -14,27 +14,27 @@
       :placeholder="placeholder"
       :value="val"
       @input="onInputChange"
-      v-if="editing && type === 'textarea'"
+      v-if="isEditing && type === 'textarea'"
       ref="input"
-    ></textarea>
+    />
 
     <ckeditor
-      v-if="editing && type === 'editor'"
+      v-if="isEditing && type === 'editor'"
       :editor="editor"
       :value="val"
       @input="onInputChange"
       :config="editorConfig"
       class="row"
       ref="input"
-    ></ckeditor>
+    />
 
     <datetime
-      :value="valueStr"
+      :value="val"
       :type="type"
       @input="onInputChange"
-      v-if="editing && dateTypes.includes(type)"
+      v-if="isEditing && dateTypes.includes(type)"
       ref="input"
-    ></datetime>
+    />
   </span>
 </template>
 
@@ -53,43 +53,32 @@ import Vue from "vue";
     computed: mapGetters(['isAuthenticated'])
 })
 export default class SInput extends Vue {
-  @PropSync('value',{
-    type: [String, Number, Boolean, Date]
-  })
+  @Prop({ type: [String, Number, Boolean, Date] })
+  value: string | number | boolean | Date;
+
   val: string | number | boolean | Date;
 
-  @Prop({
-    type: String,
-    default: 'text'
-  })
+  @Prop({ type: String, default: 'text' })
   type: string;
 
-  @Prop({
-    type: String,
-    default: 'Enter a value'
-  })
+  @Prop({ type: String, default: 'Enter a value' })
   placeholder: string;
 
-  @Prop({
-    type: Boolean,
-    default: true
-  })
-  editing: boolean;
+  @Prop({ type: String, default: 'static'})
+  mode: string;
 
   @Ref('input')
   element:HTMLInputElement;
 
+  isEditing = false;
   editor = ClassicEditor;
   editorConfig = {};
   specialTypes = ['textarea', 'editor'];
   dateTypes = ['date', 'datetime', 'time'];
 
-  get valueStr(): string | number | boolean {
-    if(isDate(this.val)) {
-      return this.val.toISOString();
-    }
-
-    return this.val;
+  created() {
+    this.isEditing = this.mode !== 'inline';
+    this.val = isDate(this.value) ? this.value.toISOString() : this.value;
   }
 
   get nonSimpleTypes(): string[] {
@@ -98,19 +87,36 @@ export default class SInput extends Vue {
 
   @Watch('value')
   onValueChange(newVal) {
-    if (this.type !== 'editor' && this.element.value !== newVal && !isDate(newVal)) {
+    if (this.type !== 'editor' && this.element && this.element.value !== newVal && !isDate(newVal)) {
       this.element.value = newVal;
     }
   }
 
-  @Emit('input')
   onInputChange(event) {
     const value = isString(event) ? event : event.target.value;
+    this.val = value;
 
-    if(isDate(this.val)) {
-      return new Date(value);
-    } else {
-      return value;
+    if(this.mode === 'static') {
+      if(isDate(this.val)) {
+        this.$emit('input', new Date(value));
+      } else {
+        this.$emit('input',value);
+      }
+    }
+  }
+
+  onDoubleClick() {
+    if(this.mode === 'inline') {
+      this.val = this.value;
+      this.isEditing = !this.isEditing;
+    }
+  }
+
+  onSubmit() {
+    if(this.mode === 'inline' && this.isEditing) {
+      this.$emit('input', this.val);
+      this.$emit('submit');
+      this.isEditing = false;
     }
   }
 }

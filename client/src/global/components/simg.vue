@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "sinput",
+  name: "simg",
   props: ["src"],
   data: function() {
     return {

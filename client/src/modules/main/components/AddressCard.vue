@@ -5,9 +5,11 @@
     </div>
 
     <div class="message">
-      <sinput>858 Grand Regency Pointe</sinput>
-      <div>#104</div>
-      <div>Altamonte Springs, FL 32714</div>
+      <sinput v-model="address.line1" mode="inline" @submit="onSubmit" style="display:block" />
+      <sinput v-model="address.line2" mode="inline" @submit="onSubmit" style="display:block" />
+      <sinput v-model="address.city" mode="inline" @submit="onSubmit" />,
+      <sinput v-model="address.state" mode="inline" @submit="onSubmit" />
+      <sinput v-model="address.zipcode" mode="inline" @submit="onSubmit" style="margin-left:5px;"/>
     </div>
   </main>
 </template>
@@ -15,12 +17,13 @@
 <script lang="ts">
   import {Component} from "vue-property-decorator";
   import Vue from 'vue';
+  import Sinput from "@/global/components/sinput.vue";
 
   interface Address {
     id?:number;
     label: string;
-    address1: string;
-    address2: string;
+    line1: string;
+    line2: string;
     city: string;
     state: string;
     zipcode: number;
@@ -33,31 +36,24 @@
     moveOut: Date;
   }
 
-  const example = {
-    id: 1,
-    label: 'Home',
-    address1: '858 Grande Regency Pointe',
-    address2: '#104',
-    city: 'Orlando',
-    state: 'Florida',
-    zipcode: 32714
-  };
-
-  @Component
+  @Component({
+    components: {Sinput}
+  })
   export default class AddressCard extends Vue {
-    created() {
-      /*
-      this.form.commit(example);
+    address:Address = {
+      id: 1,
+      label: 'Home',
+      line1: '858 Grande Regency Pointe',
+      line2: '#104',
+      city: 'Orlando',
+      state: 'Florida',
+      zipcode: 32714
+    };
 
-      this.form.controls = [
-        { key:'id', type:'text', readonly:true, hideIfEmpty:true },
-        { key:'label', type:'datetime' },
-        { key:'address1', type:'text' },
-        { key:'address2', type:'text' },
-        { key:'city', type:'text' },
-        { key:'state', type:'editor' },
-        { key:'zipcode', type:'text'}
-      ];*/
+    isEditing = false;
+
+    onSubmit() {
+      console.log(this.address.line1);
     }
   }
 </script>
