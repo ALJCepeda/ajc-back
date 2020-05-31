@@ -42,6 +42,7 @@
       <label>When:</label> <sinput v-model="entry.when" type="datetime" />
       <label>Image URL:</label> <sinput v-model="entry.imageURL" type="text" />
       <label>Label:</label> <sinput v-model="entry.label" type="text" />
+      <label>Label URL:</label> <sinput v-model="entry.labelURL" type="text" />
       <label>Message:</label> <sinput v-model="entry.message" type="editor" />
 
       <div class="buttons">
