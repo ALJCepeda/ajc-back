@@ -6,8 +6,10 @@
       <label>Username:</label> <sinput v-model="credentials.username" type="text" />
       <label>Password:</label> <sinput v-model="credentials.password" type="text" />
 
-      <button class="btn btn-primary submit" @click="submit()">Login</button>
-      <button class="btn btn-warning reset" @click="cancel()">Cancel</button>
+      <div class="buttons">
+        <button class="btn btn-primary submit" @click="submit()">Login</button>
+        <button class="btn btn-warning reset" @click="cancel()">Cancel</button>
+      </div>
     </div>
   </main>
 </template>
@@ -39,5 +41,7 @@
 </script>
 
 <style lang="less" scoped>
-
+  .form {
+    max-width:350px;
+  }
 </style>

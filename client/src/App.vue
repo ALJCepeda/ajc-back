@@ -178,8 +178,6 @@
     }
   }
 
-
-
   .cover-photo {
     height:355px;
     background-image:url('assets/images/workstation.png');
@@ -198,8 +196,6 @@
     margin-left:15px;
     margin-right:18px;
     margin-bottom:15px;
-
-
   }
 
   .content {
