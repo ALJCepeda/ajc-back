@@ -1,44 +1,41 @@
 <template>
-  <main class="sinput">
-    <div v-if='!editing'>
-      <span>{{ val }}</span>
-    </div>
+  <span class="sinput" v-bind:class="{ row: type === 'editor' }">
+    <span v-if='!editing'>{{ val }}</span>
 
-    <div v-if="editing">
-      <input
-        :type="type"
-        :value="val"
-        @input="onInputChange"
-        v-if="!nonSimpleTypes.includes(type)"
-        ref="input"
-      />
+    <input
+      :type="type"
+      :value="val"
+      @input="onInputChange"
+      v-if="editing && !nonSimpleTypes.includes(type)"
+      ref="input"
+    />
 
-      <textarea
-        :placeholder="placeholder"
-        :value="val"
-        @input="onInputChange"
-        v-if="type === 'textarea'"
-        ref="input"
-      ></textarea>
+    <textarea
+      :placeholder="placeholder"
+      :value="val"
+      @input="onInputChange"
+      v-if="editing && type === 'textarea'"
+      ref="input"
+    ></textarea>
 
-      <ckeditor
-        v-if="type === 'editor'"
-        :editor="editor"
-        :value="val"
-        @input="onInputChange"
-        :config="editorConfig"
-        ref="input"
-      ></ckeditor>
+    <ckeditor
+      v-if="editing && type === 'editor'"
+      :editor="editor"
+      :value="val"
+      @input="onInputChange"
+      :config="editorConfig"
+      class="row"
+      ref="input"
+    ></ckeditor>
 
-      <datetime
-        :value="valueStr"
-        :type="type"
-        @input="onInputChange"
-        v-if="dateTypes.includes(type)"
-        ref="input"
-      ></datetime>
-    </div>
-  </main>
+    <datetime
+      :value="valueStr"
+      :type="type"
+      @input="onInputChange"
+      v-if="editing && dateTypes.includes(type)"
+      ref="input"
+    ></datetime>
+  </span>
 </template>
 
 <script lang="ts">
@@ -121,21 +118,21 @@ export default class SInput extends Vue {
 
 <style lang="less">
 .sinput {
-  max-width: 100%;
-
-  label {
-    width: 20%;
-    text-align: right;
-    margin-right: 35px;
-  }
-
   textarea {
     flex: 0.7;
     min-width: 175px;
   }
 
   input[type="text"] {
-    min-width: 173px;
+    min-width: 175px;
+  }
+
+  .vdatetime {
+    display: inline-block;
+  }
+
+  .ck-editor {
+    width: 99.654%;
   }
 }
 </style>

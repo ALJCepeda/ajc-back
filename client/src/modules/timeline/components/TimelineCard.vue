@@ -44,9 +44,11 @@
       <label>Label:</label> <sinput v-model="entry.label" type="text" />
       <label>Message:</label> <sinput v-model="entry.message" type="editor" />
 
-      <button class="btn btn-primary submit" @click="submit()">Submit</button>
-      <button class="btn btn-warning reset" @click="reset()">Reset</button>
-      <button class="btn btn-danger remove" v-if="entry.id" @click="remove()">Delete</button>
+      <div class="buttons">
+        <button class="btn btn-primary submit" @click="submit()">Submit</button>
+        <button class="btn btn-warning reset" @click="reset()">Reset</button>
+        <button class="btn btn-danger remove" v-if="entry.id" @click="remove()">Delete</button>
+      </div>
     </div>
   </main>
 </template>
@@ -129,8 +131,8 @@ export default class TimelineCard extends Vue {
 @import "../../../../node_modules/ajc-toolbelt/dist/less/flex.less";
 @import "../../../less/variables.less";
 
-.sinput[name="message"] .value {
-  margin-top:15px;
+.sinput[type="editor"] .value {
+  margin-top:40px;
   width:100%
 }
 
@@ -176,7 +178,7 @@ export default class TimelineCard extends Vue {
   }
 
   .form {
-    padding-top: 15px;
+    margin: 25px 0;
   }
 
   .edit {
