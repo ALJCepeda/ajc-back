@@ -181,11 +181,5 @@ export default class TimelineCard extends Vue {
   .form {
     margin: 25px 0;
   }
-
-  .edit {
-    float: right;
-    color: @color-blue;
-    cursor: pointer;
-  }
 }
 </style>

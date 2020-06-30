@@ -1,15 +1,45 @@
 <template>
   <main class="address-card">
-    <div class="header row-nw">
-      <h3>Home</h3>
+    <div class="header">
+      <div class="row-nw ai-center jc-between">
+        <h3>{{ address.name }}</h3>
+
+        <span class="edit">
+            <span v-if="!isEditing" @click="edit()">
+              edit
+            </span>
+
+            <span v-if="isEditing" @click="cancel()">
+              cancel
+            </span>
+          </span>
+      </div>
+
+      <div>{{ address.line1 }} </div>
+      <div v-if="address.line2">{{ address.line2 }}</div>
+      <div>{{ address.city }}, {{ address.state }} {{ address.zipcode }}</div>
     </div>
 
-    <div class="message">
-      <sinput v-model="address.line1" mode="inline" @submit="onSubmit" style="display:block" />
-      <sinput v-model="address.line2" mode="inline" @submit="onSubmit" style="display:block" />
-      <sinput v-model="address.city" mode="inline" @submit="onSubmit" />,
-      <sinput v-model="address.state" mode="inline" @submit="onSubmit" />
-      <sinput v-model="address.zipcode" mode="inline" @submit="onSubmit" style="margin-left:5px;"/>
+    <div class="form" v-if="isEditing">
+      <label>Name:</label> <sinput v-model="address.name" />
+      <label>Line1:</label> <sinput v-model="address.line1" />
+      <label>Line2:</label> <sinput v-model="address.line2" />
+      <label>City:</label> <sinput v-model="address.city" />
+      <label>State:</label> <sinput v-model="address.state" />
+
+      <vue-google-autocomplete
+        id="map"
+        classname="form-control"
+        placeholder="Start typing"
+        v-on:placechanged="getAddressData"
+      >
+      </vue-google-autocomplete>
+
+      <div class="buttons">
+        <button class="btn btn-primary submit" @click="submit">Submit</button>
+        <button class="btn btn-warning reset" @click="reset">Reset</button>
+        <button class="btn btn-danger remove" v-if="address.id" @click="remove">Delete</button>
+      </div>
     </div>
   </main>
 </template>
@@ -21,7 +51,7 @@
 
   interface Address {
     id?:number;
-    label: string;
+    name: string;
     line1: string;
     line2: string;
     city: string;
@@ -31,18 +61,12 @@
     updatedOn?:Date;
   }
 
-  interface PersonalAddress extends Address {
-    moveIn: Date;
-    moveOut: Date;
-  }
-
   @Component({
     components: {Sinput}
   })
   export default class AddressCard extends Vue {
     address:Address = {
-      id: 1,
-      label: 'Home',
+      name: 'Home',
       line1: '858 Grande Regency Pointe',
       line2: '#104',
       city: 'Orlando',
@@ -52,8 +76,28 @@
 
     isEditing = false;
 
-    onSubmit() {
+    submit() {
       console.log(this.address.line1);
+    }
+
+    reset() {
+
+    }
+
+    remove() {
+
+    }
+
+    edit() {
+      this.isEditing = true;
+    }
+
+    cancel() {
+      this.isEditing = false;
+    }
+
+    getAddressData() {
+      debugger;
     }
   }
 </script>
@@ -64,5 +108,9 @@
 
   .address-card {
     margin: 10px;
+  }
+
+  .form {
+    margin: 25px 0;
   }
 </style>
