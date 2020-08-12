@@ -1,11 +1,11 @@
-import moment from "moment";
-import _ from "lodash";
+import moment from 'moment';
+import _ from 'lodash';
 
 const rawData = {};
 
 const BaseWork = {
-  link: "#",
-  logo: require("./../assets/images/work-icon.png"),
+  link: '#',
+  logo: require('./../assets/images/work-icon.png'),
   isHometown: false
 };
 
@@ -36,7 +36,7 @@ export default {
     const result = {};
 
     cities.forEach(city => {
-      let key = `${city.name}, ${city.shortState}`;
+      const key = `${city.name}, ${city.shortState}`;
 
       if (!_.isUndefined(result[key])) {
         throw new Error(`Primary key already defined: ${key}`);
@@ -69,7 +69,7 @@ export default {
       }
 
       if (!_.isUndefined(result[key])) {
-        throw new Error("Primary key already defined:", key);
+        throw new Error('Primary key already defined:', key);
       }
 
       result[key] = address;
@@ -101,8 +101,8 @@ export default {
     return entries.map(entry =>
       Object.assign(
         {
-          fullStart: moment(entry.start).format("MMMM Do, YYYY"),
-          fullEnd: moment(entry.end).format("MMMM Do, YYYY")
+          fullStart: moment(entry.start).format('MMMM Do, YYYY'),
+          fullEnd: moment(entry.end).format('MMMM Do, YYYY')
         },
         entry
       )

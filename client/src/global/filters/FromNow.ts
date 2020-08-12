@@ -1,10 +1,10 @@
-import moment from "moment";
+import moment from 'moment';
 
 export default function(value:Date) {
   const now = moment();
   const when = moment(value);
 
-  if(Math.abs(now.diff(when, 'minutes')) < 9240) {
+  if (Math.abs(now.diff(when, 'minutes')) < 9240) {
     return when.calendar();
   }
 

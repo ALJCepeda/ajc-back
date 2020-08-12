@@ -1,7 +1,8 @@
-import './config';
+require('dotenv').config({ path: './../.env' });
+
 import logger from './services/logger';
-import {typeORMConfig} from "./config";
 import {createConnection} from "typeorm";
+import {typeORMConfig} from "./config/typeorm";
 import serverService from "./services/ServerService";
 
 async function run(): Promise<void> {
@@ -9,10 +10,11 @@ async function run(): Promise<void> {
   console.log(typeORMConfig);
   await createConnection(typeORMConfig);
   const port = Number(process.env.PORT) || 3000;
+  const host = process.env.HOST || '0.0.0.0';
 
   const app = serverService.setupApp();
-  app.listen(port);
-  logger.log(`Server started on ${port}`)
+  app.listen(port, host);
+  logger.log(`Server started on ${host}:${port}`)
 }
 
 run().then(() => logger.log('Completed setup'), (err) => logger.error(err));

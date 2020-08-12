@@ -1,21 +1,45 @@
 version: "3.7"
 
 services:
+  client:
+    working_dir: /home/node/app
+    tty: true
+    env_file:
+      - .env
+    networks:
+      - ajc-web
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./client:/home/node/app:Z
+      - ./shared:/home/node/shared:Z
+    image: node:13
   server:
     working_dir: /home/node/app
-    user: node
+    tty: true
     env_file:
-      - server/.env
+      - .env
     networks:
       - ajc-web
     ports:
       - '3000:3000'
     volumes:
-      - ./:/home/node/app:Z
+      - ./server:/home/node/app:Z
+      - ./shared:/home/node/shared:Z
+    image: node:13
+  shared:
+    working_dir: /home/node/app
+    env_file:
+      - .env
+    networks:
+      - ajc-web
+    volumes:
+      - ./client:/home/node/app:Z
+      - ./shared:/home/node/shared:Z
     image: node:13
   postgres:
     env_file:
-      - server/.env
+      - .env
     networks:
       - ajc-web
     ports:
@@ -23,20 +47,8 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data:Z
     image: postgres:11
-  pgadmin:
-    env_file:
-      - server/.env
-    networks:
-      - ajc-web
-    ports:
-      - '8081:80'
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    image: dpage/pgadmin4:4.22
 volumes:
   postgres:
-    driver: local
-  pgadmin:
     driver: local
 networks:
   ajc-web:

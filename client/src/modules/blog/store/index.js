@@ -1,6 +1,6 @@
-import Vue from "vue";
-import moment from "moment";
-import api from "../../../services/api";
+import Vue from 'vue';
+import moment from 'moment';
+import api from '../../../services/api';
 
 const module = {
   namespaced: true,
@@ -26,7 +26,7 @@ const module = {
   },
   mutations: {
     manifest(state, manifest) {
-      Vue.set(state, "manifest", manifest);
+      Vue.set(state, 'manifest', manifest);
     },
     entry(state, entry) {
       entry.created_at = moment(entry.created_at);
@@ -40,14 +40,14 @@ const module = {
   },
   actions: {
     manifest({ commit }) {
-      return api.get("/blogs/manifest").then(resp => {
-        commit("manifest", resp);
+      return api.get('/blogs/manifest').then(resp => {
+        commit('manifest', resp);
         return resp;
       });
     },
     entries({ commit }, ids = []) {
-      return api.post("/blogs/entries", ids).then(entries => {
-        entries.forEach(entry => commit("entry", entry));
+      return api.post('/blogs/entries', ids).then(entries => {
+        entries.forEach(entry => commit('entry', entry));
 
         return Array.from(entries.values()).sort((a, b) => {
           return b.created_at.diff(a.created_at);
@@ -55,13 +55,13 @@ const module = {
       });
     },
     entriesByPage({ dispatch }, page) {
-      return api.get("/blogs/entriesByPage", { page, limit: 20 }).then(ids => {
-        return dispatch("entries", ids);
+      return api.get('/blogs/entriesByPage', { page, limit: 20 }).then(ids => {
+        return dispatch('entries', ids);
       });
     },
     content({ commit }, uri) {
       return api.get(`/blogs/${uri}`).then(resp => {
-        commit("content", { uri, content: resp });
+        commit('content', { uri, content: resp });
         return resp;
       });
     }

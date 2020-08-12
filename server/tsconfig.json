@@ -10,7 +10,10 @@
     "esModuleInterop": true,
     "strictNullChecks": true,
     "moduleResolution": "node",
-    "rootDir": "./src",
+    "rootDirs": [
+      "./src",
+      "../shared/src"
+    ],
     "outDir": "./dist",
     "lib": [
       "es2017",
@@ -21,14 +24,7 @@
     "node_modules"
   ],
   "include": [
-    "./src/**/*.d.ts",
     "./src/**/*.ts",
-    "../ajc-shared/src/types.d.ts"
-  ],
-  "files": [
-    "../shared/src/app.api.d.ts",
-    "../shared/src/api/app.d.ts",
-    "../shared/src/api/timeline.d.ts",
-    "../shared/src/types.d.ts"
+    "../shared/**/*.ts"
   ]
 }

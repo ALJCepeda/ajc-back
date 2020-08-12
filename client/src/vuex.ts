@@ -1,12 +1,12 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-import main from "@/modules/main/store/index";
-import blog from "@/modules/blog/store/index.js";
-import timeline from "@/modules/timeline/store/index.ts";
-import {AppActions} from "@/modules/main/store/actions";
-import {AppMutations} from "@/modules/main/store/mutations";
-import {TimelineActions} from "@/modules/timeline/store/actions";
+import main from '@/modules/main/store/index';
+import blog from '@/modules/blog/store/index.js';
+import timeline from '@/modules/timeline/store/index.ts';
+import { AppActions } from '@/modules/main/store/actions';
+import { AppMutations } from '@/modules/main/store/mutations';
+import { TimelineActions } from '@/modules/timeline/store/actions';
 
 Vue.use(Vuex);
 

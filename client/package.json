@@ -11,10 +11,10 @@
     "eslint-loader": "2.1.2"
   },
   "scripts": {
-    "client": "vue-cli-service serve",
+    "dev": "vue-cli-service --port=8000 serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint --fix"
   },
   "author": "Alfred Cepeda",
   "license": "ISC",
@@ -58,10 +58,17 @@
     "@vue/eslint-config-prettier": "^5.0.0",
     "@vue/eslint-config-typescript": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
+    "babel-eslint": "^10.1.0",
     "chai": "^4.1.2",
     "dotenv": "^6.0.0",
     "eslint": "^5.16.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-html": "^6.0.3",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^5.0.0",
     "less": "^3.8.1",
     "less-loader": "^5.0.0",
