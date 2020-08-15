@@ -2,7 +2,8 @@ import {Container} from "inversify";
 import {json, urlencoded} from "body-parser";
 import {readdirSync} from "fs";
 import {join} from 'path';
-import express = require('express');
+import express = require('express')
+const promMid = require('express-prometheus-middleware');
 import session from 'express-session';
 
 import DecoratorManifest from "../decorators/DecoratorManifest";
@@ -34,6 +35,11 @@ export class ServerService {
     container.bind(EntityManager).toConstantValue(entityManager);
 
     const app = express();
+
+    app.use(promMid({
+      metricsPath: '/metrics',
+      collectDefaultMetrics: true,
+    }));
 
     app.use(ContainerMiddleware(container));
     app.use(HeaderMiddleware);

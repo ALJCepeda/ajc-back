@@ -22,7 +22,7 @@ services:
     networks:
       - ajc-web
     ports:
-      - '3000:3000'
+      - '8001:8001'
     volumes:
       - ./server:/home/node/app:Z
       - ./shared:/home/node/shared:Z
@@ -47,8 +47,30 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data:Z
     image: postgres:11
+  prometheus:
+    env_file:
+      - .env
+    networks:
+      - ajc-web
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yml
+    image: prom/prometheus
+  grafana:
+    env_file:
+      - .env
+    networks:
+      - ajc-web
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana:/var/lib/grafana
+    image: grafana/grafana
 volumes:
   postgres:
+    driver: local
+  grafana:
     driver: local
 networks:
   ajc-web:
