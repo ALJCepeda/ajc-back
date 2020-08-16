@@ -10,6 +10,7 @@ services:
       - ajc-web
     ports:
       - '8000:8000'
+      - '9229:9229'
     volumes:
       - ./client:/home/node/app:Z
       - ./shared:/home/node/shared:Z
@@ -67,10 +68,22 @@ services:
     volumes:
       - grafana:/var/lib/grafana
     image: grafana/grafana
+  pgadmin:
+    env_file:
+      - .env
+    networks:
+      - ajc-web
+    ports:
+      - '8002:80'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    image: dpage/pgadmin4:4.22
 volumes:
   postgres:
     driver: local
   grafana:
+    driver: local
+  pgadmin:
     driver: local
 networks:
   ajc-web:

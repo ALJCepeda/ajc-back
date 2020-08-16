@@ -1,11 +1,10 @@
 import {Application, NextFunction, Request, Response} from "express";
 import {Container} from "inversify";
 import { normalize, isAbsolute } from "path";
-import logger from "../services/logger";
+import {logger} from "../services/baseLogger";
 import {ControllerConstructor, Middleware} from "../types";
 import ValidationMiddleware from "../middleware/ValidationMiddleware";
-import LoggerMiddleware from "../middleware/LoggerMiddleware";
-import {Resp} from "../models/http/Resp";
+import {Resp} from "../models/Resp";
 
 interface RouterHandlerEntry {
   methodKey:string;
@@ -71,7 +70,9 @@ class DecoratorManifest {
             route = `/${route}`;
           }
 
-          logger.log(action, route, constructor.name);
+          logger.debug(`Registered Controller`, {
+            action, route, name:constructor.name
+          });
 
           app[action](route,
             controllerEntry.middleware,
@@ -90,7 +91,7 @@ class DecoratorManifest {
                   }
                 }
               } catch(err) {
-                logger.internalError(resp, err);
+                logger.error(err);
               }
             }
           );

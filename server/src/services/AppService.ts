@@ -14,7 +14,7 @@ import {setupPassport} from "../config/passport";
 import {EntityManager, getConnection} from "typeorm";
 import LoggerMiddleware from "../middleware/LoggerMiddleware";
 
-export class ServerService {
+export class AppService {
   readControllers() {
     const controllerDirectory = join(__dirname, '../controllers');
     readdirSync(controllerDirectory).forEach(function(file) {
@@ -72,4 +72,4 @@ export class ServerService {
   }
 }
 
-export default new ServerService();
+export default new AppService();

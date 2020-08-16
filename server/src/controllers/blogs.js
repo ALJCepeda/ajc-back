@@ -1,5 +1,5 @@
 import { isNaN, isArray, isString } from 'lodash';
-import logger from './../services/logger';
+import logger from '../services/baseLogger';
 import blogsDB from './../services/blogs';
 
 

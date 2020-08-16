@@ -4,6 +4,9 @@ import { promisify } from 'bluebird';
 import {WriteStream} from "fs";
 import {Request, Response} from "express";
 import { parse } from 'url';
+import {omit} from 'lodash';
+import {createLogger, transports, format} from "winston";
+import {PostgresTransport} from "../transports/PostgresTransport";
 
 const stat = promisify(fs.stat);
 const mkdir = promisify(fs.mkdir);
@@ -67,7 +70,7 @@ class Logger {
   }
 
   timestamp() {
-    return moment.utc().format('MM-DD HH:mm:ss');
+    return moment.utc().format('HH:mm:ss');
   }
 
   error(...args:string[]) {
@@ -122,7 +125,7 @@ class Logger {
   }
 
   debug(...args:string[]) {
-    if(this.verbose === true || this.consoleDebug === true) {
+    if(this.verbose || this.consoleDebug) {
       this.log.apply(this, args);
     }
   }
@@ -142,22 +145,10 @@ class Logger {
   }
 
   doVerbose(message:string, override:string) {
-    if(this.verbose === true || this[override] === true) {
+    if(this.verbose || this[override] === true) {
       this.log(message);
     }
   };
-
-  erroredRequest(err:Error, req:Request) {
-    this.error(`Request errored: `, err.stack as string);
-
-    if(req.params) {
-      this.error(JSON.stringify(req.params));
-    }
-
-    if(req.body) {
-      this.error(JSON.stringify(req.body));
-    }
-  }
 
   internalError(resp:Response, err:Error) {
     const parsedUrl = parse((resp.req as Request).originalUrl);
@@ -183,11 +174,35 @@ class Logger {
   }
 }
 
-export const logger = new Logger({
+export const BaseLogger = createLogger({
+  levels: {
+    error: 0,
+    warn: 1,
+    info: 2,
+    debug: 3,
+    blab: 4
+  },
+  transports:[
+    new PostgresTransport(),
+    new transports.Console({
+      level:'blab',
+      format: format.combine(
+        format.timestamp(),
+        format.printf((info) => {
+          const time = info.timestamp.substring(11, 19);
+          const data = omit(info, ['timestamp', 'message', 'level']);
+          return `${time} ${info.message} ${JSON.stringify(data)}`;
+        })
+      )
+    })
+  ]
+});
+
+export const logger = BaseLogger.child({});
+
+export default new Logger({
   consoleErrors: process.env.CONSOLE_ERRORS === 'true',
   consoleAccess: process.env.CONSOLE_ACCESS === 'true',
   verbose: process.env.VERBOSE === 'true',
   muteCount: process.env.MUTE_COUNT === 'true'
-});
-
-export default logger;
+})

@@ -10,8 +10,8 @@
   "scripts": {
     "start": "node dist/index.js",
     "dev": "ts-node-dev --poll -r dotenv/config src/index.ts ",
+    "inspect": "ts-node-dev --inspect-brk=0.0.0.0:9229 --poll -r dotenv/config src/index.ts ",
     "playground": "ts-node-dev playground.ts",
-    "inspect": "ts-node-dev --inspect=0.0.0.0:9229 --poll --transpileOnly src/index.ts",
     "ts": "ts-node-dev --poll -r dotenv/config"
   },
   "author": "Alfred Cepeda",
@@ -32,6 +32,7 @@
     "inversify": "^5.0.1",
     "is-uuid": "^1.0.2",
     "lodash": "^4.17.15",
+    "lodash.omit": "^4.5.0",
     "moment": "^2.24.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
@@ -40,7 +41,9 @@
     "reflect-metadata": "^0.1.13",
     "run-sequence": "^2.2.1",
     "typeorm": "^0.2.20",
-    "winston": "^3.2.1"
+    "uuid": "^8.3.0",
+    "winston": "^3.3.3",
+    "winston-transport": "^4.4.0"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.28",
@@ -51,7 +54,9 @@
     "@types/passport": "^1.0.3",
     "@types/passport-local": "^1.0.33",
     "@types/pg": "^7.11.2",
+    "@types/winston": "^2.4.4",
     "eslint": "^4.19.1",
+    "eslint-plugin-node": "^11.1.0",
     "inquirer": "^5.2.0",
     "js-yaml": "^3.13.1",
     "nodemon": "^1.19.4",
