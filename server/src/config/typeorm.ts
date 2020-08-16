@@ -3,6 +3,7 @@ import User from "../models/User";
 import Blog from "../models/Blog";
 import TimelineEntry from "../../../shared/src/models/TimelineEntry";
 import Log from "../models/Log";
+import {HTTPLog} from "../models/HTTPLog";
 
 export const typeORMConfig: PostgresConnectionOptions = {
   type: 'postgres',
@@ -15,6 +16,7 @@ export const typeORMConfig: PostgresConnectionOptions = {
   logging: false,
   entities: [
     Log,
+    HTTPLog,
     User,
     Blog,
     TimelineEntry

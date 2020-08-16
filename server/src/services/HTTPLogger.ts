@@ -1,15 +1,14 @@
 import {Logger as WinstonLogger} from "winston";
 import {PostgresTransport} from "../transports/PostgresTransport";
-import {inject} from "inversify";
+import {inject, injectable} from "inversify";
 import {tokens} from "../tokens";
 import {Request, Response} from "express";
 import {parse} from "url";
 import {BaseLogger} from "./baseLogger";
 
+@injectable()
 export default class HTTPLogger {
-  private logger:WinstonLogger = BaseLogger.child({}).add(
-    new PostgresTransport({})
-  );
+  private logger:WinstonLogger = BaseLogger.child({});
   
   constructor(
     @inject(tokens.traceId) private traceId:string

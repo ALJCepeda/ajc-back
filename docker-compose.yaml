@@ -10,13 +10,12 @@ services:
       - ajc-web
     ports:
       - '8000:8000'
-      - '9229:9229'
     volumes:
       - ./client:/home/node/app:Z
       - ./shared:/home/node/shared:Z
     image: node:13
   server:
-    working_dir: /home/node/app
+    working_dir: /mnt/host
     tty: true
     env_file:
       - .env
@@ -24,10 +23,12 @@ services:
       - ajc-web
     ports:
       - '8001:8001'
+      - '9229:9229'
+      - '9100:9100'
     volumes:
-      - ./server:/home/node/app:Z
-      - ./shared:/home/node/shared:Z
-    image: node:13
+      - ./server:/mnt/host:Z
+      - ./shared:/mnt/shared:Z
+    image: ajrelic/dev
   shared:
     working_dir: /home/node/app
     env_file:

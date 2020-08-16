@@ -29,9 +29,16 @@ export class TimelineController {
   ]) async entries(req: Request, res: Response) {
     const limit = parseInt(req.query.limit);
     const page = parseInt(req.query.page);
-
-    const entries = await this.timelineService.entriesByPage(page, limit);
-    res.send(entries);
+    const time = parseInt(req.query.time);
+    
+    if(time) {
+      setTimeout(() => {
+        res.send([]);
+      }, time);
+    } else {
+      const entries = await this.timelineService.entriesByPage(page, limit);
+      res.send(entries);
+    }
   }
 
   @POST('', AuthenticatedMiddleware)

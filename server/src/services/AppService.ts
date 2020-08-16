@@ -46,7 +46,7 @@ export class AppService {
     app.use(session({
       secret: 'keyboard cat',
       resave: true,
-      saveUnitialized: false
+      saveUninitialized: false
     }));
     app.use(json());
     app.use(urlencoded({ extended: true }));

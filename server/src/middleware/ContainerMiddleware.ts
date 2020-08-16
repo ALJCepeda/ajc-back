@@ -3,7 +3,6 @@ import {EntityManager, getConnection} from "typeorm"
 import {Container} from "inversify";
 import {tokens} from "../tokens";
 import * as uuid from 'uuid';
-import HTTPLogger from "../services/HTTPLogger";
 
 export default function(container:Container) {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -11,7 +10,6 @@ export default function(container:Container) {
     const entityManager = getConnection().createEntityManager();
     
     containerChild.bind(tokens.traceId).toConstantValue(uuid.v4());
-    containerChild.bind(HTTPLogger).toConstructor(HTTPLogger);
     containerChild.bind(EntityManager).toConstantValue(entityManager);
 
     res.locals.container = containerChild;

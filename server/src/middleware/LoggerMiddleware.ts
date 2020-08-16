@@ -7,9 +7,13 @@ export default function(req:Request, resp:Response, next:NextFunction) {
   
   const send = resp.send;
   resp.send = (data) => {
-    logger.response(resp, data);
-    return send.apply(resp, arguments);
-  };
+    if(!resp.locals.loggedResponse) {
+      logger.response(resp, data);
+      resp.locals.loggedResponse = true;
+    }
+    
+    return send.call(resp, data);
+  }
   
   next();
 }
