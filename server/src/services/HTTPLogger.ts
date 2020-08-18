@@ -1,6 +1,5 @@
 import {Logger as WinstonLogger} from "winston";
-import {PostgresTransport} from "../transports/PostgresTransport";
-import {inject, injectable} from "inversify";
+import {inject, injectable} from "expressman";
 import {tokens} from "../tokens";
 import {Request, Response} from "express";
 import {parse} from "url";

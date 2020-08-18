@@ -3,10 +3,10 @@ import bcrypt from 'bcrypt';
 import passport = require('passport');
 import {Strategy as LocalStrategy} from "passport-local";
 import User from "../models/User";
-import {Container} from "inversify";
+import {DependencyContainer} from "expressman";
 import UserService from "../services/UserService";
 
-export function setupPassport(app:Application, container:Container) {
+export function setupPassport(app:Application, container:DependencyContainer) {
   app.use(passport.initialize());
   app.use(passport.session());
 

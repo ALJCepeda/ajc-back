@@ -1,5 +1,5 @@
 import {EntityManager} from "typeorm";
-import {injectable} from "inversify";
+import {injectable} from "expressman";
 import TimelineEntryRepository from "../repositories/TimelineEntryRepository";
 import TimelineEntry from "../../../shared/src/models/TimelineEntry";
 

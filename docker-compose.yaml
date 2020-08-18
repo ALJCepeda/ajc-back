@@ -15,7 +15,6 @@ services:
       - ./shared:/home/node/shared:Z
     image: node:13
   server:
-    working_dir: /mnt/host
     tty: true
     env_file:
       - .env
@@ -28,6 +27,7 @@ services:
     volumes:
       - ./server:/mnt/host:Z
       - ./shared:/mnt/shared:Z
+      - ./../expressman:/mnt/expressman:Z
     image: ajrelic/dev
   shared:
     working_dir: /home/node/app

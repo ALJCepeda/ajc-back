@@ -1,18 +1,18 @@
-import {Container} from "inversify";
 import {json, urlencoded} from "body-parser";
 import {readdirSync} from "fs";
 import {join} from 'path';
 import express = require('express')
 const promMid = require('express-prometheus-middleware');
 import session from 'express-session';
+import {Request, Response} from "express";
+import * as uuid from "uuid";
 
-import DecoratorManifest from "../decorators/DecoratorManifest";
 import HeaderMiddleware from "../middleware/HeaderMiddleware";
-import ContainerMiddleware from "../middleware/ContainerMiddleware";
-import {Application} from "express";
+import {publish, container, DependencyContainer} from "expressman";
 import {setupPassport} from "../config/passport";
 import {EntityManager, getConnection} from "typeorm";
 import LoggerMiddleware from "../middleware/LoggerMiddleware";
+import {tokens} from "../tokens";
 
 export class AppService {
   readControllers() {
@@ -24,15 +24,11 @@ export class AppService {
     });
   }
 
-  setupApp():Application {
+  setupApp():Promise<any> {
     this.readControllers();
 
     const clientRoute = process.env.NODE_ENV === 'development' ? '/' : '*';
-    let container = new Container({
-      autoBindInjectable: true
-    });
-    const entityManager = getConnection().createEntityManager();
-    container.bind(EntityManager).toConstantValue(entityManager);
+    container.registerInstance(EntityManager, getConnection().createEntityManager())
 
     const app = express();
 
@@ -41,7 +37,6 @@ export class AppService {
       collectDefaultMetrics: true,
     }));
 
-    app.use(ContainerMiddleware(container));
     app.use(HeaderMiddleware);
     app.use(session({
       secret: 'keyboard cat',
@@ -65,10 +60,15 @@ export class AppService {
       res.sendFile(__dirname + '/' + process.env.JS_FILE + '.map');
     });
 
-    app.use(LoggerMiddleware);
-    DecoratorManifest.generateRoutes(app, container);
-
-    return app;
+    return publish(app, {
+      routeDir:'src/routes',
+      configureContainer(container: DependencyContainer, request: Request, response: Response): any {
+        container.register(tokens.traceId, { useValue: uuid.v4() });
+        container.registerInstance(EntityManager, getConnection().createEntityManager());
+        
+        LoggerMiddleware(request, response, () => {});
+      }
+    });
   }
 }
 
