@@ -1,16 +1,15 @@
-import {Request, Response} from 'express';
-import TimelineService from "../services/TimelineService";
+import { Request, Response } from "express";
 import Controller from "../decorators/Controller";
-import {REMOVE, GET, POST} from "../decorators/HTTP";
+import { REMOVE, GET, POST } from "../decorators/HTTP";
 import AuthenticatedMiddleware from "../middleware/AuthenticatedMiddleware";
 
 const defaults = {
   entries: {
-    limit:10,
-    offset:0
-  }
+    limit: 10,
+    offset: 0,
+  },
 };
-
+/*
 @Controller('timeline')
 export class TimelineController {
   constructor(
@@ -34,3 +33,4 @@ export class TimelineController {
     res.send(true);
   }
 }
+*/

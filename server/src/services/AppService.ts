@@ -24,7 +24,7 @@ export class AppService {
     });
   }
 
-  setupApp():Promise<any> {
+  async startServer(host:string, port:number):Promise<any> {
     this.readControllers();
 
     const clientRoute = process.env.NODE_ENV === 'development' ? '/' : '*';
@@ -60,7 +60,7 @@ export class AppService {
       res.sendFile(__dirname + '/' + process.env.JS_FILE + '.map');
     });
 
-    return publish(app, {
+    const publishResult = await publish(app, {
       routeDir:'src/routes',
       configureContainer(container: DependencyContainer, request: Request, response: Response): any {
         container.register(tokens.traceId, { useValue: uuid.v4() });
@@ -69,6 +69,10 @@ export class AppService {
         LoggerMiddleware(request, response, () => {});
       }
     });
+
+    app.listen(port, host);
+
+    return publishResult;
   }
 }
 

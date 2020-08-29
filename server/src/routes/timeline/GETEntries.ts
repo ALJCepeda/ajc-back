@@ -1,34 +1,32 @@
-import TimelineService from "../../services/TimelineService";
 import TimelineEntry from "../../../../shared/src/models/TimelineEntry";
-import {GET, Input, Query} from "expressman";
+import { GET, Input, Query, Integer } from "expressman";
+import TimelineEntryAdapter from "../../adapters/TimelineEntryAdapter";
+
+const { ANumber, GreaterThan } = Integer;
 
 class GETEntriesInput {
-  @Query('limit', {
-    validate(input:any) {
-      if(isNaN(input) || input <= 0) throw new Error('Limit must be a number greater than 0');
-    }
+  @Query("limit", {
+    default: 10,
+    validate: [ANumber, GreaterThan(0)],
+    transform: parseInt,
   })
-  limit:number;
-  
-  @Query('skip',{
-    validate(input:any) {
-      if(isNaN(input) || input <= 0) throw new Error('Skip must be a number greater than 0');
-    }
+  limit: number;
+
+  @Query("skip", {
+    default: 0,
+    validate: [ANumber, GreaterThan(0)],
+    transform: parseInt,
   })
-  skip:number;
+  skip: number;
 }
 
 @Input(GETEntriesInput)
-@GET('/timeline')
+@GET("/timeline")
 export default class GETEntries {
-  constructor(
-    private timelineService:TimelineService
-  ) {}
-  
-  handle(payload): Promise<TimelineEntry[]> {
-    const limit = parseInt(payload.limit);
-    const page = parseInt(payload.page);
-    
-    return this.timelineService.entriesByPage(page, limit);
+  constructor(private timelineEntryAdapter: TimelineEntryAdapter) {}
+
+  handle(payload: GETEntriesInput): Promise<TimelineEntry[]> {
+    const { limit, skip } = payload;
+    return this.timelineEntryAdapter.entries(limit, skip);
   }
 }

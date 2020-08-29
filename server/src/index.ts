@@ -11,8 +11,7 @@ async function run(): Promise<void> {
   const port = Number(process.env.SERVER_PORT) || 8001;
   const host = process.env.SERVER_HOST || '0.0.0.0';
   
-  const { app } = await serverService.setupApp();
-  app.listen(port, host);
+  const { app } = await serverService.startServer(host, port);
   logger.info('Server started', { host, port });
 }
 

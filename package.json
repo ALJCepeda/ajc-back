@@ -1,0 +1,21 @@
+{
+  "name": "ajc-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server:dev": "docker-compose exec server npm run dev",
+    "server:zsh": "docker-compose exec server zsh",
+    "client:dev": "docker-compose exec client npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ALJCepeda/ajc-back.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ALJCepeda/ajc-back/issues"
+  },
+  "homepage": "https://github.com/ALJCepeda/ajc-back#readme"
+}
