@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "sourceMap": true,
+    "allowJs": true,
+    "checkJs": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "moduleResolution": "node",
+    "rootDirs": [
+      "./src",
+      "../shared/src"
+    ],
+    "outDir": "./dist",
+    "lib": [
+      "es2017",
+      "dom"
+    ]
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "../src/**/*.ts",
+    "../shared/**/*.ts"
+  ],
+  "files": [
+    "node_modules/ajc-shared/src/types.d.ts",
+    "node_modules/ajc-shared/src/api/app.d.ts",
+    "node_modules/ajc-shared/src/api/timeline.d.ts"
+  ]
+}

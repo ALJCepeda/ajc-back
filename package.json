@@ -1,21 +1,71 @@
 {
-  "name": "ajc-web",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "server:dev": "docker-compose exec server npm run dev",
-    "server:zsh": "docker-compose exec server zsh",
-    "client:dev": "docker-compose exec client npm run dev"
-  },
+  "name": "ajc-back",
+  "version": "1.2.0",
+  "description": "AJCepeda's backend services",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ALJCepeda/ajc-back.git"
+    "url": "https://github.com/ALJCepeda/ajcepeda-back.git"
   },
-  "author": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --poll -r dotenv/config src/index.ts ",
+    "inspect": "ts-node-dev --poll -r dotenv/config src/index.ts ",
+    "playground": "ts-node-dev playground.ts",
+    "ts": "ts-node-dev --poll -r dotenv/config"
+  },
+  "author": "Alfred Cepeda",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ALJCepeda/ajc-back/issues"
+  "dependencies": {
+    "ajc-shared": "^1.0.1",
+    "ajc-toolbelt": "^1.2.1",
+    "bcrypt": "^4.0.1",
+    "bluebird": "^3.7.1",
+    "body-parser": "^1.19.0",
+    "dotenv": "^5.0.1",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "express": "^4.17.1",
+    "express-prometheus-middleware": "^0.9.6",
+    "express-session": "^1.17.1",
+    "express-validator": "^6.2.0",
+    "expressman": "^1.1.2",
+    "handlebars": "^4.4.5",
+    "inversify": "^5.0.1",
+    "is-uuid": "^1.0.2",
+    "lodash": "^4.17.15",
+    "lodash.omit": "^4.5.0",
+    "moment": "^2.24.0",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "pg": "^7.12.1",
+    "prom-client": "^12.0.0",
+    "reflect-metadata": "^0.1.13",
+    "run-sequence": "^2.2.1",
+    "typeorm": "^0.2.20",
+    "uuid": "^8.3.0",
+    "winston": "^3.3.3",
+    "winston-transport": "^4.4.0"
   },
-  "homepage": "https://github.com/ALJCepeda/ajc-back#readme"
+  "devDependencies": {
+    "@types/bluebird": "^3.5.28",
+    "@types/express": "^4.17.1",
+    "@types/express-validator": "^3.0.0",
+    "@types/lodash": "^4.14.144",
+    "@types/node": "^12.11.5",
+    "@types/passport": "^1.0.3",
+    "@types/passport-local": "^1.0.33",
+    "@types/pg": "^7.11.2",
+    "@types/winston": "^2.4.4",
+    "eslint": "^4.19.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "inquirer": "^5.2.0",
+    "js-yaml": "^3.13.1",
+    "nodemon": "^1.19.4",
+    "ts-node": "^8.4.1",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.6.4"
+  }
 }
