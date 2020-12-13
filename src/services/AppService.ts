@@ -1,7 +1,7 @@
 import {json, urlencoded} from "body-parser";
 import {readdirSync} from "fs";
 import {join} from 'path';
-import express = require('express')
+import express from 'express';
 const promMid = require('express-prometheus-middleware');
 import session from 'express-session';
 import {Request, Response} from "express";
@@ -28,7 +28,7 @@ export class AppService {
     this.readControllers();
 
     const clientRoute = process.env.NODE_ENV === 'development' ? '/' : '*';
-    container.registerInstance(EntityManager, getConnection().createEntityManager())
+    container.register(EntityManager, { useValue: getConnection().createEntityManager() });
 
     const app = express();
 
@@ -63,9 +63,9 @@ export class AppService {
     const publishResult = await publish(app, {
       routeDir:'src/routes',
       configureContainer(container: DependencyContainer, request: Request, response: Response): any {
-        container.register(tokens.traceId, { useValue: uuid.v4() });
-        container.registerInstance(EntityManager, getConnection().createEntityManager());
-        
+        container.register(tokens.traceId, { useValue: uuid.v4() })
+        container.register(EntityManager, { useValue: getConnection().createEntityManager() });
+
         LoggerMiddleware(request, response, () => {});
       }
     });

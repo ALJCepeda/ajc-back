@@ -4,14 +4,15 @@ import Blog from "../models/Blog";
 import Log from "../models/Log";
 import {HTTPLog} from "../models/HTTPLog";
 import TimelineEntry from "../models/TimelineEntry";
+import {AppConfig} from "./app";
 
 export const typeORMConfig: PostgresConnectionOptions = {
   type: 'postgres',
-  host: process.env.POSTGRES_HOST,
-  port: Number(process.env.POSTGRES_PORT),
-  username: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DB || process.env.POSTGRES_USER,
+  host: AppConfig.postgres.host,
+  port: AppConfig.postgres.port,
+  username: AppConfig.postgres.username,
+  password: AppConfig.postgres.password,
+  database: AppConfig.postgres.database,
   synchronize: true,
   logging: false,
   entities: [

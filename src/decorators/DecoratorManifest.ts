@@ -1,5 +1,5 @@
 import {Application, NextFunction, Request, Response} from "express";
-import {Container} from "inversify";
+import {DependencyContainer} from "expressman";
 import { normalize, isAbsolute } from "path";
 import {logger} from "../services/baseLogger";
 import {ControllerConstructor, Middleware} from "../types";
@@ -51,9 +51,9 @@ class DecoratorManifest {
     });
   }
 
-  generateRoutes(app:Application, container:Container) {
+  generateRoutes(app:Application, container:DependencyContainer) {
     this.controllers.forEach((controllerEntry, constructor) => {
-      container.bind(constructor).to(constructor);
+      container.register(constructor, { useValue: constructor });
       const basePath = controllerEntry.basePath;
 
       controllerEntry.handlers.forEach((pathMap, path) => {
@@ -80,7 +80,7 @@ class DecoratorManifest {
             ValidationMiddleware,
             async (req:Request, resp:Response, next:NextFunction) => {
               try {
-                const controller = resp.locals.container.get(constructor);
+                const controller = (resp.locals.container as DependencyContainer).resolve(constructor);
                 const result = await controller[routeHandlerEntry.methodKey](req, resp, next);
 
                 if(!resp.headersSent) {

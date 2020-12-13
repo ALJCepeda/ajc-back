@@ -1,3 +1,4 @@
+/*
 import * as fs from 'fs';
 import { promisify } from 'bluebird';
 
@@ -82,5 +83,6 @@ pool.query('SELECT count(*), MAX(created_at) as "created_at" FROM Blogs').then(r
   count:parseInt(result.rows[0].count),
   last_updated:result.rows[0].created_at
 });*/
-
+/*
 export default BlogsDB;
+*/

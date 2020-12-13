@@ -1,6 +1,6 @@
-import TimelineEntry from "../../../../shared/src/models/TimelineEntry";
 import { GET, Input, Query, Integer } from "expressman";
 import TimelineEntryAdapter from "../../adapters/TimelineEntryAdapter";
+import TimelineEntry from "../../models/TimelineEntry";
 
 const { ANumber, GreaterThan } = Integer;
 
@@ -14,7 +14,7 @@ class GETEntriesInput {
 
   @Query("skip", {
     default: 0,
-    validate: [ANumber, GreaterThan(0)],
+    validate: [ANumber, GreaterThan(-1)],
     transform: parseInt,
   })
   skip: number;

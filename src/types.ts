@@ -7,3 +7,7 @@ export type Middleware = RequestHandler | Array<RequestHandler>;
 export interface RequestContext extends Request {
   user: User
 }
+
+export interface ClientState {
+  isAuthenticated: boolean
+}
