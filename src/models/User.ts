@@ -1,4 +1,7 @@
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import { pick } from 'lodash';
+
+export type UserDTO = Pick<User, 'id' | 'username' | 'active'>;
 
 @Entity('user')
 export default class User {
@@ -24,4 +27,8 @@ export default class User {
     onUpdate: "CURRENT_TIMESTAMP"
   })
   updatedOn?:Date;
+
+  toDTO(): UserDTO {
+    return pick(this, 'id', 'username', 'active');
+  }
 }

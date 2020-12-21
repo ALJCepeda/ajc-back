@@ -25,11 +25,13 @@ export function setupPassport(app:Application, container:DependencyContainer) {
     const userService = container.resolve(UserService);
 
     userService.entry(username).then((user) => {
+      debugger;
       if(!user) {
         return done(null, false);
       }
 
       bcrypt.compare(password, user.password, function(err, matches) {
+        debugger;
         if(!matches || err) {
           return done(err, false);
         }

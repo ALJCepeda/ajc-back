@@ -8,34 +8,35 @@ import {BaseLogger} from "./baseLogger";
 @injectable()
 export default class HTTPLogger {
   private logger:WinstonLogger = BaseLogger.child({});
-  
+
   constructor(
     @inject(tokens.traceId) private traceId:string
   ) { }
-  
-  error(err:Error, message?:string) {
-    this.logger.error(message || err.message, {
-      error: err,
+
+  error(error: any, message:string = 'Error') {
+    this.logger.error({
+      message,
+      error,
       traceId: this.traceId
     });
   }
-  
+
   request(req:Request, message:string = 'Request') {
     const parsedUrl = parse(req.originalUrl);
     const route = parsedUrl.pathname;
     const ip = req.connection.remoteAddress;
     const {params, query, body, headers, cookies} = req;
-    
+
     this.logger.info(message, {
       route, ip, params, query, body, headers, cookies, traceId: this.traceId
     });
   }
-  
+
   response(resp:Response, data:any, message:string = 'Response') {
     this.logger.info(message, {
       traceId: this.traceId,
       headers: resp.getHeaders(),
-      data
+      data: JSON.stringify(data)
     });
   }
 }

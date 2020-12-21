@@ -4,15 +4,15 @@ import {join} from 'path';
 import express from 'express';
 const promMid = require('express-prometheus-middleware');
 import session from 'express-session';
-import {Request, Response} from "express";
 import * as uuid from "uuid";
 
 import HeaderMiddleware from "../middleware/HeaderMiddleware";
-import {publish, container, DependencyContainer} from "expressman";
+import {publish, container, DependencyContainer, APIError} from 'expressman';
 import {setupPassport} from "../config/passport";
 import {EntityManager, getConnection} from "typeorm";
 import LoggerMiddleware from "../middleware/LoggerMiddleware";
 import {tokens} from "../tokens";
+import HTTPLogger from "./HTTPLogger";
 
 export class AppService {
   readControllers() {
@@ -27,7 +27,6 @@ export class AppService {
   async startServer(host:string, port:number):Promise<any> {
     this.readControllers();
 
-    const clientRoute = process.env.NODE_ENV === 'development' ? '/' : '*';
     container.register(EntityManager, { useValue: getConnection().createEntityManager() });
 
     const app = express();
@@ -48,10 +47,6 @@ export class AppService {
 
     setupPassport(app, container);
 
-    app.get(clientRoute, (req, res) => {
-      res.sendFile(__dirname + '/' + process.env.HTML_FILE);
-    });
-
     app.get('/build.js', (req, res) => {
       res.sendFile(__dirname + '/' + process.env.JS_FILE);
     });
@@ -62,12 +57,19 @@ export class AppService {
 
     const publishResult = await publish(app, {
       routeDir:'src/routes',
-      configureContainer(container: DependencyContainer, request: Request, response: Response): any {
-        container.register(tokens.traceId, { useValue: uuid.v4() })
-        container.register(EntityManager, { useValue: getConnection().createEntityManager() });
-
-        LoggerMiddleware(request, response, () => {});
+      configureContainer(container: DependencyContainer) {
+        container.register(tokens.traceId, {useValue: uuid.v4()})
+        container.register(EntityManager, {useValue: getConnection().createEntityManager()});
+      },
+      onAPIError(container: DependencyContainer, error: any) {
+        const logger:HTTPLogger = container.resolve(HTTPLogger);
+        logger.error(error);
       }
+    });
+
+    const clientRoute = process.env.NODE_ENV === 'development' ? '/' : '*';
+    app.get(clientRoute, (req, res) => {
+      res.sendFile(__dirname + '/' + process.env.HTML_FILE);
     });
 
     app.listen(port, host);

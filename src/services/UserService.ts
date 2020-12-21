@@ -1,4 +1,4 @@
-import { injectable } from "inversify";
+import { injectable } from "expressman";
 import { EntityManager } from "typeorm";
 import UserRepository from "../adapters/UserRepository";
 

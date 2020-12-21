@@ -190,8 +190,13 @@ export const BaseLogger = createLogger({
         format.timestamp(),
         format.printf((info) => {
           const time = info.timestamp.substring(11, 19);
-          const data = omit(info, ['timestamp', 'message', 'level']);
-          return `${time} ${info.message} ${JSON.stringify(data)}`;
+
+          if(info.error && info.error.stack) {
+            return `${time} ${info.message} - (${info.traceId}) \n ${info.error.stack}`;
+          } else {
+            const data = omit(info, ['timestamp', 'message', 'level']);
+            return `${time} ${info.message} ${JSON.stringify(data)}`;
+          }
         })
       )
     })
