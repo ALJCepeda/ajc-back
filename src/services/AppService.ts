@@ -13,6 +13,8 @@ import {EntityManager, getConnection} from "typeorm";
 import LoggerMiddleware from "../middleware/LoggerMiddleware";
 import {tokens} from "../tokens";
 import HTTPLogger from "./HTTPLogger";
+import TimelineEntryRepository from "../adapters/TimelineEntryRepository";
+import UserRepository from "../adapters/UserRepository";
 
 export class AppService {
   readControllers() {
@@ -26,8 +28,6 @@ export class AppService {
 
   async startServer(host:string, port:number):Promise<any> {
     this.readControllers();
-
-    container.register(EntityManager, { useValue: getConnection().createEntityManager() });
 
     const app = express();
 
@@ -45,6 +45,21 @@ export class AppService {
     app.use(json());
     app.use(urlencoded({ extended: true }));
 
+    container.register(EntityManager, { useValue: getConnection().createEntityManager() });
+    container.register(TimelineEntryRepository, {
+      useFactory: (dic: DependencyContainer) => {
+        const entityManager = dic.resolve(EntityManager) as EntityManager;
+        return entityManager.getCustomRepository(TimelineEntryRepository);
+      }
+    });
+
+    container.register(UserRepository, {
+      useFactory: (dic: DependencyContainer) => {
+        const entityManager = dic.resolve(EntityManager) as EntityManager;
+        return entityManager.getCustomRepository(UserRepository);
+      }
+    });
+
     setupPassport(app, container);
 
     app.get('/build.js', (req, res) => {
@@ -58,18 +73,13 @@ export class AppService {
     const publishResult = await publish(app, {
       routeDir:'src/routes',
       configureContainer(container: DependencyContainer) {
-        container.register(tokens.traceId, {useValue: uuid.v4()})
-        container.register(EntityManager, {useValue: getConnection().createEntityManager()});
+        container.register(tokens.traceId, { useValue: uuid.v4() })
+        container.register(EntityManager, { useValue: getConnection().createEntityManager() })
       },
-      onAPIError(container: DependencyContainer, error: any) {
+      onUncaughtException(container: DependencyContainer, error: any) {
         const logger:HTTPLogger = container.resolve(HTTPLogger);
         logger.error(error);
       }
-    });
-
-    const clientRoute = process.env.NODE_ENV === 'development' ? '/' : '*';
-    app.get(clientRoute, (req, res) => {
-      res.sendFile(__dirname + '/' + process.env.HTML_FILE);
     });
 
     app.listen(port, host);

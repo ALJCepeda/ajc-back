@@ -191,7 +191,7 @@ export const BaseLogger = createLogger({
         format.printf((info) => {
           const time = info.timestamp.substring(11, 19);
 
-          if(info.error && info.error.stack) {
+          if(info.error?.stack) {
             return `${time} ${info.message} - (${info.traceId}) \n ${info.error.stack}`;
           } else {
             const data = omit(info, ['timestamp', 'message', 'level']);

@@ -4,7 +4,7 @@ import passport from 'passport';
 import {Strategy as LocalStrategy} from "passport-local";
 import User from "../models/User";
 import {DependencyContainer} from "expressman";
-import UserService from "../services/UserService";
+import UserRepository from "../adapters/UserRepository";
 
 export function setupPassport(app:Application, container:DependencyContainer) {
   app.use(passport.initialize());
@@ -15,23 +15,21 @@ export function setupPassport(app:Application, container:DependencyContainer) {
   });
 
   passport.deserializeUser(function (username:string, done) {
-    const userService = container.resolve(UserService);
-    userService.entry(username).then((user) => {
+    const userRepository = container.resolve(UserRepository);
+    userRepository.entry(username).then((user) => {
       return done(null, user)
     }).catch((err) => done(err));
   });
 
   passport.use(new LocalStrategy(function (username, password, done) {
-    const userService = container.resolve(UserService);
+    const userRepository = container.resolve(UserRepository);
 
-    userService.entry(username).then((user) => {
-      debugger;
+    userRepository.entry(username).then((user) => {
       if(!user) {
         return done(null, false);
       }
 
       bcrypt.compare(password, user.password, function(err, matches) {
-        debugger;
         if(!matches || err) {
           return done(err, false);
         }

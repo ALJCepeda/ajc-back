@@ -1,6 +1,7 @@
-import { GET, Input, Query, Integer } from "expressman";
-import TimelineEntryAdapter from "../../adapters/TimelineEntryAdapter";
+import { GET, Input, Query, Integer, Wrap, Wrapperware } from "expressman";
+import TimelineEntryRepository from "../../adapters/TimelineEntryRepository";
 import TimelineEntry from "../../models/TimelineEntry";
+import {TransactionWrapperware} from "../../middleware/wrapperware/TransactionWrapperware";
 
 const { ANumber, GreaterThan } = Integer;
 
@@ -22,11 +23,12 @@ class GETEntriesInput {
 
 @Input(GETEntriesInput)
 @GET("/timeline")
+@Wrap(TransactionWrapperware as unknown as Wrapperware)
 export default class GETEntries {
-  constructor(private timelineEntryAdapter: TimelineEntryAdapter) {}
+  constructor(private timelineEntryRepository: TimelineEntryRepository) {}
 
   handle(payload: GETEntriesInput): Promise<TimelineEntry[]> {
     const { limit, skip } = payload;
-    return this.timelineEntryAdapter.entries(limit, skip);
+    return this.timelineEntryRepository.entries(limit, skip);
   }
 }
