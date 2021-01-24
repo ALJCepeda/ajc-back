@@ -1,11 +1,10 @@
-import { GET, Input, Query, Integer, Wrap, Wrapperware } from "expressman";
+import { GET, Input, Query, Integer } from "expressman";
 import TimelineEntryRepository from "../../adapters/TimelineEntryRepository";
-import TimelineEntry from "../../models/TimelineEntry";
-import {TransactionWrapperware} from "../../middleware/wrapperware/TransactionWrapperware";
+import {ITimelineEntry} from "../../types";
 
 const { ANumber, GreaterThan } = Integer;
 
-class GETEntriesInput {
+class FetchEntriesInput {
   @Query("limit", {
     default: 10,
     validate: [ANumber, GreaterThan(0)],
@@ -21,13 +20,12 @@ class GETEntriesInput {
   skip: number;
 }
 
-@Input(GETEntriesInput)
+@Input(FetchEntriesInput)
 @GET("/timeline")
-@Wrap(TransactionWrapperware as unknown as Wrapperware)
-export default class GETEntries {
+export default class FetchEntries {
   constructor(private timelineEntryRepository: TimelineEntryRepository) {}
 
-  handle(payload: GETEntriesInput): Promise<TimelineEntry[]> {
+  handle(payload: FetchEntriesInput): Promise<ITimelineEntry[]> {
     const { limit, skip } = payload;
     return this.timelineEntryRepository.entries(limit, skip);
   }

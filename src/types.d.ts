@@ -23,14 +23,10 @@ interface Credentials {
 }
 
 interface ITimelineEntry {
-	id?:number;
 	message:string;
 	imageURL:string;
 	label:string;
 	labelURL:string;
-	when:Date;
-	createdOn?:Date;
-	updatedOn?:Date;
 }
 
 

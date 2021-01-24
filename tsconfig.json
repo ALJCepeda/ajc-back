@@ -15,8 +15,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.d.ts",
-    "../ajc-shared/src/types.d.ts"
+    "src/**/*.d.ts"
   ],
   "exclude": [
     "node_modules"

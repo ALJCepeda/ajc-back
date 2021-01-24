@@ -260,14 +260,6 @@ acorn@^5.5.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.4.tgz#3e8d8a9947d0599a1796d10225d7432f4a4acf5e"
   integrity sha512-1D++VG7BhrtvQpNbBzovKNc1FLGGEE/oGe7b9xJm/RFHMBeUaUGpluV9RLjZa47YFdPcDAenEYuq9pQPcMdLJg==
 
-ajc-shared@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/ajc-shared/-/ajc-shared-1.0.1.tgz#bccd593e97bac349299a7269cd732ca0d9504d09"
-  integrity sha512-9spdk4Nj+cN4GxGS2fjUM5lNXePLW8mr5Lmv7rPYT1RzUYvAQVVOmfDMl0Dv+hBnj5FxIus5pVk34Mz0+KZKgg==
-  dependencies:
-    moment "^2.24.0"
-    typeorm "^0.2.20"
-
 ajc-toolbelt@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ajc-toolbelt/-/ajc-toolbelt-1.2.1.tgz#423390bfa6d1cc6ac89ca43917ca9dceddfaacfe"
@@ -1606,10 +1598,8 @@ express@^4.17.1:
     utils-merge "1.0.1"
     vary "~1.1.2"
 
-expressman@^1.1.2:
+"expressman@file:../../expressman":
   version "1.1.2"
-  resolved "https://registry.yarnpkg.com/expressman/-/expressman-1.1.2.tgz#1141ec162152ef9666eec7fd2ffec37c187cde41"
-  integrity sha512-wVrQzjc9WUsXo8qitd9Y7UAZA7urKyyYDGk4qLVtB9o33zH2I2tWsRhsCVqKklkPPGYX5n3/wHFP8Z+FWnwaKQ==
   dependencies:
     glob "^7.1.6"
     lodash.flatten "^4.4.0"
