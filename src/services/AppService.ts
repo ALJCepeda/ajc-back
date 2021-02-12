@@ -7,14 +7,14 @@ import session from 'express-session';
 import * as uuid from "uuid";
 
 import HeaderMiddleware from "../middleware/HeaderMiddleware";
-import {publish, container, DependencyContainer, APIError} from 'expressman';
+import {publish, container, DependencyContainer} from 'expressman';
 import {setupPassport} from "../config/passport";
 import {EntityManager, getConnection} from "typeorm";
-import LoggerMiddleware from "../middleware/LoggerMiddleware";
 import {tokens} from "../tokens";
 import HTTPLogger from "./HTTPLogger";
 import TimelineEntryRepository from "../adapters/TimelineEntryRepository";
 import UserRepository from "../adapters/UserRepository";
+import LoggerMiddleware from "../middleware/LoggerMiddleware";
 
 export class AppService {
   readControllers() {
@@ -71,6 +71,7 @@ export class AppService {
     });
 
     const publishResult = await publish(app, {
+      before: [LoggerMiddleware],
       routeDir:'src/routes',
       configureContainer(container: DependencyContainer) {
         container.register(tokens.traceId, { useValue: uuid.v4() })

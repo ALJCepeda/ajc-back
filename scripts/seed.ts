@@ -9,8 +9,6 @@ import { readFileSync } from "fs";
 const file = readFileSync('src/config/local.yaml', 'utf8')
 const localConfig = yaml.parse(file);
 
-debugger;
-
 async function createUser(entityManager: EntityManager, user:User) {
   const userRepository = entityManager.getCustomRepository(UserRepository);
   const password = await bcrypt.hash(user.password, 10);
