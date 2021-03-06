@@ -1,16 +1,17 @@
-import { GET, Before, inject, tokens } from "expressman";
+import { API, GET, Before, inject, tokens } from "expressman";
 
 import {ClientState, RequestContext} from "../../types";
 import AuthenticatedMiddleware from "../../middleware/AuthenticatedMiddleware";
 
-@GET("/state")
-@Before(AuthenticatedMiddleware)
-export default class GETEntries {
+@API('/')
+export default class GETState {
 	constructor(
 		@inject(tokens.Request) public request: RequestContext
 	) {}
-
-	async handle(): Promise<ClientState> {
+	
+	@GET("/state")
+	@Before(AuthenticatedMiddleware)
+	async GETState(): Promise<ClientState> {
 		return {
 			isAuthenticated: true
 		}

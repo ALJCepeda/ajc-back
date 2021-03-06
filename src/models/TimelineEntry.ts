@@ -1,5 +1,5 @@
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
-import {ITimelineEntry} from "../types";
+import {ITimelineEntry} from "ajc-shared";
 
 @Entity('timeline_entry')
 export default class TimelineEntry implements ITimelineEntry {

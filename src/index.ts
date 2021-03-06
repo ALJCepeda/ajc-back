@@ -6,7 +6,6 @@ import serverService from "./services/AppService";
 import {AppConfig} from "./config/app";
 
 async function run(): Promise<void> {
-  await badLogger.init('logs');
   await createConnection(typeORMConfig);
   const {host, port} = AppConfig;
 

@@ -8,7 +8,7 @@ import * as uuid from "uuid";
 
 import HeaderMiddleware from "../middleware/HeaderMiddleware";
 import {publish, container, DependencyContainer} from 'expressman';
-import {setupPassport} from "../config/passport";
+import {setupPassport} from "../config";
 import {EntityManager, getConnection} from "typeorm";
 import {tokens} from "../tokens";
 import HTTPLogger from "./HTTPLogger";
@@ -72,7 +72,14 @@ export class AppService {
 
     const publishResult = await publish(app, {
       before: [LoggerMiddleware],
-      routeDir:'src/routes',
+      pattern:'src/routes/**/*.ts',
+      swagger: {
+        path: '/swagger',
+        define: {
+          title: 'AJC-Server',
+          description: 'API for AJCWeb\'s backend'
+        }
+      },
       configureContainer(container: DependencyContainer) {
         container.register(tokens.traceId, { useValue: uuid.v4() })
         container.register(EntityManager, { useValue: getConnection().createEntityManager() })

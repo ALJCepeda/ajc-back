@@ -8,10 +8,3 @@ export interface RequestContext extends Request {
 export interface ClientState {
   isAuthenticated: boolean
 }
-
-export interface ITimelineEntry {
-  message:string;
-  imageURL:string;
-  label:string;
-  labelURL:string;
-}
