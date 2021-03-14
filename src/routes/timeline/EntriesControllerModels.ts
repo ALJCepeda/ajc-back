@@ -26,15 +26,13 @@ export class CreateEntryInput implements ITimelineEntry {
 export class FetchEntriesInput {
   @Query("limit", {
     default: 10,
-    validate: [ANumber, GreaterThan(0)],
-    transform: parseInt,
+    validate: [ANumber, GreaterThan(0)]
   })
   limit: number;
   
   @Query("page", {
     default: 0,
-    validate: [ANumber, GreaterThan(-1)],
-    transform: parseInt,
+    validate: [ANumber, GreaterThan(-1)]
   })
   page: number;
 }

@@ -25,17 +25,22 @@ export default class HTTPLogger {
     const parsedUrl = parse(req.originalUrl);
     const route = parsedUrl.pathname;
     const ip = req.connection.remoteAddress;
-    const {params, query, body, headers, cookies} = req;
+    const {params, query, body } = req;
 
-    this.logger.info(message, {
-      route, ip, params, query, body, headers, cookies, traceId: this.traceId
-    });
+    const trimmed:any = {
+      route, ip, traceId: this.traceId
+    };
+    
+    if(Object.keys(params).length > 0) { trimmed.params = params; }
+    if(Object.keys(query).length > 0) { trimmed.query = query; }
+    if(Object.keys(body).length > 0) { trimmed.body = body; }
+    
+    this.logger.info(message, trimmed);
   }
 
   response(resp:Response, data:any, message:string = 'Response') {
     this.logger.info(message, {
       traceId: this.traceId,
-      headers: resp.getHeaders(),
       data: JSON.stringify(data)
     });
   }

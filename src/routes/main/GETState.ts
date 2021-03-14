@@ -1,5 +1,4 @@
 import { API, GET, Before, inject, tokens } from "expressman";
-
 import {ClientState, RequestContext} from "../../types";
 import AuthenticatedMiddleware from "../../middleware/AuthenticatedMiddleware";
 
