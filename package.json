@@ -31,7 +31,7 @@
     "express-prometheus-middleware": "^0.9.6",
     "express-session": "^1.17.1",
     "express-validator": "^6.2.0",
-    "expressman": "../expressman/expressman-v1.2.0.tgz",
+    "expressman": "^1.2.0",
     "handlebars": "^4.4.5",
     "inversify": "^5.0.1",
     "is-uuid": "^1.0.2",

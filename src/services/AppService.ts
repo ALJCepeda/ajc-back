@@ -75,6 +75,7 @@ export class AppService {
       pattern:'src/routes/**/*.ts',
       swagger: {
         path: '/swagger',
+        outpath: './swagger.yaml',
         define: {
           title: 'AJC-Server',
           description: 'API for AJCWeb\'s backend'

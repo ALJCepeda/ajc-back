@@ -10,6 +10,7 @@ class TimelineEntriesController {
   
   @POST()
   async CreateEntry(payload: CreateEntryInput): Promise<CreateEntryInput> {
+    console.log("Payload:", payload);
     await this.timelineEntryRepository.insert(payload);
     return payload;
   }

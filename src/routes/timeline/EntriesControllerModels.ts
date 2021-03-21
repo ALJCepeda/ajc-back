@@ -1,13 +1,13 @@
-import {Body, Query, Integer, Param} from "expressman";
-import {ITimelineEntry} from "ajc-shared";
+import {Body, Query, Param, Integer} from "expressman";
+import {ITimelineEntry} from "../../types";
 
-const { ANumber, GreaterThan } = Integer;
+const { GreaterThan } = Integer;
 
-export class CreateEntryInput implements ITimelineEntry {
+export class CreateEntryInput {
   @Body({
     default: "What's an entry without a message though?"
   })
-  message:string;
+  message?:string;
   
   @Body({
     default: 'https://en.wikipedia.org/wiki/Doge_(meme)#/media/File:Original_Doge_meme.jpg'
@@ -26,13 +26,13 @@ export class CreateEntryInput implements ITimelineEntry {
 export class FetchEntriesInput {
   @Query("limit", {
     default: 10,
-    validate: [ANumber, GreaterThan(0)]
+    validate: [GreaterThan(0)]
   })
   limit: number;
   
   @Query("page", {
     default: 0,
-    validate: [ANumber, GreaterThan(-1)]
+    validate: [GreaterThan(-1)]
   })
   page: number;
 }
